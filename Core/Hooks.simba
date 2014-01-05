@@ -1,0 +1,40 @@
+const
+
+ReflectionRevision =  '32';
+
+{  Hooks   }
+
+HookLocalPlayer = 'aw.hf';
+HookAnimation = 'aq';
+HookGetSkillLevel = 'client.hi';
+HookGetMaxSkillLevel = 'client.ha';
+HookGetSkillExp = 'client.hk';
+HookGetHealth ='au';
+HookGetMaxHealth ='ae';
+HookGetRunEnergy = 'client.jc';
+HookGetBaseX = 'y.cp';
+HookGetBaseY = 'be.cs';
+HookTileHeights = 'n.j';
+HookCharacterX = 'w';
+HookCharacterY = 'z';
+HookGetYaw = 'q.fi';
+HookGetPitch = 'f.fo';
+HookGetOffset = 'client.dq';
+HookGetCompassAngle = 'client.fw';
+HookPlane = 'cv.a';
+{  Multipliers   }
+
+HookAnimationMultiplier = -722206993;
+HookGetHealthMultiplier = 34727386;
+HookGetMaxHealthMultiplier = -985685721;
+HookGetRunEnergyMultiplier = -1497270809;
+HookGetBaseXMultiplier = -2001773755;
+HookGetBaseYMultiplier = -1712339069;
+HookCharacterXMultiplier = 79908219;
+HookCharacterYMultiplier = 1269869755;
+HookGetYawMultiplier = -1409161417;
+HookGetPitchMultiplier = 1424438993;
+HookGetCompassAngleMultiplier = 888129377;
+HookGetOffsetMultiplier = -955239685;
+HookPlaneMultiplier = 101565845;
+
