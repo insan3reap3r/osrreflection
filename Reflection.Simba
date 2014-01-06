@@ -1,6 +1,36 @@
+
 {$DEFINE REFLECTION}
 
 {$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
 {$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Player.simba}
+
+procedure SetupReflection;
+var NewFile:integer;
+    OnlineVersion, NewScript, NewFileName:string;
+begin
+    writeln('Checking for reflection updates...');
+    OnlineVersion := GetPage('https://raw.github.com/Elfyyy/OsrReflection/master/Current%20Rev.txt');
+    if (trim(OnlineVersion) > ReflectionRevision) then
+    begin
+      writeLn('reflection update available!');
+      writeLn('Updating to v' + OnlineVersion);
+      NewScript := GetPage('https://raw.github.com/Elfyyy/OsrReflection/master/Core/Hooks.simba');
+
+      NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Hooks.simba';
+      NewFile := Rewritefile(NewFileName, true);
+      try
+        WriteFileString(NewFile, NewScript);
+      except
+        begin
+          writeLn('Fatal error writing to '+NewFileName+'!!');
+          terminatescript;
+        end;
+      end;
+      CloseFile(NewFile);
+      writeLn('Please restart Simba.');
+      TerminateScript;
+    end else
+      writeLn('You have the latest version of Reflection');
+end;
