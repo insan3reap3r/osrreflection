@@ -1,5 +1,20 @@
 
+type
+  TPoint3D = record
+    x, y, z: Extended;
+  end;
 
+  TRotation = TPoint3D;
+  ATPoint3D = Array of TPoint3D;
+
+  TMatrix = record
+    Data: Array of Extended;
+  end;
+
+  TScene = record
+    TilePosition, PlayerTile, CameraPosition: TPoint3D;
+    TileRotation, CameraRotation: TRotation;
+  end;
 
 (*
 R_GetTileGlobal
@@ -78,6 +93,57 @@ begin
   Loc := R_GetTileGlobal
   if Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist then
     Result := True;
+end;
+
+(*
+R_inPolygon
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_inPolygon(Area: TPointArray): Boolean;
+
+Checks if inside a area that's not a box specified by the Tpa
+
+.. note::
+
+    By: Felipe Monteiro de Carvalho, modified by Officer Barbrady
+
+*)
+function R_inPolygon(Area: TPointArray): Boolean;
+var
+  xnew, ynew, xold, yold, x1, y1, x2, y2: Cardinal;
+  i, numpoints, inside, X, Y: Integer;
+begin
+  numpoints := Length(Area);
+  X := R_GetTileGlobal.x Y := R_GetTileGlobal.y if (numpoints < 3) then
+    Exit;
+  xold := Area[numpoints - 1].X;
+  yold := Area[numpoints - 1].Y;
+  for i := 0 to (numpoints - 1) do
+  begin
+    xnew := Area[i].X;
+    ynew := Area[i].Y;
+    if (xnew > xold) then
+    begin
+      x1 := xold;
+      x2 := xnew;
+      y1 := yold;
+      y2 := ynew;
+    end
+    else
+    begin
+      x1 := xnew;
+      x2 := xold;
+      y1 := ynew;
+      y2 := yold;
+    end;
+    if (((xnew < X) = (X <= xold)) and ((Y - y1) * (x2 - x1) < (y2 - y1) * (X - x1))) then
+      inside := not inside;
+    xold := xnew;
+    yold := ynew;
+  end;
+  Result := inside <> 0;
 end;
 
 (*

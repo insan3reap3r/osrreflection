@@ -1,3 +1,8 @@
-program new;
-begin
-end.
+
+{$DEFINE REFLECTION}
+
+{$i ./lib/core/Hooks.simba}
+{$i ./lib/core/MapWalk.simba}
+{$i ./lib/core/Player.simba}
+{$i ./lib/core/Tiles.simba}
+
