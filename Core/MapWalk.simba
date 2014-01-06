@@ -1,50 +1,4 @@
 
-
-
-
-(*
-R_GetMinimapAngleDeg
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    function R_GetMinimapAngleDeg: extended;
-
-Returns the current Map angle in degrees. North: 0 deg, increases in the
-counter clockwise direction
-
-.. note::
-
-  by BenLand100
-
-*)
-function R_GetMinimapAngleDeg: extended;
-begin
-  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetYaw) * HookGetYawMultiplier / 2048.0 * 360);
-end;
-
-(*
-R_GetMinimapAngleRad
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    function R_GetMinimapAngleRad: extended;
-
-Returns the current Map angle in radians. North: 0 deg, increases in the
-counter clockwise direction
-
-.. note::
-
-  by BenLand100
-
-*)
-function R_GetMinimapAngleRad: extended;
-begin
-  Result := Radians((SmartGetFieldInt(SmartCurrentTarget, 0, HookGetYaw) * HookGetYawMultiplier / 2048.0 * 360));
-end;
-
-
 (*
 R_TileOnMM
 ~~~~~~~~~~
@@ -67,8 +21,6 @@ begin
   P := R_TileToMM(Tile);
   Result := rs_OnMinimap(P);
 end;
-
-
 
 (*
 R_WalkPath

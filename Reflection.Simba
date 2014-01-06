@@ -1,8 +1,6 @@
-
 {$DEFINE REFLECTION}
 
-{$i ./lib/core/Hooks.simba}
-{$i ./lib/core/MapWalk.simba}
-{$i ./lib/core/Player.simba}
-{$i ./lib/core/Tiles.simba}
-
+{$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
+{$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
+{$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
+{$include SRL-OSR/SRL/Reflection/Core/Player.simba}

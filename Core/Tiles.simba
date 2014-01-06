@@ -17,6 +17,48 @@ type
   end;
 
 (*
+R_GetMinimapAngleDeg
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMinimapAngleDeg: extended;
+
+Returns the current Map angle in degrees. North: 0 deg, increases in the
+counter clockwise direction
+
+.. note::
+
+  by BenLand100
+
+*)
+function R_GetMinimapAngleDeg: extended;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetYaw) * HookGetYawMultiplier / 2048.0 * 360);
+end;
+
+(*
+R_GetMinimapAngleRad
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMinimapAngleRad: extended;
+
+Returns the current Map angle in radians. North: 0 deg, increases in the
+counter clockwise direction
+
+.. note::
+
+  by BenLand100
+
+*)
+function R_GetMinimapAngleRad: extended;
+begin
+  Result := Radians((SmartGetFieldInt(SmartCurrentTarget, 0, HookGetYaw) * HookGetYawMultiplier / 2048.0 * 360));
+end;
+
+(*
 R_GetTileGlobal
 ~~~~~~~~~~~
 
@@ -39,35 +81,6 @@ begin
   Result.X := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, HookCharacterX) * HookCharacterXMultiplier) div 128;
   Result.Y := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseYMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, HookCharacterY) * HookCharacterYMultiplier) div 128;
   SmartFreeObject(SmartCurrentTarget, Me);
-end;
-
-(*
-R_TileToMM
-~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    function R_TileToMM(tile: TPoint): TPoint;
-
-Converts the global tile position to a screen location on the
-  minimap, taking map rotation into account.
-
-.. note::
-
-  by BenLand100, Modified by Krazy_Meerkat
-
-*)
-function R_TileToMM(tile: TPoint): TPoint;
-var
-  Angle, x, y: extended;
-  temp: TPoint;
-begin
-  Angle := -R_GetMinimapAngleRad;
-  temp := R_GetTileGlobal;
-  x := (tile.x - temp.x) * 4 - 2;
-  y := (temp.y - tile.y) * 4 - 2;
-  result.x := round((x * cos(angle)) + (y * sin(angle))) + 643;
-  result.y := round((y * cos(angle)) - (x * sin(angle))) + 83;
 end;
 
 (*
@@ -169,6 +182,35 @@ begin
   Loc := R_GetTileGlobal
   if Loc = TP then
     Result := True;
+end;
+
+(*
+R_TileToMM
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_TileToMM(tile: TPoint): TPoint;
+
+Converts the global tile position to a screen location on the
+  minimap, taking map rotation into account.
+
+.. note::
+
+  by BenLand100, Modified by Krazy_Meerkat
+
+*)
+function R_TileToMM(tile: TPoint): TPoint;
+var
+  Angle, x, y: extended;
+  temp: TPoint;
+begin
+  Angle := -R_GetMinimapAngleRad;
+  temp := R_GetTileGlobal;
+  x := (tile.x - temp.x) * 4 - 2;
+  y := (temp.y - tile.y) * 4 - 2;
+  result.x := round((x * cos(angle)) + (y * sin(angle))) + 643;
+  result.y := round((y * cos(angle)) - (x * sin(angle))) + 83;
 end;
 
 (*
