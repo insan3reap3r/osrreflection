@@ -207,14 +207,14 @@ begin
 end;
 
 (*
-R_GetSkillLevel
+R_GetSkillExp
 ~~~~~~~
 
 .. code-block:: pascal
 
-    function R_GetSkillLevel(SkillConst: Integer): Integer;
+    R_GetSkillExp(SkillConst: Integer): Integer;
 
-Returns a skill level(Top) specified by Skill(Please use constants).
+Returns Skill Exp(Top) specified by Skill(Please use constants).
 
 .. note::
 
