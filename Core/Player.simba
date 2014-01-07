@@ -44,6 +44,66 @@ begin
 end;
 
 (*
+R_GetSkillLevel
+~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetSkillLevel(SkillConst: Integer): Integer;
+
+Returns a skill level(Top) specified by Skill(Please use constants).
+
+.. note::
+
+  by mormonman
+
+*)
+function R_GetSkillLevel(SkillConst: Integer): Integer;
+begin
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillLevel, skillconst);
+end;
+
+(*
+R_GetMaxSkillLevel
+~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMaxSkillLevel(SkillConst: Integer): Integer;
+
+Returns a skill level(Top) specified by Skill(Please use constants).
+
+.. note::
+
+  by ?
+
+*)
+function R_GetMaxSkillLevel(SkillConst: Integer): Integer;
+begin
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetMaxSkillLevel, skillconst);
+end;
+
+(*
+R_GetSkillExp
+~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetSkillExp(SkillConst: Integer): Integer;
+
+Returns Skill Exp(Top) specified by Skill(Please use constants).
+
+.. note::
+
+  by mormonman
+
+*)
+function R_GetSkillExp(SkillConst: Integer): Integer;
+begin
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillExp, SkillConst);
+end;
+
+(*
 R_GetHealth
 ~~~~~~~~~~~
 
@@ -62,9 +122,7 @@ function R_GetHealth: extended;
 var
   Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, HookLocalPlayer);
-  Result := (SmartGetFieldInt(SmartCurrentTarget, me, HookGethealth) * HookgethealthMultiplier) / 30;
-  SmartFreeObject(SmartCurrentTarget, me);
+  Result := R_GetSkillLevel(skill_hitpoints);
 end;
 
 (*
@@ -164,64 +222,4 @@ begin
       Exit;
   end;
   Result := true;
-end;
-
-(*
-R_GetSkillLevel
-~~~~~~~
-
-.. code-block:: pascal
-
-    function R_GetSkillLevel(SkillConst: Integer): Integer;
-
-Returns a skill level(Top) specified by Skill(Please use constants).
-
-.. note::
-
-  by mormonman
-
-*)
-function R_GetSkillLevel(SkillConst: Integer): Integer;
-begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillLevel, skillconst);
-end;
-
-(*
-R_GetMaxSkillLevel
-~~~~~~~
-
-.. code-block:: pascal
-
-    function R_GetMaxSkillLevel(SkillConst: Integer): Integer;
-
-Returns a skill level(Top) specified by Skill(Please use constants).
-
-.. note::
-
-  by ?
-
-*)
-function R_GetMaxSkillLevel(SkillConst: Integer): Integer;
-begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetMaxSkillLevel, skillconst);
-end;
-
-(*
-R_GetSkillExp
-~~~~~~~
-
-.. code-block:: pascal
-
-    R_GetSkillExp(SkillConst: Integer): Integer;
-
-Returns Skill Exp(Top) specified by Skill(Please use constants).
-
-.. note::
-
-  by mormonman
-
-*)
-function R_GetSkillExp(SkillConst: Integer): Integer;
-begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillExp, SkillConst);
 end;
