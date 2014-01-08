@@ -119,8 +119,6 @@ Returns the number value of your player's current health.
 
 *)
 function R_GetHealth: extended;
-var
-  Me: Integer;
 begin
   Result := R_GetSkillLevel(skill_hitpoints);
 end;

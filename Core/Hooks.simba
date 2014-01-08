@@ -22,6 +22,13 @@ HookGetPitch = 'f.fo';
 HookGetOffset = 'client.dq';
 HookGetCompassAngle = 'client.fw';
 HookPlane = 'cv.a';
+HookNPCs = 'client.bj';
+HookNPCDef = 'j';
+HookNPCName = 'a';
+HookNPCActions = 'z';
+HookNPCDefID = 'u';
+HookNPCDefCombat = 'v';
+HookNPCNodeMoveSpeed = 'bj';
 {  Multipliers   }
 
 HookAnimationMultiplier = -722206993;
@@ -37,4 +44,6 @@ HookGetPitchMultiplier = 1424438993;
 HookGetCompassAngleMultiplier = 888129377;
 HookGetOffsetMultiplier = -955239685;
 HookPlaneMultiplier = 101565845;
-
+HookNPCDefIDMultiplier = -1659183157;
+HookNPCDefCombatMultiplier = 1744538141;
+HookNPCNodeMoveSpeedMultiplier = 642616867;
