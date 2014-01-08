@@ -11,21 +11,41 @@
 
 
 
+(*
+R_GetNpcsLoc
+~~~~~~~~~~~~~~
 
-function R_GetNpcLoc(CacheId:TintegerArray):TPointArray;
+.. code-block:: pascal
+
+    R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
+
+Returns all nearby Npc's Current Location with the Id given by
+the CacheId.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
 var
   i, l, BaseX, BaseY, Node, Def: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
   BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * -1712339069);
-  l := length(CacheId);
+  l := high(CacheId);
   for i := 0 to l do
   begin
-    SetLength(Result, (i + 1));
-    Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId[1]);
+    Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId[i]);
     Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
+    if Def = 0 then
+      continue;
+    SetLength(Result, (i + 1));
     result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterX) * HookCharacterXMultiplier) div 128;
     result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseYMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterY) * HookCharacterYMultiplier) div 128;
   end;
 end;
+
+
+
