@@ -30,7 +30,7 @@ the CacheId.
 *)
 function R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
 var
-  t, i, l, BaseX, BaseY, Node, Def: Integer;
+  i, l, BaseX, BaseY, Node, Def: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
@@ -73,9 +73,6 @@ Returns Location of Given NPC
 
 *)
 function R_GetNpcLoc(CacheId:integer):TPointArray;
-var
-  i, l, BaseX, BaseY, Node, Def: Integer;
-
 begin
   result := R_GetNpcsLoc([CacheId]);
 end;
@@ -97,7 +94,7 @@ Returns Current hp of given npc
 *)
 function R_GetNpcHp(CacheId:integer):integer;
 var
-  Mid, BaseX, BaseY, Node, Def: Integer;
+  Mid, BaseX, BaseY, Node: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
