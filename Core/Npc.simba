@@ -30,25 +30,31 @@ the CacheId.
 *)
 function R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
 var
-  i, l, BaseX, BaseY, Node, Def: Integer;
+  t, i, l, BaseX, BaseY, Node, Def: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
   BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * -1712339069);
   l := high(CacheId);
+  SetLength(Result, 100);
   for i := 0 to l do
   begin
     Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId[i]);
     Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
     if Def = 0 then
+    begin
+      SmartFreeObject(SmartCurrentTarget, Node);
+      SmartFreeObject(SmartCurrentTarget, Def);
       continue;
+    end;
     SetLength(Result, (i + 1));
     result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterX) * HookCharacterXMultiplier) div 128;
     result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseYMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterY) * HookCharacterYMultiplier) div 128;
+    SmartFreeObject(SmartCurrentTarget, Node);
+    SmartFreeObject(SmartCurrentTarget, Def);
   end;
   SortTpaFrom(Result, Point(10000,10000));
-  SmartFreeObject(SmartCurrentTarget, Node);
-  SmartFreeObject(SmartCurrentTarget, Def);
+  result:= RemoveDeadTPA(result);
 end;
 
 (*

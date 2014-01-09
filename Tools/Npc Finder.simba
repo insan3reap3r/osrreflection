@@ -23,19 +23,25 @@ var
   TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
   TheName: string;
 begin
+  Setlength(Result, 100);
   k := 0;
-  for i := 0 to 30000 do
+  for i := 0 to 32767 do
   begin
     TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, i);
     NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, HookNPCDef);
     TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, HookNPCName);
     TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
     if TheName = '' then
+    begin
+      SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+      SmartFreeObject(SmartCurrentTarget, TheNPC);
+      SmartFreeObject(SmartCurrentTarget, NPCDef);
+      SmartFreeObject(SmartCurrentTarget, TheBytes);
       continue;
+    end;
     begin
       if TheName = LowerCase(NpcName) then
       begin
-      Setlength(Result, (k + 1));
       Result[k] := i;
       inc(k);
       end;
@@ -45,13 +51,11 @@ begin
     SmartFreeObject(SmartCurrentTarget, NPCDef);
     SmartFreeObject(SmartCurrentTarget, TheBytes);
   end;
+  result:= RemoveDeadTIA(result);
   writeln('We Found ' + inttostr(length(result)) + ' Npc''s in the area');
 end;
 
 begin
 setupsrl;
-repeat
 writeln(FindNpc);
-wait(1000);
-until(false)
 end.

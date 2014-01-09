@@ -21,3 +21,65 @@ begin
   Result := Replace(Result, 'Â', '');
   Result := Replace(Result, #160, #32);
 end;
+
+(*
+RemoveDeadTPA
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function RemoveDeadTPA(list:TPointArray): TPointArray;
+
+Removes any dead values in a Tpa.
+
+.. note::
+
+  by Krazy Meerkat & elfyyy
+
+*)
+function RemoveDeadTPA(list:TPointArray): TPointArray;
+var
+  maxlength, ls: Integer;
+begin
+  for ls:=0 to high(list) do
+  begin
+    if (result[ls].x = 0) and (result[ls].y = 0) then
+    begin
+      maxlength:= ls;
+      break;
+    end;
+  end;
+  SetLength(list, maxlength);
+  result:= list;
+end;
+
+(*
+RemoveDeadTIA
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function RemoveDeadTIA(list:TintegerArray): TintegerArray;
+
+Removes any dead values in a Tia.
+
+.. note::
+
+  by Krazy Meerkat & elfyyy
+
+*)
+function RemoveDeadTIA(list:TintegerArray): TintegerArray;
+var
+  maxlength, ls: Integer;
+begin
+  for ls:=0 to length(list) do
+  begin
+    if List[ls] = 0 then
+    begin
+      maxlength:= ls;
+      break;
+    end;
+  end;
+  SetLength(list, maxlength);
+  result:= list;
+end;
