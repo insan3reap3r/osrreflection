@@ -1,0 +1,57 @@
+program R_FindNpcIds;
+{$DEFINE SMART8}
+{$I SRL-OSR/SRL.Simba}
+{$I SRL-OSR\SRL\misc\SmartGraphics.simba}
+{$I SRL-OSR/SRL/misc/al_functions.simba}
+{$I SRL-OSR/SRL/Reflection/Reflection.simba}
+{*
+This Tool will find the Cache Id of all Npc's with the given
+Name within the loaded plane of us.
+IMPORTANT: If using with a monster which dies, You must get the full array
+of id's or use an R_FindNpcArray function
+
+By: elfyyy
+
+*}
+
+Const
+ NpcName = 'chicken';
+
+function FindNpc:TintegerArray;
+var
+  i, k: Integer;
+  TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
+  TheName: string;
+begin
+  k := 0;
+  for i := 0 to 30000 do
+  begin
+    TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, i);
+    NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, HookNPCDef);
+    TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, HookNPCName);
+    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    if TheName = '' then
+      continue;
+    begin
+      if TheName = LowerCase(NpcName) then
+      begin
+      Setlength(Result, (k + 1));
+      Result[k] := i;
+      inc(k);
+      end;
+    end;
+    SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+    SmartFreeObject(SmartCurrentTarget, TheNPC);
+    SmartFreeObject(SmartCurrentTarget, NPCDef);
+    SmartFreeObject(SmartCurrentTarget, TheBytes);
+  end;
+  writeln('We Found ' + inttostr(length(result)) + ' Npc''s in the area');
+end;
+
+begin
+setupsrl;
+repeat
+writeln(FindNpc);
+wait(1000);
+until(false)
+end.
