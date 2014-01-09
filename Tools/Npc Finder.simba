@@ -7,8 +7,6 @@ program R_FindNpcIds;
 {*
 This Tool will find the Cache Id of all Npc's with the given
 Name within the loaded plane of us.
-IMPORTANT: If using with a monster which dies, You must get the full array
-of id's or use an R_FindNpcArray function
 
 By: elfyyy
 
