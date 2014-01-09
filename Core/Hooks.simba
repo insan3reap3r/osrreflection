@@ -1,6 +1,6 @@
 const
 
-ReflectionRevision =  '32';
+ReflectionRevision =  '33';
 
 {  Hooks   }
 
@@ -21,14 +21,10 @@ HookGetYaw = 'ap.fh';
 HookGetPitch = 'i.fn';
 HookGetOffset = 'client.da';
 HookGetCompassAngle = 'client.dc';
-HookPlane = 'x.hc';
 HookNPCs = 'client.bc';
 HookNPCDef = 'b';
-HookNPCName = 'a';
-HookNPCActions = 'z';
-HookNPCDefID = 'u';
-HookNPCDefCombat = 'v';
-HookNPCNodeMoveSpeed = 'bj';
+HookNPCName = 'h';
+HookNPCDefID = 'a';
 {  Multipliers   }
 
 HookAnimationMultiplier = -235902795;
@@ -43,7 +39,5 @@ HookGetYawMultiplier = 411939123;
 HookGetPitchMultiplier = -1453013617;
 HookGetCompassAngleMultiplier = 848676339;
 HookGetOffsetMultiplier = 1071060881;
-HookPlaneMultiplier = 5015225;
-HookNPCDefIDMultiplier = -1659183157;
-HookNPCDefCombatMultiplier = 1744538141;
+HookNPCDefIDMultiplier = 1045362593; //
 HookNPCNodeMoveSpeedMultiplier = 642616867;
