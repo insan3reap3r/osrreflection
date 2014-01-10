@@ -527,35 +527,39 @@ GetMMToMSTile
   by Krazy Meerkat
 
 *)
-function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer): TPoint;
+function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer; Tp: Tpoint): TPoint;
 var
-  p: TPoint;
+  p, pl: TPoint;
 begin
   p := RotatePoint(Point(MMx, MMy), 0-(round(R_GetMinimapAngleRad)), MMCX, MMCY);
   p.x := Floor((p.x - (MMCX - 33)) / 4.0);
   p.y := 17- Floor((p.y - (MMCY - 37)) / 4.0);
-  if ((floor(R_GetMinimapAngleDeg) > 286)and(floor(R_GetMinimapAngleDeg) < 315)) then
-    p.y:= p.y + 1;
-  if ((floor(R_GetMinimapAngleDeg) > 314)and(floor(R_GetMinimapAngleDeg) < 343)) then
-    p.x:= p.x - 1;
-  if (((round(R_GetMinimapAngleDeg) > 235)and(floor(R_GetMinimapAngleDeg) < 252))or(floor(R_GetMinimapAngleDeg) = 257)) then
-    p.y:= p.y + 1;
-  if ((round(R_GetMinimapAngleDeg) > 200)and(floor(R_GetMinimapAngleDeg) < 216)) then
-    p.x:= p.x - 1;
-  if ((round(R_GetMinimapAngleDeg) > 197)and(round(R_GetMinimapAngleDeg) < 200)) then
-    p.y:= p.y + 1;
-  if ((floor(R_GetMinimapAngleDeg) > 143)and(round(R_GetMinimapAngleDeg) < 164)) then
-    p.x:= p.x - 1;
-  if ((round(R_GetMinimapAngleDeg) > 124)and(floor(R_GetMinimapAngleDeg) < 144)) then
-    p.y:= p.y + 1;
-  if ((round(R_GetMinimapAngleDeg) > 86)and(round(R_GetMinimapAngleDeg) < 102)) then
-    p.x:= p.x - 1;
-  if ((round(R_GetMinimapAngleDeg) > 76)and(round(R_GetMinimapAngleDeg) < 87)) then
-    p.y:= p.y + 1;
-  if ((round(R_GetMinimapAngleDeg) > 28)and(round(R_GetMinimapAngleDeg) < 56)) then
-    p.x:= p.x - 1;
-  if ((floor(R_GetMinimapAngleDeg) > 16)and(round(R_GetMinimapAngleDeg) < 29)) then
-    p.y:= p.y + 1;
+  pl:= R_GetTileGlobal;
+  if ((Tp.x = pl.x) and (Tp.y = pl.y)) then
+  begin
+    if ((floor(R_GetMinimapAngleDeg) > 286)and(floor(R_GetMinimapAngleDeg) < 315)) then
+      p.y:= p.y + 1;
+    if ((floor(R_GetMinimapAngleDeg) > 314)and(floor(R_GetMinimapAngleDeg) < 343)) then
+      p.x:= p.x - 1;
+    if (((round(R_GetMinimapAngleDeg) > 235)and(floor(R_GetMinimapAngleDeg) < 252))or(floor(R_GetMinimapAngleDeg) = 257)) then
+      p.y:= p.y + 1;
+    if ((round(R_GetMinimapAngleDeg) > 200)and(floor(R_GetMinimapAngleDeg) < 216)) then
+      p.x:= p.x - 1;
+    if ((round(R_GetMinimapAngleDeg) > 197)and(round(R_GetMinimapAngleDeg) < 200)) then
+      p.y:= p.y + 1;
+    if ((floor(R_GetMinimapAngleDeg) > 143)and(round(R_GetMinimapAngleDeg) < 164)) then
+      p.x:= p.x - 1;
+    if ((round(R_GetMinimapAngleDeg) > 124)and(floor(R_GetMinimapAngleDeg) < 144)) then
+      p.y:= p.y + 1;
+    if ((round(R_GetMinimapAngleDeg) > 86)and(floor(R_GetMinimapAngleDeg) < 102)) then
+      p.x:= p.x - 1;
+    if ((round(R_GetMinimapAngleDeg) > 76)and(round(R_GetMinimapAngleDeg) < 87)) then
+      p.y:= p.y + 1;
+    if ((round(R_GetMinimapAngleDeg) > 28)and(round(R_GetMinimapAngleDeg) < 56)) then
+      p.x:= p.x - 1;
+    if ((floor(R_GetMinimapAngleDeg) > 16)and(round(R_GetMinimapAngleDeg) < 29)) then
+      p.y:= p.y + 1;
+  end;
   GetTile(x, y, p.x, p.y, False, 0);
   Result := Point(x,y);
 end;
@@ -583,7 +587,7 @@ begin
   Tp.x:= Tp.x + 1;
   Tp.y:= Tp.y - 1;
   One := R_TileToMM(Tp);
-  Result := GetMMToMSTile(x, y, one.x, one.y);
+  Result := GetMMToMSTile(x, y, one.x, one.y, Tp);
 end;
 
 (*
