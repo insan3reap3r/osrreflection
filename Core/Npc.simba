@@ -1,16 +1,72 @@
 {* Reflection Npc Functions
 
-   This Contains all the current functions relating to Npc's
-   The Cache Id Can be found Using the Npc tool found in the tools Folder.
-   The ID is specific to each individual monster in runescape, this means
-   you must get the ID for each one. This allows us to be much more
-   accurate than if just using the general ID.
+   This Contains all the current reflection functions relating to Npc's.
+   Each idividual npc in runescape has a specific index number (two seperate chickens
+   have different index.)  If it is a npc that doesn't die, then the index number will
+   never change. If it is an npc that dies, then the index will change by around one
+   number each time the hooks update.  You can grab the index number by using the tool
+   for static index's, or call R_LoadNpcIndex ONCE at the start of script to load the
+   current index.
 
-   Thanks To Borland for the Npc Work.
 
 *}
 
 
+(*
+R_LoadNpcIndex
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_LoadNpcIndex(Name: string):TintegerArray;
+
+Searches the entire index for Npc's with the name given by "Npcname" that are
+within our loaded plane(around 20-30 tiles) DO NOT RUN THIS IN A LOOP. This takes
+a bit of time (10-20 seconds) and should only be called once at the beggining of
+the script to load the index's of each npc, or once when entering a new area of npc's.
+The TIA containing the Index will then be called in the rest of the functions.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_LoadNpcIndex(NpcName: string):TintegerArray;
+var
+  i, k: Integer;
+  TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
+  TheName: string;
+begin
+  Setlength(Result, 100);
+  k := 0;
+  for i := 0 to 32767 do
+  begin
+    TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, i);
+    NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, HookNPCDef);
+    TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, HookNPCName);
+    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    if TheName = '' then
+    begin
+      SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+      SmartFreeObject(SmartCurrentTarget, TheNPC);
+      SmartFreeObject(SmartCurrentTarget, NPCDef);
+      SmartFreeObject(SmartCurrentTarget, TheBytes);
+      continue;
+    end;
+    begin
+      if TheName = LowerCase(NpcName) then
+      begin
+      Result[k] := i;
+      inc(k);
+      end;
+    end;
+    SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+    SmartFreeObject(SmartCurrentTarget, TheNPC);
+    SmartFreeObject(SmartCurrentTarget, NPCDef);
+    SmartFreeObject(SmartCurrentTarget, TheBytes);
+  end;
+  result:= RemoveDeadTIA(result);
+end;
 
 (*
 R_GetNpcsLoc
@@ -18,28 +74,28 @@ R_GetNpcsLoc
 
 .. code-block:: pascal
 
-    R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
+    R_GetNpcsLoc(IndexID:TintegerArray):TPointArray;
 
 Returns all nearby Npc's Current Location with the Id given by
-the CacheId.
+the Index Id.
 
 .. note::
 
   by elfyyy
 
 *)
-function R_GetNpcsLoc(CacheId:TintegerArray):TPointArray;
+function R_GetNpcsLoc(IndexID:TintegerArray):TPointArray;
 var
   i, l, BaseX, BaseY, Node, Def: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
   BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * -1712339069);
-  l := high(CacheId);
+  l := high(IndexId);
   SetLength(Result, 100);
   for i := 0 to l do
   begin
-    Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId[i]);
+    Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, IndexID[i]);
     Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
     if Def = 0 then
     begin
@@ -63,7 +119,7 @@ R_GetNpcLoc
 
 .. code-block:: pascal
 
-    R_GetNpcLoc(CacheId:TintegerArray):TPointArray;
+    R_GetNpcLoc(IndexID:TintegerArray):TPointArray;
 
 Returns Location of Given NPC
 
@@ -72,9 +128,9 @@ Returns Location of Given NPC
   by elfyyy
 
 *)
-function R_GetNpcLoc(CacheId:integer):TPointArray;
+function R_GetNpcLoc(IndexID:integer):TPointArray;
 begin
-  result := R_GetNpcsLoc([CacheId]);
+  result := R_GetNpcsLoc([IndexID]);
 end;
 
 (*
@@ -83,7 +139,7 @@ R_GetNpcHp
 
 .. code-block:: pascal
 
-    function R_GetNpcHp(CacheId:integer):integer;
+    function R_GetNpcHp(IndexID:integer):integer;
 
 Returns Current hp of given npc
 
@@ -92,14 +148,14 @@ Returns Current hp of given npc
   by elfyyy
 
 *)
-function R_GetNpcHp(CacheId:integer):integer;
+function R_GetNpcHp(IndexID:integer):integer;
 var
   Mid, BaseX, BaseY, Node: Integer;
 
 begin
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
   BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * -1712339069);
-  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId);
+  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, IndexID);
   Mid := ((SmartGetFieldInt(SmartCurrentTarget, Node, HookGethealth) * HookgethealthMultiplier) / 30);
   if Mid < 0 then
   begin
@@ -117,7 +173,7 @@ R_IsNpcAnimating
 
 .. code-block:: pascal
 
-    R_IsNpcAnimating(CacheId:integer):Boolean;
+    R_IsNpcAnimating(IndexID:integer):Boolean;
 
 Returns true if given npc is animating.
 
@@ -126,14 +182,14 @@ Returns true if given npc is animating.
   by elfyyy
 
 *)
-function IsNpcAnimating(CacheId:integer):Boolean;
+function IsNpcAnimating(IndexID:integer):Boolean;
 var
   Mid, BaseX, BaseY, Node, Def: Integer;
 begin
   result := false;
   BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * -2001773755);
   BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * -1712339069);
-  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, CacheId);
+  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, IndexID);
   Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
   Mid := (SmartGetFieldInt(SmartCurrentTarget, Node, HookAnimation ) * -722206993);
   if mid > -1 then
