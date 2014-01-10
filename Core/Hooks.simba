@@ -1,6 +1,7 @@
 const
 
 ReflectionRevision =  '33';
+IncludeVersion     =  '1';
 
 {  Hooks   }
 
