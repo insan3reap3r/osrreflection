@@ -104,6 +104,7 @@ begin
   if Mid < 0 then
   begin
     result := 0;
+    SmartFreeObject(SmartCurrentTarget, Node);
     exit;
   end;
   Result := Mid;
