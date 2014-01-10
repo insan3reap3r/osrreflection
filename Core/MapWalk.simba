@@ -70,8 +70,8 @@ begin
       begin
         MMouse(MM.x, MM.y, 0, 0);
         wait(randomrange(90, 160));
-        AL_FastClick(mouse_left);
-        WaitFunc(@ AL_playerWalking, 10, 500);
+        ClickMouse2(mouse_left);
+        WaitFunc(@ R_IsAnimating, 10, 500);
         MMF := MM;
         if (I = H) then
           FFlag(5)

@@ -638,13 +638,13 @@ begin
     exit;
   result := false;
   Me := R_TileToMs(Tp);
-  AL_MissMouse(Me,2,2);
+  Mmouse(Me.x ,Me.y, 2,2);
   wait(randomrange(220,380));
   ClickMouse2(Mouse_Left);
   timeout:= 0;
   repeat
   Wait(100);
-  if not(AL_playerWalking) then
+  if not(R_IsAnimating) then
     timeout:= 100;
   Inc(timeout);
   until(timeout > 99);
