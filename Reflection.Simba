@@ -8,31 +8,162 @@
 {$include SRL-OSR/SRL/Reflection/Core/Player.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 
+const
+  IncludeRevision = 1;
+
+(*
+SetupReflection
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure SetupReflection;
+
+Checks for a new version from the google source-code and updates all reflection files
+
+.. note::
+
+  by Krazy_Meerkat, Hoodz
+
+*)
 procedure SetupReflection;
 var NewFile:integer;
-    OnlineVersion, NewScript, NewFileName:string;
+    OnlineVersion, NewFileName:string;
 begin
-    writeln('Checking for reflection updates...');
-    OnlineVersion := GetPage('http://pastebin.com/raw.php?i=XPTAcknk');
-    writeln(trim(OnlineVersion));
+    writeln('Checking the Google Source-code for Hook updates...');
+    OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
     if (trim(OnlineVersion) > ReflectionRevision) then
     begin
-      writeLn('reflection update available!');
-      writeLn('Updating to v' + OnlineVersion);
-      NewScript := GetPage('http://pastebin.com/raw.php?i=xyWMXs6u');
-      NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Hooks.simba';
-      NewFile := Rewritefile(NewFileName, true);
+      writeLn('Hook update available!');
+      writeLn('Updating to revision ' + OnlineVersion);
       try
-        WriteFileString(NewFile, NewScript);
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Hooks.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Hooks.simba'));
+        writeLn('Successfully updated '+NewFileName);
       except
-        begin
-          writeLn('Fatal error writing to '+NewFileName+'!!');
-          terminatescript;
-        end;
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
       end;
-      CloseFile(NewFile);
-      writeLn('Please restart Simba.');
-      TerminateScript;
     end else
-      writeLn('You have the latest version of Reflection');
+      writeLn('You have the latest Hooks.');
+    writeln('Checking the Google Source-code for Reflection updates...');
+    OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Include%20Rev.txt');
+    if (trim(OnlineVersion) > IncludeRevision) then
+    begin
+      writeLn('Reflection update available!');
+      writeLn('Updating to revision ' + OnlineVersion);
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Hooks.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Hooks.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'MapWalk.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/MapWalk.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Misc.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Misc.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Npc.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Npc.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Player.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Player.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Core\'+ 'Tiles.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Tiles.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\Tools\'+ 'Npc Finder.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Tools/Npc%20Finder.simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+      end;
+      try
+        NewFileName := 'C:\Simba\Includes\SRL-OSR\SRL\Reflection\'+ 'Reflection.simba';
+        NewFile := Rewritefile(NewFileName, true);
+        WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Reflection.Simba'));
+        writeLn('Successfully updated '+NewFileName);
+      except
+          begin
+            writeLn('Fatal error writing to '+NewFileName+'!!');
+            terminatescript;
+          end;
+      finally
+        CloseFile(NewFile);
+        writeLn('Reflection update completed.');
+        writeLn('Please restart Simba.');
+        TerminateScript;
+      end;
+    end else
+      writeLn('You have the latest version of Reflection.');
 end;
