@@ -32,7 +32,7 @@ var NewFile:integer;
 begin
     writeln('Checking the Google Source-code for Hook updates...');
     OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
-    if (StrToInt(OnlineVersion) > ReflectionRevision) then
+    if (trim(OnlineVersion) > ReflectionRevision) then
     begin
       writeLn('Hook update available!');
       writeLn('Updating to revision ' + OnlineVersion);
