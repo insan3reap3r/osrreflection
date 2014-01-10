@@ -23,7 +23,7 @@ Checks for a new version from the google source-code and updates all reflection 
 
 .. note::
 
-  by Krazy_Meerkat, Hoodz
+  by Krazy_Meerkat, Elfyyy & Hoodz
 
 *)
 procedure SetupReflection;
@@ -32,7 +32,7 @@ var NewFile:integer;
 begin
     writeln('Checking the Google Source-code for Hook updates...');
     OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
-    if (trim(OnlineVersion) > ReflectionRevision) then
+    if (StrToInt(OnlineVersion) > ReflectionRevision) then
     begin
       writeLn('Hook update available!');
       writeLn('Updating to revision ' + OnlineVersion);
@@ -53,7 +53,7 @@ begin
       writeLn('You have the latest Hooks.');
     writeln('Checking the Google Source-code for Reflection updates...');
     OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Include%20Rev.txt');
-    if (trim(OnlineVersion) > IncludeRevision) then
+    if (StrToInt(OnlineVersion) > IncludeRevision) then
     begin
       writeLn('Reflection update available!');
       writeLn('Updating to revision ' + OnlineVersion);
