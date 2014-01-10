@@ -1,0 +1,44 @@
+const
+
+ReflectionRevision =  '33';
+IncludeVersion     =  '1';
+
+{  Hooks   }
+
+HookLocalPlayer = 'g.ho';
+HookAnimation = 'aj';
+HookGetSkillLevel = 'client.hf';
+HookGetMaxSkillLevel = 'client.hh';
+HookGetSkillExp = 'client.hb';
+HookGetHealth ='af';
+HookGetMaxHealth ='au';
+HookGetRunEnergy = 'client.ju';
+HookGetBaseX = 'o.cc';
+HookGetBaseY = 'aa.ci';
+HookTileHeights = 'n.j';
+HookCharacterX = 'k';
+HookCharacterY = 'p';
+HookGetYaw = 'ap.fh';
+HookGetPitch = 'i.fn';
+HookGetOffset = 'client.da';
+HookGetCompassAngle = 'client.fd';
+HookNPCs = 'client.bc';
+HookNPCDef = 'b';
+HookNPCName = 'h';
+HookNPCDefID = 'a';
+{  Multipliers   }
+
+HookAnimationMultiplier = -235902795;
+HookGetHealthMultiplier = 1335345578;
+HookGetMaxHealthMultiplier = -1120761321;
+HookGetRunEnergyMultiplier = -1510307713;
+HookGetBaseXMultiplier = -2032069411;
+HookGetBaseYMultiplier = -170410595;
+HookCharacterXMultiplier = -657252599;
+HookCharacterYMultiplier = -1947713529;
+HookGetYawMultiplier = 411939123;
+HookGetPitchMultiplier = -1453013617;
+HookGetCompassAngleMultiplier = 1540345569;
+HookGetOffsetMultiplier = 1071060881;
+HookNPCDefIDMultiplier = 1045362593;
+HookNPCNodeMoveSpeedMultiplier = 642616867;
