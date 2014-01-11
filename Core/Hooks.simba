@@ -22,7 +22,7 @@ HookGetPitch = 'i.fn';
 HookGetOffset = 'client.da';
 HookGetCompassAngle = 'client.fd';
 HookNPCs = 'client.bc';
-HookNPCDef = 'b';
+HookNPCDef = 'aq';
 HookNPCName = 'h';
 HookNPCDefID = 'a';
 {  Multipliers   }
