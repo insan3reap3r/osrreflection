@@ -119,7 +119,7 @@ R_GetNpcLoc
 
 .. code-block:: pascal
 
-    R_GetNpcLoc(IndexID:TintegerArray):TPointArray;
+    R_GetNpcLoc(IndexID:TintegerArray):TPoint;
 
 Returns Location of Given NPC
 
@@ -128,9 +128,14 @@ Returns Location of Given NPC
   by elfyyy
 
 *)
-function R_GetNpcLoc(IndexID:integer):TPointArray;
+function R_GetNpcLoc(IndexID:integer):TPoint;
+var
+  temp: TPointArray;
 begin
-  result := R_GetNpcsLoc([IndexID]);
+  Temp := R_GetNpcsLoc([IndexID]);
+  if length(Temp) = 0 then
+    exit;
+  Result := Temp[0];
 end;
 
 (*

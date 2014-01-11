@@ -30,7 +30,7 @@ RemoveDeadTPA
 
     function RemoveDeadTPA(list:TPointArray): TPointArray;
 
-Removes any dead values in a Tpa.
+Removes any dead values in a Tpa, must be sorted from low to high.
 
 .. note::
 
@@ -43,7 +43,7 @@ var
 begin
   for ls:=0 to high(list) do
   begin
-    if (result[ls].x = 0) and (result[ls].y = 0) then
+    if (list[ls].x = 0) and (list[ls].y = 0) then
     begin
       maxlength:= ls;
       break;
@@ -61,7 +61,7 @@ RemoveDeadTIA
 
     function RemoveDeadTIA(list:TintegerArray): TintegerArray;
 
-Removes any dead values in a Tia.
+Removes any dead values in a Tia, must be sorted from low to high.
 
 .. note::
 
