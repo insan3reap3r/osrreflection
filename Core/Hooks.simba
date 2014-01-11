@@ -21,10 +21,15 @@ HookGetYaw = 'ap.fh';
 HookGetPitch = 'i.fn';
 HookGetOffset = 'client.da';
 HookGetCompassAngle = 'client.fd';
+HookGetPlane = 'x.hc';
+HookGetTileSettings = 'q.h';
+HookGetTileHeight = 'q.b';
 HookNPCs = 'client.bc';
 HookNPCDef = 'b';
 HookNPCName = 'h';
 HookNPCDefID = 'a';
+HookNPCIndex = 'client.by';
+
 {  Multipliers   }
 
 HookAnimationMultiplier = -235902795;
@@ -39,5 +44,6 @@ HookGetYawMultiplier = 411939123;
 HookGetPitchMultiplier = -1453013617;
 HookGetCompassAngleMultiplier = 1540345569;
 HookGetOffsetMultiplier = 1071060881;
+HookGetPlaneMultiplier = 5015225;
 HookNPCDefIDMultiplier = 1045362593;
 HookNPCNodeMoveSpeedMultiplier = 642616867;

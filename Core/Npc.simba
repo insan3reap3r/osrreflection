@@ -4,9 +4,9 @@
    Each idividual npc in runescape has a specific index number (two seperate chickens
    have different index.)  If it is a npc that doesn't die, then the index number will
    never change. If it is an npc that dies, then the index will change by around one
-   number each time the hooks update.  You can grab the index number by using the tool
-   for static index's, or call R_LoadNpcIndex ONCE at the start of script to load the
-   current index.
+   number each time the hooks update.  For Npc's that die (monsters), Grab the index
+   Number at the beggining of script with R_LoadNpcIndex. For an Npc Such as a banker,
+   the NpcTool in Tools can grab the Index to be used in the script.
 
 
 *}
@@ -23,7 +23,7 @@ R_LoadNpcIndex
 Searches the entire index for Npc's with the name given by "Npcname" that are
 within our loaded plane(around 20-30 tiles) DO NOT RUN THIS IN A LOOP. This takes
 a bit of time (10-20 seconds) and should only be called once at the beggining of
-the script to load the index's of each npc, or once when entering a new area of npc's.
+the script to load the indexes of each npc, or once when entering a new area of npc's.
 The TIA containing the Index will then be called in the rest of the functions.
 
 .. note::

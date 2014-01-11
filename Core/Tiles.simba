@@ -16,11 +16,6 @@ type
     TileRotation, CameraRotation: TRotation;
   end;
 
-function R_GetTileHeight: extended;
-begin
-  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, HookTileHeights));
-end;
-
 (*
 R_GetMinimapAngleDeg
 ~~~~~~~~~~~~~~~~~~~~
@@ -216,6 +211,44 @@ begin
   y := (temp.y - tile.y) * 4 - 2;
   result.x := round((x * cos(angle)) + (y * sin(angle))) + 643;
   result.y := round((y * cos(angle)) - (x * sin(angle))) + 83;
+end;
+
+(*
+R_GetTileHeight
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetTileHeight(tile: TPoint) : integer;
+
+Finds the average height of the global tile provided the tile is in the current
+loading area and on a loaded plane.
+
+.. note::
+
+  by BenLand100, Modified by Brandon
+
+*)
+function R_GetTileHeight(tile: TPoint): integer;
+var
+  x, y, CurPlane, GroundSetting: integer;
+begin
+  x := tile.x - SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier;
+  y := tile.y - SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseyMultiplier;
+  if ((x < 0) or (x > 104) or (y < 0) or (y > 104)) then
+  begin
+    result := 0;
+    exit;
+  end;
+  CurPlane := SmartGetFieldInt(SmartCurrentTarget, 0, HookGetPlane) * HookGetPlaneMultiplier;
+  GroundSetting := SmartGetFieldArray3DByte(SmartCurrentTarget, 0, HookGetTileSettings, 1, X, Y);
+  if ((CurPlane < 3) and ((GroundSetting and 2) <> 0)) then
+    CurPlane := CurPlane + 1;
+  Result := SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x + 1, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x, y + 1)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x + 1, y + 1);
+  Result := - Result div 4;
 end;
 
 (*

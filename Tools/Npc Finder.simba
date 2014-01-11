@@ -5,7 +5,7 @@ program R_FindNpcIds;
 {$I SRL-OSR/SRL/misc/al_functions.simba}
 {$I SRL-OSR/SRL/Reflection/Reflection.simba}
 {*
-This Tool will find the Cache Id of all Npc's with the given
+This Tool will find the Index Id of all Npc's with the given
 Name within the loaded plane of us.
 
 By: elfyyy
