@@ -692,23 +692,43 @@ begin
       begin
         if ((Two.x - Tp.x) < 0) then
         begin
-          Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
-          Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          if ((Two.y - Tp.y) < 0) then
+          begin
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+          end else
+          begin
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
         end else
         begin
-          Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
-          Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          if ((Two.y - Tp.y) < 0) then
+          begin
+            Result.x:= Result.x - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+          end else
+          begin
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
         end;
       end else
         if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
         begin
           if ((Two.x - Tp.x) < 0) then
           begin
-            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
-            Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            if ((Two.y - Tp.y) < 0) then
+            begin
+              Result.x:= Result.x - (1 * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end else
+            begin
+              Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            end;
           end else
           begin
-          writeln('yo');
             Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
             Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
           end;
@@ -717,19 +737,40 @@ begin
           begin
             if ((Two.x - Tp.x) < 0) then
             begin
-              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
-              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+                Result.x:= Result.x - (1 * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  ) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+                Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
             end else
             begin
-              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
-              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                Result.x:= Result.x - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
+                Result.y:= Result.y + (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+                Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
             end;
           end else
           begin
             if ((Two.x - Tp.x) < 0) then
             begin
-              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
-              Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                //Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+                Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+                Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
             end else
             begin
               Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
@@ -739,30 +780,85 @@ begin
     end;
     if ((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) > 0) then
     begin
-      Writeln('height > 0');
       if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
       begin
-          //Result.x:= Result.x + (4 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
-          //Result.y:= Result.y + (4 * NoNegatives(Two.y - Tp.y) * (NoNegatives(Two.y - Tp.y) / 2));
+              if ((Two.y - Tp.y) > 0) then
+              begin
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+              end else
+              begin
         Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
         Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+              end;
+          //Result.x:= Result.x + (4 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+          //Result.y:= Result.y + (4 * NoNegatives(Two.y - Tp.y) * (NoNegatives(Two.y - Tp.y) / 2));
       end else
         if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
         begin
-          //Result.x:= Result.x + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 2));
+              if ((Two.x - Tp.x) < 0) then
+              begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+        Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+        //Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+          Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
+              end else
+              begin
           Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
           Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+          //Result.x:= Result.x + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 2));
         end else
           if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
           begin
-            //Result.y:= Result.y + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+              if ((Two.y - Tp.y) > 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            if (R_GetMinimapAngleDeg < 260) then
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+            if (R_GetMinimapAngleDeg < 290) then
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
             Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
             Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+              end;
+            //Result.y:= Result.y + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
           end else
           begin
-            //Result.y:= Result.y - (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+              if ((Two.x - Tp.x) < 0) then
+              begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
+            //Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            //Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
             Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
             Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+            //Result.y:= Result.y - (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
           end;
     end;
     if (not(PointInBox(Result, IntToBox(MSX1,MSY1,MSX2,MSY2)))) then
