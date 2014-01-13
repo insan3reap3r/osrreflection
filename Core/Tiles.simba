@@ -84,6 +84,29 @@ begin
 end;
 
 (*
+R_DistanceFromTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_DistanceFromTile(Tile: TPoint): integer;
+
+Returns distance from given tile.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_DistanceFromTile(Tile: TPoint): integer;
+var
+  Loc: TPoint;
+begin
+  Loc := R_GetTileGlobal
+  Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
+end;
+
+(*
 R_NearTile
 ~~~~~~~~~~~
 
@@ -249,6 +272,34 @@ begin
   + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x, y + 1)
   + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, HookGetTileHeight, curPlane, x + 1, y + 1);
   Result := - Result div 4;
+end;
+
+(*
+R_IsWalking
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsWalking: Boolean;
+
+Returns true if we are walking
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_IsWalking: Boolean;
+var
+  first, second: Tpoint;
+begin
+  result := False;
+  first := R_GetTileGlobal;
+  wait(800)
+  second := R_GetTileGlobal;
+  if first = second then
+    result := false
+  else result := true;
 end;
 
 (*
@@ -677,7 +728,7 @@ begin
   timeout:= 0;
   repeat
   Wait(100);
-  if not(R_IsAnimating) then
+  if not(R_IsWalking) then
     timeout:= 100;
   Inc(timeout);
   until(timeout > 99);

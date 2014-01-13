@@ -6,6 +6,7 @@ ReflectionRevision =  '33';
 
 HookLocalPlayer = 'g.ho';
 HookAnimation = 'aj';
+HookInteracting = 'an';
 HookGetSkillLevel = 'client.hf';
 HookGetMaxSkillLevel = 'client.hh';
 HookGetSkillExp = 'client.hb';
@@ -27,12 +28,13 @@ HookGetTileHeight = 'q.b';
 HookNPCs = 'client.bc';
 HookNPCDef = 'b';
 HookNPCName = 'h';
-HookNPCDefID = 'a';
+HookNPCID = 'a';
 HookNPCIndex = 'client.by';
-
+HookNPCLevel = 'm';
 {  Multipliers   }
 
 HookAnimationMultiplier = -235902795;
+HookInteractingMultiplier = 1178772513;
 HookGetHealthMultiplier = 1335345578;
 HookGetMaxHealthMultiplier = -1120761321;
 HookGetRunEnergyMultiplier = -1510307713;
@@ -45,5 +47,5 @@ HookGetPitchMultiplier = -1453013617;
 HookGetCompassAngleMultiplier = 1540345569;
 HookGetOffsetMultiplier = 1071060881;
 HookGetPlaneMultiplier = 5015225;
-HookNPCDefIDMultiplier = 1045362593;
-HookNPCNodeMoveSpeedMultiplier = 642616867;
+HookNPCIDMultiplier = 1045362593;
+HookNPCLevelMultiplier = 1287293725;

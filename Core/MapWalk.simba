@@ -5,7 +5,7 @@ R_TileOnMM
 
 .. code-block:: pascal
 
-    function R_TileOnMM(Tile: TTile): boolean;
+    function R_TileOnMM(Tile: TPoint): boolean;
 
 Checks if the Tile is on the MM.
 
@@ -39,7 +39,7 @@ Walks the path specified in a human like manner.
 *)
 function R_WalkPath(Path: TPointArray): boolean;
 var
-  I, H, T, D, Fails, lP: integer;
+  I, K, H, T, D, Fails, lP: integer;
   P, MM, MMF: TPoint;
 begin
   ColorToleranceSpeed(1);
@@ -71,7 +71,13 @@ begin
         MMouse(MM.x, MM.y, 0, 0);
         wait(randomrange(90, 160));
         ClickMouse2(mouse_left);
-        WaitFunc(@ R_IsAnimating, 10, 500);
+        MarkTime(K);
+        repeat
+        if not R_IsWalking then
+          break;
+        if TimeFromMark(K) > 500 then
+          break;
+        until(TimeFromMark(K) > 2000);
         MMF := MM;
         if (I = H) then
           FFlag(5)
