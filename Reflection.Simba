@@ -36,6 +36,8 @@ begin
   begin
     try
       NewFile := CreateFile(NewFileName);
+      CloseFile(NewFile);
+      NewFile := Rewritefile(NewFileName, true);
       WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba'));
       writeLn('Added new file '+NewFileName);
     except
