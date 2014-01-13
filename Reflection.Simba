@@ -8,7 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 
 const
-  IncludeRevision = 2;
+  IncludeRevision = 3;
 
 
 (*
@@ -34,27 +34,9 @@ begin
   NewFileName := includePath + 'SRL-OSR\SRL\Reflection\Tools\' + 'Path Maker.simba';
   if not(FileExists(NewFileName)) then
   begin
-    CreateFile(NewFileName);
     try
-      NewFile := Rewritefile(NewFileName, true);
+      NewFile := CreateFile(NewFileName);
       WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba'));
-      writeLn('Added new file '+NewFileName);
-    except
-      begin
-        writeLn('Fatal error writing to '+NewFileName+'!!');
-        terminatescript;
-      end;
-    finally
-      CloseFile(NewFile);
-    end;
-  end;
-  NewFileName := includePath + 'SRL-OSR\SRL\Reflection\' + 'RefMisc.simba';
-  if not(FileExists(NewFileName)) then
-  begin
-    CreateFile(NewFileName);
-    try
-      NewFile := Rewritefile(NewFileName, true);
-      WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/RefMisc.simba'));
       writeLn('Added new file '+NewFileName);
     except
       begin
@@ -90,7 +72,7 @@ begin
   if FileExists(OldFileName) then
   begin
     DeleteFile(OldFileName)
-    Writeln('Deleted old file '+OldFileName);
+    Writeln('Deleted file '+OldFileName);
   end;
 end;
 
