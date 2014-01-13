@@ -88,7 +88,10 @@ var
 begin
   OldFileName := includePath + 'SRL-OSR\SRL\Reflection\Tools\' + 'Npc Finder.simba';
   if FileExists(OldFileName) then
+  begin
     DeleteFile(OldFileName)
+    Writeln('Deleted old file '+OldFileName);
+  end;
 end;
 
 (*
