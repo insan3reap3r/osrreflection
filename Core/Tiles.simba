@@ -603,8 +603,10 @@ GetMMToMSTile
 
 .. code-block:: pascal
 
-    function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer): TPoint;
+    function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer; Tp: Tpoint): TPoint;
 
+    Converts a Tile into a Tpoint coord on the minimap using the tile grid
+    and some simple geometry
 
 .. note::
 
@@ -615,37 +617,31 @@ function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer; Tp: Tpoint): TPoint
 var
   p, pl: TPoint;
 begin
-  p := RotatePoint(Point(MMx, MMy), 0-(round(R_GetMinimapAngleRad)), MMCX, MMCY);
-  p.x := Floor((p.x - (MMCX - 33)) / 4.0);
-  p.y := 17- Floor((p.y - (MMCY - 37)) / 4.0);
   pl:= R_GetTileGlobal;
-  if ((Tp.x = pl.x) and (Tp.y = pl.y)) then
-  begin
-    if ((floor(R_GetMinimapAngleDeg) > 286)and(floor(R_GetMinimapAngleDeg) < 315)) then
-      p.y:= p.y + 1;
-    if ((floor(R_GetMinimapAngleDeg) > 314)and(floor(R_GetMinimapAngleDeg) < 343)) then
-      p.x:= p.x - 1;
-    if (((round(R_GetMinimapAngleDeg) > 235)and(floor(R_GetMinimapAngleDeg) < 252))or(floor(R_GetMinimapAngleDeg) = 257)) then
-      p.y:= p.y + 1;
-    if ((round(R_GetMinimapAngleDeg) > 200)and(floor(R_GetMinimapAngleDeg) < 216)) then
-      p.x:= p.x - 1;
-    if ((round(R_GetMinimapAngleDeg) > 197)and(round(R_GetMinimapAngleDeg) < 200)) then
-      p.y:= p.y + 1;
-    if ((floor(R_GetMinimapAngleDeg) > 143)and(round(R_GetMinimapAngleDeg) < 164)) then
-      p.x:= p.x - 1;
-    if ((round(R_GetMinimapAngleDeg) > 124)and(floor(R_GetMinimapAngleDeg) < 144)) then
-      p.y:= p.y + 1;
-    if ((round(R_GetMinimapAngleDeg) > 86)and(floor(R_GetMinimapAngleDeg) < 102)) then
-      p.x:= p.x - 1;
-    if ((round(R_GetMinimapAngleDeg) > 76)and(round(R_GetMinimapAngleDeg) < 87)) then
-      p.y:= p.y + 1;
-    if ((round(R_GetMinimapAngleDeg) > 28)and(round(R_GetMinimapAngleDeg) < 56)) then
-      p.x:= p.x - 1;
-    if ((floor(R_GetMinimapAngleDeg) > 16)and(round(R_GetMinimapAngleDeg) < 29)) then
-      p.y:= p.y + 1;
-  end;
+  p.x:= (8 + (Tp.x - (pl.x + 1)));
+  p.y:= (8 + (Tp.y - (pl.y - 1)));
   GetTile(x, y, p.x, p.y, False, 0);
   Result := Point(x,y);
+end;
+
+(*
+NoNegatives
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function NoNegatives: Integer;
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
+function NoNegatives(number: Integer): Integer;
+begin
+  if (number < 0) then
+    Result:= number - (number * 2);
+  Result:= number;
 end;
 
 (*
@@ -657,21 +653,124 @@ R_TileToMs
     function R_TileToMs(Tp: Tpoint): Tpoint;
 
     Converts a Tile Onscreen into a Tpoint coord on mainscreen
+    Corrections for differences in Tile height
+    Corrections for Tile distance with heights
 
 .. note::
 
-  by ReadySteadyGo, Modified by Krazy Meerkat
+  by Krazy Meerkat
 
 *)
 function R_TileToMs(Tp: Tpoint): Tpoint;
 var
   x,y: integer;
-  One: Tpoint;
+  One, Two: Tpoint;
 begin
   Tp.x:= Tp.x + 1;
   Tp.y:= Tp.y - 1;
   One := R_TileToMM(Tp);
+  Two:= R_GetTileGlobal;
   Result := GetMMToMSTile(x, y, one.x, one.y, Tp);
+  if (((not(Result.x = 0))and(not(Result.y = 0)))and(((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) > 0)or((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) < 0))) then
+  begin
+    if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+    begin
+      Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.y - Tp.y)));
+    end else
+      if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+      begin
+        Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.y - Tp.y)));
+      end else
+        if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+        begin
+          Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.x - Tp.x)));
+        end else
+          Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.x - Tp.x)));
+    if ((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) < 0) then
+    begin
+      if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+      begin
+        if ((Two.x - Tp.x) < 0) then
+        begin
+          Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+          Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        end else
+        begin
+          Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
+          Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        end;
+      end else
+        if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+        begin
+          if ((Two.x - Tp.x) < 0) then
+          begin
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end else
+          begin
+          writeln('yo');
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
+        end else
+          if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+          begin
+            if ((Two.x - Tp.x) < 0) then
+            begin
+              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            end else
+            begin
+              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end;
+          end else
+          begin
+            if ((Two.x - Tp.x) < 0) then
+            begin
+              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end else
+            begin
+              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end;
+          end;
+    end;
+    if ((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) > 0) then
+    begin
+      Writeln('height > 0');
+      if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+      begin
+          //Result.x:= Result.x + (4 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+          //Result.y:= Result.y + (4 * NoNegatives(Two.y - Tp.y) * (NoNegatives(Two.y - Tp.y) / 2));
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+      end else
+        if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+        begin
+          //Result.x:= Result.x + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 2));
+          Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+        end else
+          if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+          begin
+            //Result.y:= Result.y + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+          end else
+          begin
+            //Result.y:= Result.y - (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+          end;
+    end;
+    if (not(PointInBox(Result, IntToBox(MSX1,MSY1,MSX2,MSY2)))) then
+    begin
+      Result.x:= 0;
+      Result.y:= 0;
+    end;
+  end;
 end;
 
 (*
@@ -681,6 +780,7 @@ ProjectTiles
 .. code-block:: pascal
 
     function ProjectTiles;
+    Draws the mainscreen tile grid on screen
 
 
 .. note::
@@ -722,17 +822,20 @@ begin
     exit;
   result := false;
   Me := R_TileToMs(Tp);
-  Mmouse(Me.x ,Me.y, 2,2);
-  wait(randomrange(220,380));
-  ClickMouse2(Mouse_Left);
-  timeout:= 0;
-  repeat
-  Wait(100);
-  if not(R_IsWalking) then
-    timeout:= 100;
-  Inc(timeout);
-  until(timeout > 99);
-  result := (R_GetTileGlobal = Tp)
+  if ((not(Me.x = 0))and(not(Me.y = 0))) then
+  begin
+    Mmouse(Me.x ,Me.y, 2,2);
+    wait(randomrange(220,380));
+    ClickMouse2(Mouse_Left);
+    timeout:= 0;
+    repeat
+      Wait(100);
+      if not(R_IsAnimating) then
+        timeout:= 100;
+      Inc(timeout);
+    until(timeout > 99);
+    result := (R_GetTileGlobal = Tp)
+  end;
 end;
 
 
