@@ -1,4 +1,3 @@
-
 {$DEFINE REFLECTION}
 
 {$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
@@ -9,7 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 
 const
-  IncludeRevision = 1;
+  IncludeRevision = 2;
 
 (*
 SetupReflection
