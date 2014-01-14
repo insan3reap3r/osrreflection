@@ -1,5 +1,6 @@
 #### - This File contains the path & filename followed by the URL - ####
+#### -  Check for capital letters in the extension caused by git  - ####
 (Reflection\Tools\Path Maker.simba)
 (http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba)
 (Reflection\Core\Includes.simba)
-(http://osrreflection.googlecode.com/git/Core/Includes.simba)
+(http://osrreflection.googlecode.com/git/Core/Includes.Simba)
