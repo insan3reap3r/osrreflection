@@ -8,7 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 
 const
-  IncludeRevision = 4;
+  IncludeRevision = 5;
 
 
 (*
