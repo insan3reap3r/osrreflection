@@ -18,8 +18,8 @@ function R_GetAnimation: Integer;
 var
   Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, HookLocalPlayer);
-  Result := SmartGetFieldInt(SmartCurrentTarget, me, HookAnimation)  * HookAnimationMultiplier;
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  Result := SmartGetFieldInt(SmartCurrentTarget, me, Actor_animation)  * Actor_animation_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Me);
 end;
 
@@ -60,7 +60,7 @@ Returns a skill level(Top) specified by Skill(Please use constants).
 *)
 function R_GetSkillLevel(SkillConst: Integer): Integer;
 begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillLevel, skillconst);
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, client_levels, skillconst);
 end;
 
 (*
@@ -80,7 +80,7 @@ Returns a skill level(Top) specified by Skill(Please use constants).
 *)
 function R_GetMaxSkillLevel(SkillConst: Integer): Integer;
 begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetMaxSkillLevel, skillconst);
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, client_real_levels, skillconst);
 end;
 
 (*
@@ -100,7 +100,7 @@ Returns Skill Exp(Top) specified by Skill(Please use constants).
 *)
 function R_GetSkillExp(SkillConst: Integer): Integer;
 begin
-  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, HookGetSkillExp, SkillConst);
+  Result := SmartGetFieldArrayInt(SmartCurrentTarget, 0, client_experiences, SkillConst);
 end;
 
 (*
@@ -142,8 +142,8 @@ function R_GetMaxHealth: extended;
 var
   Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, HookLocalPlayer);
-  Result := (SmartGetFieldInt(SmartCurrentTarget, me, HookGetMaxhealth) * HookgetMaxhealthMultiplier);
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  Result := (SmartGetFieldInt(SmartCurrentTarget, me, Actor_maxHealth) * Actor_maxHealth_Multiplier);
   SmartFreeObject(SmartCurrentTarget, me);
 end;
 
@@ -190,7 +190,7 @@ Returns integer value of current run energy.
 *)
 function R_GetRunEnergy: integer;
 begin
-  Result := SmartGetFieldInt(SmartCurrentTarget, 0, HookGetRunEnergy) * HookGetRunEnergyMultiplier;
+  Result := SmartGetFieldInt(SmartCurrentTarget, 0, client_run_energy) * client_run_energy_Multiplier ;
 end;
 
 (*

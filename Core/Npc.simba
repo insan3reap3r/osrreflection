@@ -28,7 +28,7 @@ begin
   SetLength(Result, 150);
   repeat
   inc(i)
-  Result[i] := SmartGetFieldArrayint(SmartCurrentTarget, 0, HookNPCIndex, i);
+  Result[i] := SmartGetFieldArrayint(SmartCurrentTarget, 0, client_npcIndices, i);
   if Result[i] = 0 then
   begin
     SetLength(result, i);
@@ -67,9 +67,9 @@ begin
   k := 0;
   for i := 0 to s do
   begin
-    TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, T[i]);
-    NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, HookNPCDef);
-    TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, HookNPCName);
+    TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+    NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, Npc_definition);
+    TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
     TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
     if TheName = '' then
     begin
@@ -113,27 +113,27 @@ it in a TPA with closest first.
 *)
 function R_GetNpcsLoc(NpcName:String):TPointArray;
 var
-  i, l, BaseX, BaseY, Node, Def: Integer;
+  i, l, BaseX, BaseY, TheNode, Def: Integer;
   s : TIntegerArray;
 begin
-  BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier);
-  BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseYMultiplier);
+  BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier);
+  BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier);
   l := high(R_LoadNpcIndex(NpcName));
   s := R_LoadNpcIndex(NpcName);
   SetLength(Result, 100);
   for i := 0 to l do
   begin
-    Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, s[i]);
-    Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
+    TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, s[i]);
+    Def := SmartGetFieldObject(SmartCurrentTarget, TheNode, Npc_definition);
     if Def = 0 then
     begin
-      SmartFreeObject(SmartCurrentTarget, Node);
+      SmartFreeObject(SmartCurrentTarget, TheNode);
       SmartFreeObject(SmartCurrentTarget, Def);
       continue;
     end;
-    result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseX) * HookGetBaseXMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterX) * HookCharacterXMultiplier) div 128;
-    result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, HookGetBaseY) * HookGetBaseYMultiplier) + (SmartGetFieldInt(SmartCurrentTarget, Node, HookCharacterY) * HookCharacterYMultiplier) div 128;
-    SmartFreeObject(SmartCurrentTarget, Node);
+    result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_localX) * Actor_localX_Multiplier) div 128;
+    result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_localY) * Actor_localY_Multiplier) div 128;
+    SmartFreeObject(SmartCurrentTarget, TheNode);
     SmartFreeObject(SmartCurrentTarget, Def);
   end;
   SortTpaFrom(Result, Point(10000,10000));
@@ -188,8 +188,8 @@ function R_InteractingNpc:integer;
 var
 local: integer;
 begin
-  Local := SmartGetFieldObject(SmartCurrentTarget, 0, HookLocalPlayer);
-  result := SmartGetFieldInt(SmartCurrentTarget, Local, HookInteracting) * HookInteractingMultiplier;
+  Local := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  result := SmartGetFieldInt(SmartCurrentTarget, Local, Actor_interacting) * Actor_interacting_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Local);
 end;
 
@@ -211,20 +211,20 @@ Returns Current hp of npc in combat with us.
 *)
 function R_GetNpcHp:integer;
 var
-  Mid, Node, IndexId: Integer;
+  Mid, TheNode, IndexId: Integer;
 
 begin
   IndexId := R_InteractingNpc;
-  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, IndexID);
-  Mid := ((SmartGetFieldInt(SmartCurrentTarget, Node, HookGethealth) * HookgethealthMultiplier) / 30);
+  TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID);
+  Mid := ((SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_health) * Actor_health_Multiplier) / 30);
   if Mid < 0 then
   begin
     result := 0;
-    SmartFreeObject(SmartCurrentTarget, Node);
+    SmartFreeObject(SmartCurrentTarget, TheNode);
     exit;
   end;
   Result := Mid;
-  SmartFreeObject(SmartCurrentTarget, Node);
+  SmartFreeObject(SmartCurrentTarget, TheNode);
 end;
 
 (*
@@ -244,16 +244,16 @@ Returns Combat level of nearest npc to player with given name.
 *)
 function R_NpcLevel(NpcName: String):integer;
 var
-  Node, Def: Integer;
+  TheNode, Def: Integer;
   IndexId: TIntegerArray;
 begin
   IndexId := R_LoadNpcIndex(NpcName);
   if length(IndexId) = 0 then
     exit;
-  Node := SmartGetFieldArrayObject(SmartCurrentTarget, 0, HookNPCs, IndexID[0]);
-  Def := SmartGetFieldObject(SmartCurrentTarget, Node, HookNPCDef);
-  Result := (SmartGetFieldInt(SmartCurrentTarget, Def, HookNPCLevel ) * HookNPCLevelMultiplier);
-  SmartFreeObject(SmartCurrentTarget, Node);
+  TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID[0]);
+  Def := SmartGetFieldObject(SmartCurrentTarget, TheNode, Npc_definition);
+  Result := (SmartGetFieldInt(SmartCurrentTarget, Def, NpcDefinition_level ) * NpcDefinition_level_Multiplier);
+  SmartFreeObject(SmartCurrentTarget, TheNode);
   SmartFreeObject(SmartCurrentTarget, Def);
 end;
 
