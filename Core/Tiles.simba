@@ -125,10 +125,8 @@ function R_NearTile(TP:Tpoint; Dist:integer):Boolean;
 var
   Loc: TPoint;
 begin
-  result := False;
   Loc := R_GetTileGlobal
-  if Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist then
-    Result := True;
+  Result := Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist;
 end;
 
 (*
@@ -201,10 +199,8 @@ function R_OnTile(TP:Tpoint):Boolean;
 var
   Loc: TPoint;
 begin
-  result := False;
   Loc := R_GetTileGlobal
-  if Loc = TP then
-    Result := True;
+  Result := Loc = TP;
 end;
 
 (*
@@ -293,13 +289,10 @@ function R_IsWalking: Boolean;
 var
   first, second: Tpoint;
 begin
-  result := False;
   first := R_GetTileGlobal;
   wait(800)
   second := R_GetTileGlobal;
-  if first = second then
-    result := false
-  else result := true;
+  result := first <> second;
 end;
 
 (*
@@ -510,13 +503,6 @@ begin
       Result := False;
       Exit;
     end;
-  end;
-  if DrawColor <> -1 then
-  begin
-    SMART_DrawLine(False, _2DPoints[2], _2DPoints[3], DrawColor);
-    SMART_DrawLine(False, _2DPoints[4], _2DPoints[5], DrawColor);
-    SMART_DrawLine(False, _2DPoints[3], _2DPoints[5], DrawColor);
-    SMART_DrawLine(False, _2DPoints[2], _2DPoints[4], DrawColor);
   end;
   x := _2DPoints[1].x;
   y := _2DPoints[1].y;
