@@ -1,0 +1,24 @@
+#### - This File contains the path & filename followed by the URL - ####
+#### -  Check for capital letters in the extension caused by git  - ####
+#### - Reflection.Simba and Includes.Simba are not to be put here - ####
+
+(Reflection\Core\Hooks.simba)
+(http://osrreflection.googlecode.com/git/Core/Hooks.simba)
+
+(Reflection\Core\MapWalk.simba)
+(http://osrreflection.googlecode.com/git/Core/MapWalk.simba)
+
+(Reflection\Core\Misc.simba)
+(http://osrreflection.googlecode.com/git/Core/Misc.simba)
+
+(Reflection\Core\Npc.simba)
+(http://osrreflection.googlecode.com/git/Core/Npc.simba)
+
+(Reflection\Core\Player.simba)
+(http://osrreflection.googlecode.com/git/Core/Player.simba)
+
+(Reflection\Core\Tiles.simba)
+(http://osrreflection.googlecode.com/git/Core/Tiles.simba)
+
+(Reflection\Tools\Path Maker.simba)
+(http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba)
