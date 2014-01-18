@@ -1,0 +1,133 @@
+
+(*
+R_TileOnMM
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_TileOnMM(Tile: TPoint): boolean;
+
+Checks if the Tile is on the MM.
+
+.. note::
+
+  by Drags111
+
+*)
+function R_TileOnMM(Tile: TPoint): boolean;
+var
+  P: TPoint;
+begin
+  P := R_TileToMM(Tile);
+  Result := rs_OnMinimap(P);
+end;
+
+(*
+R_WalkPath
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkPath(Path: TPointArray): boolean;
+
+Walks the path specified in a human like manner.
+
+.. note::
+
+  by AwkwardSaw
+
+*)
+function R_WalkPath(Path: TPointArray): boolean;
+var
+  I, K, H, T, D, Fails, lP: integer;
+  P, MM, MMF: TPoint;
+begin
+  ColorToleranceSpeed(1);
+  H := High(Path);
+  T := GetSystemTime + 10000 + Random(2000);
+  Fails := 0;
+  lP := 0;
+  while (not Result) and (GetSystemTime < T) and (Fails < 5) do
+  begin
+    if (not LoggedIn()) then
+      Exit;
+    P := R_GetTileGlobal;
+    for I := H downto 0 do
+    begin
+      if Fails > 1 then
+        exit;
+      if ((I - lP) > 3) then
+        Continue
+      else
+        lP := I;
+      MM := R_TileToMM(Path[I]);
+      if MM = MMF then
+        Inc(Fails);
+      D := Distance(MM.X, MM.Y, MMCX, MMCY);
+      if (D < 2) then
+        exit
+      else if (D < 70) then
+      begin
+        MMouse(MM.x, MM.y, 0, 0);
+        wait(randomrange(90, 160));
+        ClickMouse2(mouse_left);
+        MarkTime(K);
+        repeat
+        if not R_IsWalking then
+          break;
+        if TimeFromMark(K) > 500 then
+          break;
+        until(TimeFromMark(K) > 2000);
+        MMF := MM;
+        if (I = H) then
+          FFlag(5)
+        else
+          FFlag(25);
+        T := getSystemTime + 7000 + Random(1000);
+        Break;
+      end;
+    end;
+    Result := (I = H);
+  end;
+  FFlag(5);
+end;
+
+(*
+R_BlindWalk
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_BlindWalk(P: TPoint): Boolean;
+
+Uses R_WalkPath and creates a path in a straight line to walk from current
+tile to tile specified.
+
+.. note::
+
+  by Flight
+
+*)
+function R_BlindWalk(P: TPoint): Boolean;
+var
+  Tries, Fails: Integer;
+  M: TPoint;
+  ctrlPoints: TPointArray;
+begin
+  repeat
+    inc(Fails);
+    if Fails > 1 then
+      exit;
+    if (not LoggedIn()) then
+      Exit;
+    M := R_GetTileGlobal;
+    if (M.X = - 1) then
+      Continue;
+    if (Length(ctrlPoints) = 0) then
+      ctrlPoints := TPABetweenPoints(M, P, 5 + Random(2), 2);
+    Inc(Tries);
+    if (Tries > 20) then
+      Exit;
+    Result := R_WalkPath(ctrlPoints);
+  until (Result);
+end;

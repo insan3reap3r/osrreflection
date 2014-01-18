@@ -1,0 +1,923 @@
+
+type
+  TPoint3D = record
+    x, y, z: Extended;
+  end;
+
+  TRotation = TPoint3D;
+  ATPoint3D = Array of TPoint3D;
+
+  TMatrix = record
+    Data: Array of Extended;
+  end;
+
+  TScene = record
+    TilePosition, PlayerTile, CameraPosition: TPoint3D;
+    TileRotation, CameraRotation: TRotation;
+  end;
+
+(*
+R_GetMinimapAngleDeg
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMinimapAngleDeg: extended;
+
+Returns the current Map angle in degrees. North: 0 deg, increases in the
+counter clockwise direction
+
+.. note::
+
+  by BenLand100
+
+*)
+function R_GetMinimapAngleDeg: extended;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, client_cameraYaw) * client_cameraYaw_Multiplier / 2048.0 * 360);
+end;
+
+(*
+R_GetMinimapAngleRad
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMinimapAngleRad: extended;
+
+Returns the current Map angle in radians. North: 0 deg, increases in the
+counter clockwise direction
+
+.. note::
+
+  by BenLand100
+
+*)
+function R_GetMinimapAngleRad: extended;
+begin
+  Result := Radians((SmartGetFieldInt(SmartCurrentTarget, 0, client_cameraYaw) * client_cameraYaw_Multiplier / 2048.0 * 360));
+end;
+
+(*
+R_GetTileGlobal
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetTileGlobal: TPoint;
+
+Returns the current location of player.
+
+.. note::
+
+  by Brandon
+
+*)
+function R_GetTileGlobal: TPoint;
+var
+  Me: Integer;
+begin
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  Result.X := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_localX) * Actor_localX_Multiplier) div 128;
+  Result.Y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_localY) * Actor_localY_Multiplier) div 128;
+  SmartFreeObject(SmartCurrentTarget, Me);
+end;
+
+(*
+R_DistanceFromTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_DistanceFromTile(Tile: TPoint): integer;
+
+Returns distance from given tile.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_DistanceFromTile(Tile: TPoint): integer;
+var
+  Loc: TPoint;
+begin
+  Loc := R_GetTileGlobal
+  Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
+end;
+
+(*
+R_NearTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_NearTile(Tile: TPoint; Distance: Integer): Boolean;
+
+Returns true if player is within the distance specified to the tile.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_NearTile(TP:Tpoint; Dist:integer):Boolean;
+var
+  Loc: TPoint;
+begin
+  Loc := R_GetTileGlobal
+  Result := Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist;
+end;
+
+(*
+R_inPolygon
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_inPolygon(Area: TPointArray): Boolean;
+
+Checks if inside a area that's not a box specified by the Tpa
+
+.. note::
+
+    By: Felipe Monteiro de Carvalho, modified by Officer Barbrady
+
+*)
+function R_inPolygon(Area: TPointArray): Boolean;
+var
+  xnew, ynew, xold, yold, x1, y1, x2, y2: Cardinal;
+  i, numpoints, inside, X, Y: Integer;
+begin
+  numpoints := Length(Area);
+  X := R_GetTileGlobal.x Y := R_GetTileGlobal.y if (numpoints < 3) then
+    Exit;
+  xold := Area[numpoints - 1].X;
+  yold := Area[numpoints - 1].Y;
+  for i := 0 to (numpoints - 1) do
+  begin
+    xnew := Area[i].X;
+    ynew := Area[i].Y;
+    if (xnew > xold) then
+    begin
+      x1 := xold;
+      x2 := xnew;
+      y1 := yold;
+      y2 := ynew;
+    end
+    else
+    begin
+      x1 := xnew;
+      x2 := xold;
+      y1 := ynew;
+      y2 := yold;
+    end;
+    if (((xnew < X) = (X <= xold)) and ((Y - y1) * (x2 - x1) < (y2 - y1) * (X - x1))) then
+      inside := not inside;
+    xold := xnew;
+    yold := ynew;
+  end;
+  Result := inside <> 0;
+end;
+
+(*
+R_OnTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_OnTile(TP:Tpoint):Boolean;
+
+Returns true if player is on the tile specified.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_OnTile(TP:Tpoint):Boolean;
+var
+  Loc: TPoint;
+begin
+  Loc := R_GetTileGlobal
+  Result := Loc = TP;
+end;
+
+(*
+R_TileToMM
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_TileToMM(tile: TPoint): TPoint;
+
+Converts the global tile position to a screen location on the
+  minimap, taking map rotation into account.
+
+.. note::
+
+  by BenLand100, Modified by Krazy_Meerkat
+
+*)
+function R_TileToMM(tile: TPoint): TPoint;
+var
+  Angle, x, y: extended;
+  temp: TPoint;
+begin
+  Angle := -R_GetMinimapAngleRad;
+  temp := R_GetTileGlobal;
+  x := (tile.x - temp.x) * 4 - 2;
+  y := (temp.y - tile.y) * 4 - 2;
+  result.x := round((x * cos(angle)) + (y * sin(angle))) + 643;
+  result.y := round((y * cos(angle)) - (x * sin(angle))) + 83;
+end;
+
+(*
+R_GetTileHeight
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetTileHeight(tile: TPoint) : integer;
+
+Finds the average height of the global tile provided the tile is in the current
+loading area and on a loaded plane.
+
+.. note::
+
+  by BenLand100, Modified by Brandon
+
+*)
+function R_GetTileHeight(tile: TPoint): integer;
+var
+  x, y, CurPlane, GroundSetting: integer;
+begin
+  x := tile.x - SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
+  y := tile.y - SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
+  if ((x < 0) or (x > 104) or (y < 0) or (y > 104)) then
+  begin
+    result := 0;
+    exit;
+  end;
+  CurPlane := SmartGetFieldInt(SmartCurrentTarget, 0, client_plane) * client_plane_Multiplier;
+  GroundSetting := SmartGetFieldArray3DByte(SmartCurrentTarget, 0, client_groundSettings, 1, X, Y);
+  if ((CurPlane < 3) and ((GroundSetting and 2) <> 0)) then
+    CurPlane := CurPlane + 1;
+  Result := SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x + 1, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x, y + 1)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x + 1, y + 1);
+  Result := - Result div 4;
+end;
+
+(*
+R_IsWalking
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsWalking: Boolean;
+
+Returns true if we are walking
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_IsWalking: Boolean;
+var
+  first, second: Tpoint;
+begin
+  first := R_GetTileGlobal;
+  wait(800)
+  second := R_GetTileGlobal;
+  result := first <> second;
+end;
+
+(*
+Point3D
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function Point3D(x, y, z: Extended): TPoint3D;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function Point3D(x, y, z: Extended): TPoint3D;
+begin
+  Result.x := x;
+  Result.y := y;
+  Result.z := z;
+end;
+
+(*
+Rotation
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function Rotation(xpheta, ypheta, zpheta: Extended): TRotation;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function Rotation(xpheta, ypheta, zpheta: Extended): TRotation;
+begin
+  Result.x := xpheta;
+  Result.y := ypheta;
+  Result.z := zpheta;
+end;
+
+(*
+Multiply_Point3D_Matrix3x3
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function Multiply_Point3D_Matrix3x3(p: TPoint3D; m: TMatrix): TPoint3D;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function Multiply_Point3D_Matrix3x3(p: TPoint3D; m: TMatrix): TPoint3D;
+begin
+  Result.x := (m.Data[0] * p.x) + (m.Data[1] * p.y) + (m.Data[2] * p.z);
+  Result.y := (m.Data[3] * p.x) + (m.Data[4] * p.y) + (m.Data[5] * p.z);
+  Result.z := (m.Data[6] * p.x) + (m.Data[7] * p.y) + (m.Data[8] * p.z);
+end;
+
+(*
+TranslatePoints3D
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure TranslatePoints3D(var p: ATPoint3D; v: TPoint3D);
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+procedure TranslatePoints3D(var p: ATPoint3D; v: TPoint3D);
+var
+  Len, i: Integer;
+begin
+  Len := Length(p);
+  for i := 0 to Len-1 do
+    p[i] := Point3D(p[i].x + v.x, p[i].y + v.y, p[i].z + v.z);
+end;
+
+(*
+RotatePoints3D
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function RotatePoints3D(Points: ATPoint3D; rp: TPoint3D; r: TRotation): Array of TPoint3D;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function RotatePoints3D(Points: ATPoint3D; rp: TPoint3D; r: TRotation): Array of TPoint3D;
+var
+  m: TMatrix;
+  Len, i: Integer;
+begin
+  R.x := radians(R.x);
+  R.Y := radians(R.Y);
+  r.z := radians(R.z);
+  SetLength(m.Data, 9);
+  m.Data := [Cos(r.y)*Cos(r.z), -Cos(r.x)*Sin(r.z) + Sin(r.x)*Sin(r.y)*Cos(r.z), Sin(r.x)*Sin(r.z)+Cos(r.x)*Sin(r.y)*Cos(r.z),
+  Cos(r.y)*Sin(r.z), Cos(r.x)*Cos(r.z) + Sin(r.x)*Sin(r.y)*Sin(r.z), -Sin(r.x)*Cos(r.z)+Cos(r.x)*Sin(r.y)*Sin(r.z),
+  -Sin(r.y), Sin(r.x)*Cos(r.y), Cos(r.x)*Cos(r.y)];
+  Len := Length(Points);
+  SetLength(Result, Len);
+  TranslatePoints3D(Points, Point3D(-rp.x, -rp.y, -rp.z));
+  for i := 0 to Len-1 do
+    Result[i] := Multiply_Point3D_Matrix3x3(Points[i], m);
+  TranslatePoints3D(Result, rp);
+end;
+
+(*
+PerspectiveProject
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function PerspectiveProject(p: ATPoint3D; cPos:TPoint3D): TPointArray;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function PerspectiveProject(p: ATPoint3D; cPos:TPoint3D): TPointArray;
+var
+  Len, i: Integer;
+begin
+  Len := Length(p);
+  SetLength(Result, Len);
+  for i := 0 to Len-1 do
+  begin
+    if (p[i].z - cPos.z) < 1 then
+    begin
+      Result[i].x:= 0;
+      Result[i].y:= 0;
+      Exit;
+    end;
+    Result[i].x:= Round((p[i].x - cPos.x) * {((512/2) / Tan(33/2))}864 / (p[i].z - cPos.z));
+    Result[i].y:= Round((p[i].y - cPos.y) * {(512/2) / Tan(33/2)}864 / (p[i].z - cPos.z));
+  end;
+end;
+
+(*
+ProjectTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function ProjectTile(var x, y: Integer; s: TScene; DrawColor{-1 to not Draw}: Integer): Boolean;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function ProjectTile(var x, y: Integer; s: TScene; DrawColor{-1 to not Draw}: Integer): Boolean;
+var
+  _3DPoints: ATPoint3D;
+  _2DPoints: TPointArray;
+  Len, i: Integer;
+  MSBox: TBox;
+  tp: TPoint3D;
+begin
+  if DrawColor = -1 then
+    Len := 2
+  else
+    Len := 6;
+  SetLength(_3DPoints, Len);
+  SetLength(_2DPoints, Len);
+  tp := s.TilePosition;
+  _3DPoints[0] := s.PlayerTile;
+  _3DPoints[1] := Point3D(tp.x + 6, tp.y + 12, tp.z + 6); // Center of input Tile
+  if DrawColor <> -1 then
+  begin
+    _3DPoints[2] := Point3D(tp.x + 12, tp.y + 12, tp.z);
+    _3DPoints[3] := Point3D(tp.x, tp.y + 12, tp.z);
+    _3DPoints[4] := Point3D(tp.x + 12, tp.y + 12, tp.z + 12);
+    _3DPoints[5] := Point3D(tp.x, tp.y + 12, tp.z + 12);
+  end;
+  TranslatePoints3D(_3DPoints, Point3D(-6, -6, 0));
+  _3DPoints := RotatePoints3D(_3DPoints, _3DPoints[0], s.TileRotation);
+  _3DPoints := RotatePoints3D(_3DPoints, s.CameraPosition, s.CameraRotation);
+  _2DPoints := PerspectiveProject(_3DPoints, s.CameraPosition);
+  MSBox.X1 := MSX1;
+  MSBox.Y1 := MSY1;
+  MSBox.X2 := MSX2;
+  MSBox.Y2 := MSY2;
+  for i := 0 to Len-1 do
+  begin
+    _2DPoints[i].x := _2DPoints[i].x + {(511/2) + 4}260;
+    _2DPoints[i].y := _2DPoints[i].y + {(334/2) - 4}163;
+    if not PointInBox(_2DPoints[i], MSBox) then
+    begin
+      Result := False;
+      Exit;
+    end;
+  end;
+  x := _2DPoints[1].x;
+  y := _2DPoints[1].y;
+  Result := True;
+end;
+
+(*
+GetTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function GetTile(var x, y: Integer; tx, tz: Integer; Draw: Boolean; Color: Integer): Boolean;
+
+
+.. note::
+
+  by ReadySteadyGo, Modified by Krazy Meerkat
+
+*)
+function GetTile(var x, y: Integer; tx, tz: Integer; Draw: Boolean; Color: Integer): Boolean;
+var
+  s: TScene;
+begin
+  with s do
+  begin
+    PlayerTile := Point3D(6, 20 + 12, (120) - 8 + 6);
+    TilePosition := Point3D((tx*12)-(8*12), 23, (tz*12) + (24)-8);
+    TileRotation := Rotation(0, (Round(R_GetMinimapAngleDeg)), 0);
+    CameraPosition := Point3D(0, -233, 0);
+    CameraRotation := Rotation(65, 0, 0);
+  end;
+  if (not Draw) then
+    Color := -1;
+  Result := ProjectTile(x, y, s, Color);
+end;
+
+(*
+MMToMSTileEx
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function MMToMSTileEx(var x, y: Integer; MMx, MMy:Integer; Draw: Boolean; Color: Integer): Boolean;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function MMToMSTileEx(var x, y: Integer; MMx, MMy:Integer; Draw: Boolean; Color: Integer): Boolean;
+var
+  p: TPoint;
+begin
+  p := RotatePoint(Point(MMx, MMy), R_GetMinimapAngleRad, MMCX, MMCY);
+  p.x := Floor((p.x - (MMCX - 33)) / 4.0);
+  p.y := 17- Floor((p.y - (MMCY - 37)) / 4.0);
+  Result := GetTile(x, y, p.x, p.y, Draw, Color);
+end;
+
+(*
+MMToMSTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function MMToMSTile(var x, y: Integer; MMx, MMy:Integer; Draw: Boolean; Color: Integer): Boolean;
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+function MMToMSTile(var x, y: Integer; MMx, MMy: Integer): Boolean;
+begin
+  Result := MMToMSTileEx(x, y, MMx, MMy, False, 0);
+end;
+
+(*
+GetMMToMSTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer; Tp: Tpoint): TPoint;
+
+    Converts a Tile into a Tpoint coord on the minimap using the tile grid
+    and some simple geometry
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
+function GetMMToMSTile(var x, y: Integer; MMx, MMy: Integer; Tp: Tpoint): TPoint;
+var
+  p, pl: TPoint;
+begin
+  pl:= R_GetTileGlobal;
+  p.x:= (8 + (Tp.x - (pl.x + 1)));
+  p.y:= (8 + (Tp.y - (pl.y - 1)));
+  GetTile(x, y, p.x, p.y, False, 0);
+  Result := Point(x,y);
+end;
+
+(*
+NoNegatives
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function NoNegatives: Integer;
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
+function NoNegatives(number: Integer): Integer;
+begin
+  if (number < 0) then
+    Result:= number - (number * 2);
+  Result:= number;
+end;
+
+(*
+R_TileToMs
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_TileToMs(Tp: Tpoint): Tpoint;
+
+    Converts a Tile Onscreen into a Tpoint coord on mainscreen
+    Corrections for differences in Tile height
+    Corrections for Tile distance with heights
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
+function R_TileToMs(Tp: Tpoint): Tpoint;
+var
+  x,y: integer;
+  One, Two: Tpoint;
+begin
+  Tp.x:= Tp.x + 1;
+  Tp.y:= Tp.y - 1;
+  One := R_TileToMM(Tp);
+  Two:= R_GetTileGlobal;
+  Result := GetMMToMSTile(x, y, one.x, one.y, Tp);
+  if (((not(Result.x = 0))and(not(Result.y = 0)))and(((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) > 0)or((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) < 0))) then
+  begin
+    if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+    begin
+      Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.y - Tp.y)));
+    end else
+      if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+      begin
+        Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.y - Tp.y)));
+      end else
+        if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+        begin
+          Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.x - Tp.x)));
+        end else
+          Result.y:= Result.y + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 10) + (((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) / 100) * NoNegatives(Two.x - Tp.x)));
+    if ((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) < 0) then
+    begin
+      if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+      begin
+        if ((Two.x - Tp.x) < 0) then
+        begin
+          if ((Two.y - Tp.y) < 0) then
+          begin
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+          end else
+          begin
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
+        end else
+        begin
+          if ((Two.y - Tp.y) < 0) then
+          begin
+            Result.x:= Result.x - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+          end else
+          begin
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
+        end;
+      end else
+        if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+        begin
+          if ((Two.x - Tp.x) < 0) then
+          begin
+            if ((Two.y - Tp.y) < 0) then
+            begin
+              Result.x:= Result.x - (1 * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end else
+            begin
+              Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            end;
+          end else
+          begin
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          end;
+        end else
+          if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+          begin
+            if ((Two.x - Tp.x) < 0) then
+            begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+                Result.x:= Result.x - (1 * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  ) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+                Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
+            end else
+            begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                Result.x:= Result.x - (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))));
+                Result.y:= Result.y + (2 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+                Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+            end;
+          end else
+          begin
+            if ((Two.x - Tp.x) < 0) then
+            begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+                //Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+                Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+                Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+                Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+            end else
+            begin
+              Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+            end;
+          end;
+    end;
+    if ((R_GetTileHeight(R_GetTileGlobal) - R_GetTileHeight(Tp)) > 0) then
+    begin
+      if ((R_GetMinimapAngleDeg < 45)or(R_GetMinimapAngleDeg > 315)) then
+      begin
+              if ((Two.y - Tp.y) > 0) then
+              begin
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+              end else
+              begin
+        Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+        Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+              end;
+          //Result.x:= Result.x + (4 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+          //Result.y:= Result.y + (4 * NoNegatives(Two.y - Tp.y) * (NoNegatives(Two.y - Tp.y) / 2));
+      end else
+        if ((R_GetMinimapAngleDeg < 225)and(R_GetMinimapAngleDeg > 135)) then
+        begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+        Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y))  * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+        //Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end else
+              begin
+          Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
+              end else
+              begin
+          Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+          Result.y:= Result.y - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+          //Result.x:= Result.x + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 2));
+        end else
+          if ((R_GetMinimapAngleDeg < 316)and(R_GetMinimapAngleDeg > 224)) then
+          begin
+              if ((Two.y - Tp.y) > 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            if (R_GetMinimapAngleDeg < 260) then
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) ));
+            if (R_GetMinimapAngleDeg < 290) then
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+              end;
+            //Result.y:= Result.y + (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+          end else
+          begin
+              if ((Two.x - Tp.x) < 0) then
+              begin
+              if ((Two.y - Tp.y) < 0) then
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end;
+            //Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            //Result.x:= Result.x + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+              end else
+              begin
+            Result.y:= Result.y + (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 3));
+            Result.x:= Result.x - (1 * NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) * (NoNegatives(Distance(Two.x, Two.y, Tp.x, Tp.y)) / 2));
+              end;
+            //Result.y:= Result.y - (1 * NoNegatives(Two.x - Tp.x) * (NoNegatives(Two.x - Tp.x) / 3));
+          end;
+    end;
+    if (not(PointInBox(Result, IntToBox(MSX1,MSY1,MSX2,MSY2)))) then
+    begin
+      Result.x:= 0;
+      Result.y:= 0;
+    end;
+  end;
+end;
+
+(*
+ProjectTiles
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function ProjectTiles;
+    Draws the mainscreen tile grid on screen
+
+
+.. note::
+
+  by ReadySteadyGo
+
+*)
+procedure ProjectTiles;
+var i, j, x, y: Integer;
+begin
+  for i := 0 to 16 do
+    for j := 0 to 16 do
+      GetTile(x, y, i, j, True, clGray);
+end;
+
+(*
+R_WalkToPointMS
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkToPointMS(Tp: Tpoint): Boolean;
+
+    Converts a Tile Onscreen into a Tpoint coord on mainscreen and
+    Clicks on tile.
+
+.. note::
+
+  by elfyyy, Modified by Krazy Meerkat
+
+*)
+function R_WalkToPointMS(Tp: Tpoint): Boolean;
+var
+  Me, Curr: Tpoint;
+  timeout: Integer;
+begin
+  Curr := R_GetTileGlobal;
+  if Curr = Tp then
+    exit;
+  result := false;
+  Me := R_TileToMs(Tp);
+  if ((not(Me.x = 0))and(not(Me.y = 0))) then
+  begin
+    Mmouse(Me.x ,Me.y, 2,2);
+    wait(randomrange(220,380));
+    ClickMouse2(Mouse_Left);
+    timeout:= 0;
+    repeat
+      Wait(100);
+      if not(R_IsAnimating) then
+        timeout:= 100;
+      Inc(timeout);
+    until(timeout > 99);
+    result := (R_GetTileGlobal = Tp)
+  end;
+end;
+
+
