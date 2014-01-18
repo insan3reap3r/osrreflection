@@ -1,6 +1,0 @@
-{$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Misc.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Player.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
-{$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
