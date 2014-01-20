@@ -5,7 +5,9 @@
 
 
 *}
-
+ Var
+  LocalIndexes: TintegerArray;
+  DoIterate: Boolean;
 
 (*
 R_GetIndices
@@ -15,44 +17,38 @@ R_GetIndices
 
     R_GetIndices:TintegerArray;
 
-Searches npc array and returns valid npc index's. Will refresh when distance
-from last refresh is greater than 15 tiles. NOT to be called in scripts.
+Searches npc array and returns valid npc index's. Will refresh when
+the npc array is emtpy for the first run or when Npc isn't found. NOT
+to be called in scripts
 
 
 .. note::
 
-  by Krazy_Meerkat & elfyyy
+  by Krazy_Meerkat
 
 *)
-
-Var
-  Local: Tpoint;
-  LocalIndexes: TintegerArray;
-
 function R_GetIndices:TintegerArray;
 var
   i, k: Integer;
-  TheNPCNode: integer;
-  Hero: TPoint;
+  NPCNode: integer;
 begin
-  Hero:= R_GetTileGlobal;
-  if (length(LocalIndexes) = 0) or (R_DistanceFromTile(Local) > 15) then
+  if (length(LocalIndexes) = 0) or (DoIterate = true) then
   begin
     for i := 0 to 32767 do
     begin
-      TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, i);
-      if TheNPCNode = 0 then
+      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, i);
+      if NPCNode = 0 then
       begin
-        SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+        SmartFreeObject(SmartCurrentTarget, NPCNode);
         continue;
       end;
       Setlength(Result, (k + 1));
       Result[k] := i;
       inc(k);
-      SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+      SmartFreeObject(SmartCurrentTarget, NPCNode);
     end;
-    Local := Hero;
-    LocalIndexes:= Result;
+    LocalIndexes := ArrayCombination(LocalIndexes, Result);
+    Result:= LocalIndexes;
   end else
   Result:= LocalIndexes;
 end;
@@ -63,130 +59,68 @@ R_LoadNpcIndex
 
 .. code-block:: pascal
 
-    R_LoadNpcIndex(Name: string):TintegerArray;
+    R_LoadNpcIndex(NPC: Variant):TintegerArray;
 
-Searches valid index numbers Npc's with the name given by "Npcname" that are
-within our loaded plane. The TIA containing the Index will
-then be called in the rest of the functions. NOT to be called in scripts.
+Searches valid index numbers Npc's with the name or Id that are
+within our loaded plane by searching the loacalindexarray. The TIA containing
+the Index will then be called in the rest of the functions. NOT to be called
+in scripts.
 
 .. note::
 
-  by elfyyy
+  by elfyyy, Modified by Krazy_Meerkat
 
 *)
-function R_LoadNpcIndex(NpcName: string):TintegerArray;
+function R_LoadNpcIndex(NPC: Variant):TintegerArray;
 var
   i, k, s: Integer;
-  TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
-  TheName: string;
-  t: TIntegerArray;
+  TheNPC, NPCNode, NPCDef, NameInt, NpcID: integer;
+  Name: string;
+  t, FoundNpcs, Temp: TIntegerArray;
 begin
-  Setlength(Result, 100);
-  s := high(R_GetIndices)
+  DoIterate := False;
   T := R_GetIndices;
+  s := high(T);
+  Setlength(Result, s);
   k := 0;
+  if length(result) = 0 then
+    exit;
   for i := 0 to s do
   begin
-    TheNPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
-    NPCDef := SmartGetFieldObject(SmartCurrentTarget, TheNPCNode, Npc_definition);
-    TheBytes := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
-    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
-    if TheName = '' then
+    NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+    NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
+    if VariantIsString(NPC) then
     begin
-      SmartFreeObject(SmartCurrentTarget, TheNPCNode);
-      SmartFreeObject(SmartCurrentTarget, TheNPC);
-      SmartFreeObject(SmartCurrentTarget, NPCDef);
-      SmartFreeObject(SmartCurrentTarget, TheBytes);
-      continue;
-    end;
-    begin
-      if TheName = LowerCase(NpcName) then
+      NameInt := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
+      Name := Lowercase(Trim(R_GetJavaString(NameInt, 512)));
+      if Name = LowerCase(NPC) then
       begin
-      Result[k] := T[i];
-      inc(k);
+        Result[k] := T[i];
+        inc(k);
+      end;
+    end else
+    begin
+      NpcID := SmartGetFieldInt(SmartCurrentTarget, NPCDef, NpcDefinition_id) * NpcDefinition_id_Multiplier;
+      if NpcID = NPC then
+      begin
+        Result[k] := T[i];
+        inc(k);
       end;
     end;
-    SmartFreeObject(SmartCurrentTarget, TheNPCNode);
+    SmartFreeObject(SmartCurrentTarget, NPCNode);
     SmartFreeObject(SmartCurrentTarget, TheNPC);
     SmartFreeObject(SmartCurrentTarget, NPCDef);
-    SmartFreeObject(SmartCurrentTarget, TheBytes);
+    SmartFreeObject(SmartCurrentTarget, NameInt);
+  end;
+  if k = 0 then
+  begin
+    DoIterate := True;
+    Temp := R_GetIndices;
+    Setlength(Result, length(Temp));
+    Result := R_GetIndices;
+    DoIterate := False;
   end;
   result:= RemoveDeadTIA(result);
-end;
-
-(*
-R_GetNpcsLoc
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_GetNpcsLoc(NpcName:String):TPointArray;
-
-Returns all nearby Npc's Current Location with the Name given and stores
-it in a TPA with closest first.
-
-
-.. note::
-
-  by elfyyy
-
-*)
-function R_GetNpcsLoc(NpcName:String):TPointArray;
-var
-  i, l, BaseX, BaseY, TheNode, Def: Integer;
-  s : TIntegerArray;
-begin
-  BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier);
-  BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier);
-  l := high(R_LoadNpcIndex(NpcName));
-  s := R_LoadNpcIndex(NpcName);
-  SetLength(Result, 100);
-  for i := 0 to l do
-  begin
-    TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, s[i]);
-    Def := SmartGetFieldObject(SmartCurrentTarget, TheNode, Npc_definition);
-    if Def = 0 then
-    begin
-      SmartFreeObject(SmartCurrentTarget, TheNode);
-      SmartFreeObject(SmartCurrentTarget, Def);
-      continue;
-    end;
-    result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_localX) * Actor_localX_Multiplier) div 128;
-    result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_localY) * Actor_localY_Multiplier) div 128;
-    SmartFreeObject(SmartCurrentTarget, TheNode);
-    SmartFreeObject(SmartCurrentTarget, Def);
-  end;
-  SortTpaFrom(Result, Point(10000,10000));
-  result:= RemoveDeadTPA(result);
-  SortTpaFrom(Result,R_GetTileGlobal);
-end;
-
-(*
-R_GetNpcLoc
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_GetNpcLoc(NpcName:String):TPoint;
-
-Returns Location of closest npc with given name.
-
-.. note::
-
-  by elfyyy
-
-*)
-function R_GetNpcLoc(NpcName:String):TPoint;
-var
-  temp: TPointArray;
-  Loc: Tpoint;
-begin
-  Temp := R_GetNpcsLoc(NpcName);
-  if length(Temp) = 0 then
-    exit;
-  Loc := R_GetTileGlobal;
-  SortTpaFrom(Temp, Loc);
-  Result := Temp[0];
 end;
 
 (*
@@ -197,7 +131,7 @@ R_InteractingNpc
 
     R_InteractingNpc:integer;
 
-Returns index of npc we are interacting with.
+Returns index of npc we are interacting with. If none, Result = -1
 
 .. note::
 
@@ -213,6 +147,107 @@ begin
   SmartFreeObject(SmartCurrentTarget, Local);
 end;
 
+(*
+R_GetNpcAnimation
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetNpcAnimation(NPC: Variant):integer;
+
+Gets animation of npc we are interacting with. 0 = No Npc is interacting, -1 = No animation of Npc
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetNpcAnimation:integer;
+var
+  NPCNode, IndexId: Integer;
+begin
+  IndexId := R_InteractingNpc
+  NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID);
+  Result := SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_animation)  * Actor_animation_Multiplier;
+  if result > 10000 then
+    result := 0;
+  SmartFreeObject(SmartCurrentTarget, NPCNode);
+end;
+
+(*
+R_GetNpcsLoc
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetNpcsLoc(NPC: Variant):TPointArray;
+
+Returns all nearby Npc's Current Location with the Name given and stores
+it in a TPA with closest first.
+
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetNpcsLoc(NPC: Variant):TPointArray;
+var
+  i, l, BaseX, BaseY, NPCNode, Def: Integer;
+  s : TIntegerArray;
+begin
+  BaseX := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier);
+  BaseY := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier);
+  s := R_LoadNpcIndex(NPC);
+  l := high(s);
+  SetLength(Result, 100);
+  for i := 0 to l do
+  begin
+    NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, s[i]);
+    Def := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
+    if Def = 0 then
+    begin
+      SmartFreeObject(SmartCurrentTarget, NPCNode);
+      SmartFreeObject(SmartCurrentTarget, Def);
+      continue;
+    end;
+    result[i].x := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localX) * Actor_localX_Multiplier) div 128;
+    result[i].y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localY) * Actor_localY_Multiplier) div 128;
+    SmartFreeObject(SmartCurrentTarget, NPCNode);
+    SmartFreeObject(SmartCurrentTarget, Def);
+  end;
+  SortTpaFrom(Result, Point(10000,10000));
+  result:= RemoveDeadTPA(result);
+  SortTpaFrom(Result,R_GetTileGlobal);
+end;
+
+(*
+R_GetNpcLoc
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetNpcLoc(NPC: Variant):TPoint;
+
+Returns Location npc with given name or ID.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetNpcLoc(NPC: Variant):TPoint;
+var
+  temp: TPointArray;
+  Loc: Tpoint;
+begin
+  Temp := R_GetNpcsLoc(NPC);
+  if length(Temp) = 0 then
+    exit;
+  Loc := R_GetTileGlobal;
+  SortTpaFrom(Temp, Loc);
+  Result := Temp[0];
+end;
 
 (*
 R_GetNpcHp
@@ -222,7 +257,7 @@ R_GetNpcHp
 
     function R_GetNpcHp:integer;
 
-Returns Current hp of npc in combat with us. Returns 0 if none are
+Returns Current hp of npc in combat with us. Returns -1 if none are
 currently in combat with us
 
 .. note::
@@ -232,22 +267,22 @@ currently in combat with us
 *)
 function R_GetNpcHp:integer;
 var
-  Mid, TheNode, IndexId: Integer;
+  Mid, NPCNode, IndexId: Integer;
 
 begin
   IndexId := R_InteractingNpc;
-  TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID);
-  Mid := ((SmartGetFieldInt(SmartCurrentTarget, TheNode, Actor_health) * Actor_health_Multiplier) / 30);
+  NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID);
+  Mid := ((SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_health) * Actor_health_Multiplier) / 30);
   if Mid < 0 then
   begin
     result := 0;
-    SmartFreeObject(SmartCurrentTarget, TheNode);
+    SmartFreeObject(SmartCurrentTarget, NPCNode);
     exit;
   end;
   Result := Mid;
-  SmartFreeObject(SmartCurrentTarget, TheNode);
+  SmartFreeObject(SmartCurrentTarget, NPCNode);
   if result > 1000 then
-    Result := 0;
+    Result := -1;
 end;
 
 (*
@@ -256,27 +291,27 @@ R_NpcLevel
 
 .. code-block:: pascal
 
-    R_NpcLevel(NpcName: String):integer;
+    R_NpcLevel(NPC: Variant):integer;
 
-Returns Combat level of nearest npc to player with given name.
+Returns Combat level of npc with given name or ID.
 
 .. note::
 
   by elfyyy
 
 *)
-function R_NpcLevel(NpcName: String):integer;
+function R_NpcLevel(NPC: Variant):integer;
 var
-  TheNode, Def: Integer;
+  NPCNode, Def: Integer;
   IndexId: TIntegerArray;
 begin
-  IndexId := R_LoadNpcIndex(NpcName);
+  IndexId := R_LoadNpcIndex(NPC);
   if length(IndexId) = 0 then
     exit;
-  TheNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID[0]);
-  Def := SmartGetFieldObject(SmartCurrentTarget, TheNode, Npc_definition);
+  NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, IndexID[0]);
+  Def := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
   Result := (SmartGetFieldInt(SmartCurrentTarget, Def, NpcDefinition_level ) * NpcDefinition_level_Multiplier);
-  SmartFreeObject(SmartCurrentTarget, TheNode);
+  SmartFreeObject(SmartCurrentTarget, NPCNode);
   SmartFreeObject(SmartCurrentTarget, Def);
 end;
 
@@ -297,7 +332,5 @@ R_InCombat
 *)
 function R_InCombat:Boolean;
 begin
-  result := false;
-  if (R_InteractingNpc > -1) and (R_GetAnimation > -1) then
-    result := true;
+  result := (R_GetNpcAnimation <> 0);
 end;

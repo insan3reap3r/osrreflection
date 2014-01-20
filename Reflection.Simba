@@ -6,7 +6,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
 {$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
-
+//{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
 const
   IncludeRevision = 5;
 

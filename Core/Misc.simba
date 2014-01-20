@@ -41,6 +41,8 @@ function RemoveDeadTPA(list:TPointArray): TPointArray;
 var
   maxlength, ls: Integer;
 begin
+  if length(list) = 0 then
+    exit;
   for ls:=0 to high(list) do
   begin
     if (list[ls].x = 0) and (list[ls].y = 0) then
@@ -72,7 +74,9 @@ function RemoveDeadTIA(list:TintegerArray): TintegerArray;
 var
   maxlength, ls: Integer;
 begin
-  for ls:=0 to length(list) do
+  if length(list) = 0 then
+    exit;
+  for ls:=0 to high(list) do
   begin
     if List[ls] = 0 then
     begin
@@ -82,4 +86,119 @@ begin
   end;
   SetLength(list, maxlength);
   result:= list;
+end;
+
+(*
+InLocalArray
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    InLocalArray(ilocal: TintegerArray; new: Integer): Boolean;
+
+Returns true if integer "new" is found in array "ilocal"
+
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function InLocalArray(ilocal: TintegerArray; new: Integer): Boolean;
+var ns: integer;
+begin
+  result:= false;
+  for ns:=0 to high(ilocal) do
+  begin
+    if (ilocal[ns] = new) then result:= true;
+  end;
+end;
+
+(*
+ArrayCombination
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    ArrayCombination(orig, new: TintegerArray): TintegerArray;
+
+Combines 2 TIA's without adding any duplicate values and returns
+the resulting array.
+
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function ArrayCombination(orig, new: TintegerArray): TintegerArray;
+var
+  maxlength, ls, ns: Integer;
+begin
+  if length(orig) = 0 then
+    Setlength(orig, 1);
+  maxlength:= length(orig); //get unused array slot
+  SetLength(orig, (maxlength + length(new)));
+  for ls:=0 to high(orig) do
+  begin
+    for ns:=0 to high(new) do
+    begin
+      if ((orig[ls] = 0) and not(InLocalArray(orig, new[ns]))) then
+        orig[ls]:= new[ns];
+    end;
+  end;
+  result:= RemoveDeadTIA(orig);
+end;
+
+(*
+R_GetSettingArray
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetSettingArray: TIntegerArray;
+
+Retrives the Settings array from the client.
+
+.. note::
+
+  by Drags111, modified by elfyyy
+
+*)
+function R_GetSettingArray: TIntegerArray;
+var
+  i: Integer;
+begin
+  SetLength(Result, 2000);
+  for i := 0 to 1999 do
+    Result[i] := SmartGetFieldArrayInt(SmartCurrentTarget, 0, client_settings, i);
+end;
+
+{*R_GetSetting
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetSetting(Setting: Integer): Integer;
+
+Gets the setting value at the specified index.
+
+.. note::
+
+  by Drags111
+
+*}
+
+function R_GetSetting(Setting: Integer): Integer;
+var
+  SA: TIntegerArray;
+begin
+  SA := R_GetSettingArray;
+  if(Setting < Length(SA))then
+    Result := SA[Setting]
+  else
+  begin
+    writeln('Incorrect setting index passed to GetSetting + R_GetSetting');
+    Result := -1;
+  end;
 end;
