@@ -8,40 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 //{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
 const
-  IncludeRevision = 6;
-
-(*
-CreateDirectories
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    procedure CreateDirectories;
-
-    Create reflection directories which have been added since the first revision
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-procedure CreateDirectories;
-var
-  DirectoryName: String;
-  i: Integer;
-  Multi: TStringArray;
-begin
-  DirectoryName:= GetPage('http://osrreflection.googlecode.com/git/Directories.txt');
-  Multi:= MultiBetween(DirectoryName, '(', ')');
-  for i:= 0 to high(Multi) do
-  begin
-    DirectoryName := includePath + 'SRL-OSR\SRL\' + Multi[i];
-    if not(DirectoryExists(DirectoryName)) then
-    begin
-      CreateDirectory(DirectoryName)
-    end;
-  end;
-end;
+  IncludeRevision = 7;
 
 (*
 CreateNewFiles
@@ -53,6 +20,7 @@ CreateNewFiles
 
     Create reflection files which have been added since the first revision
     Pulls the file path and URL from Files.txt on the Google Source-Code
+    Creates any new directories first by reading the file path
 
 .. note::
 
@@ -61,9 +29,9 @@ CreateNewFiles
 *)
 procedure CreateNewFiles;
 var
-  NewFile, i: Integer;
-  NewFileName: String;
-  Multi: TStringArray;
+  NewFile, i, e: Integer;
+  NewFileName, DirectoryName: String;
+  Multi, Multi2: TStringArray;
   Toggle: Boolean;
 begin
   NewFileName:= GetPage('http://osrreflection.googlecode.com/git/Files.txt');
@@ -73,6 +41,14 @@ begin
     if not(Toggle) then
     begin
       NewFileName := includePath + 'SRL-OSR\SRL\' + Multi[i];
+      Multi2:= MultiBetween(Multi[i], '\', '\');
+      DirectoryName := includePath + 'SRL-OSR\SRL\Reflection';
+      for e:= 0 to high(Multi2) do
+      begin
+        DirectoryName := DirectoryName + '\' + Multi2[e];
+        if not(DirectoryExists(DirectoryName)) then
+          CreateDirectory(DirectoryName);
+      end;
       Toggle:= true;
     end else
     begin
@@ -154,7 +130,6 @@ var
   Multi: TStringArray;
   Toggle: Boolean;
 begin
-  CreateDirectories;
   CreateNewFiles;
   DeleteOldFiles;
   writeln('Checking the Google Source-code for Hook updates...');
