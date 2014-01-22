@@ -1,9 +1,12 @@
 #### - This File contains the path & filename followed by the URL - ####
 #### -  Check for capital letters in the extension caused by git  - ####
-#### - Reflection.Simba and Includes.Simba are not to be put here - ####
+#### -           Reflection.Simba is not to be put here           - ####
 
 (Reflection\Core\Hooks.simba)
 (http://osrreflection.googlecode.com/git/Core/Hooks.simba)
+
+(Reflection\Core\Includes.simba)
+(http://osrreflection.googlecode.com/git/Core/Includes.simba)
 
 (Reflection\Core\MapWalk.simba)
 (http://osrreflection.googlecode.com/git/Core/MapWalk.simba)

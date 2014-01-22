@@ -10,6 +10,38 @@
 const
   IncludeRevision = 6;
 
+(*
+CreateDirectories
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure CreateDirectories;
+
+    Create reflection directories which have been added since the first revision
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+procedure CreateDirectories;
+var
+  DirectoryName: String;
+  i: Integer;
+  Multi: TStringArray;
+begin
+  DirectoryName:= GetPage('http://osrreflection.googlecode.com/git/Directories.txt');
+  Multi:= MultiBetween(DirectoryName, '(', ')');
+  for i:= 0 to high(Multi) do
+  begin
+    DirectoryName := includePath + 'SRL-OSR\SRL\' + Multi[i];
+    if not(DirectoryExists(DirectoryName)) then
+    begin
+      CreateDirectory(DirectoryName)
+    end;
+  end;
+end;
 
 (*
 CreateNewFiles
@@ -64,25 +96,6 @@ begin
       Toggle:= false;
     end;
   end;
-  // Includes.Simba MUST be hardcoded here to prevent compiling errors
-  NewFileName := includePath + 'SRL-OSR\SRL\Reflection\Core\Includes.simba';
-  if not(FileExists(NewFileName)) then
-  begin
-    try
-      NewFile := CreateFile(NewFileName);
-      CloseFile(NewFile);
-      NewFile := Rewritefile(NewFileName, true);
-      WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Includes.Simba'));
-      writeLn('Added new file '+NewFileName);
-    except
-      begin
-        writeLn('Fatal error writing to '+NewFileName+'!!');
-        terminatescript;
-      end;
-    finally
-      CloseFile(NewFile);
-    end;
-  end;
 end;
 
 (*
@@ -131,7 +144,7 @@ Checks for a new version from the google source-code and updates all reflection 
 
 .. note::
 
-  by Krazy_Meerkat, Elfyyy & Hoodz
+  by Krazy_Meerkat, Inspired by Shuttlue's simple updater
 
 *)
 procedure SetupReflection;
@@ -141,6 +154,7 @@ var
   Multi: TStringArray;
   Toggle: Boolean;
 begin
+  CreateDirectories;
   CreateNewFiles;
   DeleteOldFiles;
   writeln('Checking the Google Source-code for Hook updates...');
@@ -183,7 +197,7 @@ begin
         try
           NewFile := Rewritefile(NewFileName, true);
           WriteFileString(NewFile, GetPage(Multi[i]));
-          WriteLn('Added new file '+NewFileName);
+          WriteLn('Successfully updated '+NewFileName);
         except
           begin
             WriteLn('Fatal error writing to '+NewFileName+'!!');
@@ -195,20 +209,7 @@ begin
         Toggle:= false;
       end;
     end;
-    // Includes.Simba and Reflection.Simba MUST be hardcoded here to prevent compiling errors
-    try
-      NewFileName := includePath + 'SRL-OSR\SRL\Reflection\Core\Includes.simba';
-      NewFile := Rewritefile(NewFileName, true);
-      WriteFileString(NewFile, GetPage('http://osrreflection.googlecode.com/git/Core/Includes.Simba'));
-      writeLn('Successfully updated '+NewFileName);
-    except
-      begin
-        writeLn('Fatal error writing to '+NewFileName+'!!');
-        terminatescript;
-      end;
-    finally
-      CloseFile(NewFile);
-    end;
+    // Reflection.Simba MUST be hardcoded here to prevent errors
     try
       NewFileName := includePath + 'SRL-OSR\SRL\Reflection\Reflection.simba';
       NewFile := Rewritefile(NewFileName, true);
