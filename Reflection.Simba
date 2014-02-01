@@ -8,7 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 //{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
 const
-  IncludeRevision = 9;
+  IncludeRevision = 10;
 
 (*
 CreateNewFiles
@@ -133,7 +133,8 @@ begin
   CreateNewFiles;
   DeleteOldFiles;
   writeln('********** Notice **********');
-  writeln('Current Hooks Are Brought To Us By Dang From JH');
+  writeln('Massive thanks to Magorium, Dang, Hyperion, Swipe, dog_ and hexagon for supplying hooks and multipliers when we were in a tight spot!');
+  writeln('Current hooks brought to you by Dang from JH');
   writeln('****************************');
   writeln('Checking the Google Source-code for Hook updates...');
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');

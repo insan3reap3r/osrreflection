@@ -110,12 +110,12 @@ const
     NpcDefinition                                     =   'aa';
     NpcDefinition_actions                             =   't';
     NpcDefinition_name                                =   'a';
-    NpcDefinition_id                                  =   'o';
-    NpcDefinition_level                               =   'y';
+    NpcDefinition_id                                  =   'w';
+    NpcDefinition_level                               =   'h';
 
 {*NpcDefinition Multipliers*}
-    NpcDefinition_id_Multiplier                       =   -1550313271;
-    NpcDefinition_level_Multiplier                    =   -1977773035;
+    NpcDefinition_id_Multiplier                       =   930755965;
+    NpcDefinition_level_Multiplier                    =   -4449435;
 
 
 {*Npc*}
