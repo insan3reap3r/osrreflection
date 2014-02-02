@@ -42,15 +42,14 @@ var
   i, k: Integer;
   NPCNode: integer;
 begin //If the NpcIndex hook works, use it
-  if not(SmartGetFieldArrayint(SmartCurrentTarget, -1, client_npcIndices, 0) = -1) then
+  k:= 0;
+  SetLength(Result, 150);
+  for i:=0 to 150 do
   begin
-    SetLength(Result, 150);
-    for i:=0 to 150 do
-    begin
-      Result[i] := SmartGetFieldArrayint(SmartCurrentTarget, 0, client_npcIndices, i);
-    end;
-    Result:= RemoveDeadTIA(Result);
-  end else
+    Result[i] := SmartGetFieldArrayint(SmartCurrentTarget, 0, client_npcIndices, i);
+  end;
+  Result:= RemoveDeadTIA(Result);
+  if (length(Result) < 1) then
   begin //NpcIndex hook is broken, use LocalIndex method
     if (length(LocalIndexes) = 0) or (DoIterate = true) then
     begin
