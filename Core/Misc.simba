@@ -40,19 +40,22 @@ Removes any dead values in a Tpa, must be sorted from low to high.
 function RemoveDeadTPA(list:TPointArray): TPointArray;
 var
   maxlength, ls: Integer;
+  newlist: TPointArray;
 begin
   if length(list) = 0 then
     exit;
+  maxlength:= 0;
+  SetLength(newlist, length(list));
   for ls:=0 to high(list) do
   begin
-    if (list[ls].x = 0) and (list[ls].y = 0) then
+    if (not(list[ls].x = 0) and not(list[ls].y = 0)) then
     begin
-      maxlength:= ls;
-      break;
+      newlist[maxlength]:= List[ls];
+      maxlength:= maxlength + 1;
     end;
   end;
-  SetLength(list, maxlength);
-  result:= list;
+  SetLength(newlist, maxlength);
+  result:= newlist;
 end;
 
 (*
@@ -61,7 +64,7 @@ RemoveDeadTIA
 
 .. code-block:: pascal
 
-    function RemoveDeadTIA(list:TintegerArray): TintegerArray;
+    function RemoveDeadTIA(list:TIntegerArray): TIntegerArray;
 
 Removes any dead values in a Tia, must be sorted from low to high.
 
@@ -70,22 +73,25 @@ Removes any dead values in a Tia, must be sorted from low to high.
   by Krazy Meerkat & elfyyy
 
 *)
-function RemoveDeadTIA(list:TintegerArray): TintegerArray;
+function RemoveDeadTIA(list:TIntegerArray): TIntegerArray;
 var
-  maxlength, ls: Integer;
+  maxlength, ls, i: Integer;
+  newlist: TIntegerArray;
 begin
   if length(list) = 0 then
     exit;
+  maxlength:= 0;
+  SetLength(newlist, length(list));
   for ls:=0 to high(list) do
   begin
-    if List[ls] = 0 then
+    if not(List[ls] = 0) then
     begin
-      maxlength:= ls;
-      break;
+      newlist[maxlength]:= List[ls];
+      maxlength:= maxlength + 1;
     end;
   end;
-  SetLength(list, maxlength);
-  result:= list;
+  SetLength(newlist, maxlength);
+  result:= newlist;
 end;
 
 (*

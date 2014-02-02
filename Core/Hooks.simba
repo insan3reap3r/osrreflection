@@ -168,7 +168,7 @@ const
     client_menuOptions                                =   'bt.g';
     client_groundSettings                             =   'u.t';
     client_groundHeights                              =   'u.f';
-    client_npcIndices                                 =   'client.bq';
+    client_npcIndices                                 =   'client.bs';
     client_chat_senders                               =   'client.lc';
     client_chat_messages                              =   'client.lk';
     client_widgets                                    =   'de.p';

@@ -34,33 +34,44 @@ to be called in scripts
 
 .. note::
 
-  by Krazy_Meerkat
+  by Krazy_Meerkat and elfyyy
 
 *)
 function R_GetIndices:TintegerArray;
 var
   i, k: Integer;
   NPCNode: integer;
-begin
-  if (length(LocalIndexes) = 0) or (DoIterate = true) then
+begin //If the NpcIndex hook works, use it
+  if not(SmartGetFieldArrayint(SmartCurrentTarget, -1, client_npcIndices, 0) = -1) then
   begin
-    for i := 0 to 32767 do
+    SetLength(Result, 150);
+    for i:=0 to 150 do
     begin
-      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, i);
-      if NPCNode = 0 then
-      begin
-        SmartFreeObject(SmartCurrentTarget, NPCNode);
-        continue;
-      end;
-      Setlength(Result, (k + 1));
-      Result[k] := i;
-      inc(k);
-      SmartFreeObject(SmartCurrentTarget, NPCNode);
+      Result[i] := SmartGetFieldArrayint(SmartCurrentTarget, 0, client_npcIndices, i);
     end;
-    LocalIndexes := ArrayCombination(LocalIndexes, Result);
-    Result:= LocalIndexes;
+    Result:= RemoveDeadTIA(Result);
   end else
-  Result:= LocalIndexes;
+  begin //NpcIndex hook is broken, use LocalIndex method
+    if (length(LocalIndexes) = 0) or (DoIterate = true) then
+    begin
+      for i := 0 to 32767 do
+      begin
+        NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, i);
+        if NPCNode = 0 then
+        begin
+          SmartFreeObject(SmartCurrentTarget, NPCNode);
+          continue;
+        end;
+        Setlength(Result, (k + 1));
+        Result[k] := i;
+        inc(k);
+        SmartFreeObject(SmartCurrentTarget, NPCNode);
+      end;
+      LocalIndexes := ArrayCombination(LocalIndexes, Result);
+      Result:= LocalIndexes;
+    end else
+    Result:= LocalIndexes;
+  end;
 end;
 
 (*
@@ -323,4 +334,26 @@ begin
       break;
     end;
   end;
+end;
+
+(*
+R_IsValidTNPC
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_IsValidTNPC(Npc: TNPC):Boolean;
+
+Returns true if the TNPC is a valid npc
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_IsValidTNPC(Npc: TNPC):Boolean;
+begin
+  Result:= false;
+  if ((Npc.Tile.x > 0) or(Npc.Tile.y > 0)) then
+    Result:= true;
 end;
