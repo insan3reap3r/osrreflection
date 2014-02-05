@@ -8,7 +8,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 //{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
 const
-  IncludeRevision = 11;
+  IncludeRevision = 12;
 
 (*
 CreateNewFiles

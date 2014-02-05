@@ -166,8 +166,8 @@ const
     client_menuCount                                  =   'client.io';
     client_menuActions                                =   'l.c';
     client_menuOptions                                =   'bt.g';
-    client_groundSettings                             =   'u.t';
-    client_groundHeights                              =   'u.f';
+    client_groundSettings                             =   'y.l';
+    client_groundHeights                              =   'y.p';
     client_npcIndices                                 =   'client.bs';
     client_chat_senders                               =   'client.lc';
     client_chat_messages                              =   'client.lk';
@@ -196,7 +196,7 @@ const
     client_cameraZ                                    =   'bk.fx';
     client_baseX                                      =   'di.cs';
     client_baseY                                      =   's.cq';
-    client_plane                                      =   'x.hc';
+    client_plane                                      =   'ev.ho';
     client_players                                    =   'client.gs';
     client_npcs                                       =   'client.bc';
     client_settings                                   =   'ff.t';
@@ -222,4 +222,4 @@ const
     client_cameraZ_Multiplier                         =   -1182982455;
     client_baseX_Multiplier                           =   -863779709;
     client_baseY_Multiplier                           =   -2126815013;
-    client_plane_Multiplier                           =   253983849;
+    client_plane_Multiplier                           =   -1155549073;
