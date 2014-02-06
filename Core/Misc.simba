@@ -75,7 +75,7 @@ Removes any dead values in a Tia, must be sorted from low to high.
 *)
 function RemoveDeadTIA(list:TIntegerArray): TIntegerArray;
 var
-  maxlength, ls, i: Integer;
+  maxlength, ls: Integer;
   newlist: TIntegerArray;
 begin
   if length(list) = 0 then
