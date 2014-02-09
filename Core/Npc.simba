@@ -166,7 +166,7 @@ begin
   NameInt := SmartGetFieldObject(SmartCurrentTarget, Def, NpcDefinition_name);
   with result do
   begin
-    Name := Lowercase(Trim(R_GetJavaString(NameInt, 512)));
+    Name := Capitalize(Lowercase(Trim(R_GetJavaString(NameInt, 512))));
     Tile.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localX) * Actor_localX_Multiplier) div 128;
     Tile.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localY) * Actor_localY_Multiplier) div 128;
     Index:= NpcIndex;
@@ -239,15 +239,17 @@ function R_GetNpcs(NPC: variant): array of TNPC;
 var
 Npcs: TIntegerArray;
 h, i: integer;
+res2: TNPCArray;
 begin
   Npcs := R_LoadNpcIndex(NPC)
   h := high(Npcs);
   Setlength(Result, h + 1);
+  Setlength(res2, h + 1);
   for i := 0 to h do
   begin
-    result[i]:= R_GetTNPC(Npcs[i]);
+    res2[i]:= R_GetTNPC(Npcs[i]);
   end;
-  R_SortNPCs(Result);
+  Result:= R_SortNPCs(res2);
 end;
 
 (*
