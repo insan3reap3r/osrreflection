@@ -173,7 +173,7 @@ const
     client_groundSettings                             =   'a.q';
     client_baseX                                      =   'z.cs';
     client_groundHeights                              =   'a.c';
-    client_npcIndices                                 =   'client.gg';
+    client_npcIndices                                 =   'client.bq';
     client_chat_senders                               =   'client.lq';
     client_chat_messages                              =   'client.le';
     client_widgets                                    =   'fz.c';
