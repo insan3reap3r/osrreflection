@@ -194,6 +194,118 @@ begin
 end;
 
 (*
+R_AutoCasting
+~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_AutoCasting: Boolean;
+
+Returns true if a spell is selected for auto-cast, false if not.
+
+.. note::
+
+  by Borland
+
+Examples:
+
+.. code-block:: pascal
+
+    if not(R_AutoCasting) then
+      SetAutoCast;
+*)
+function R_AutoCasting: Boolean;
+begin
+  Result := R_GetSetting(108) > 0;
+end;
+
+(*
+R_GetSpecPercent
+~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetSpecPercent: Integer;
+
+Returns the players current special attack %
+
+.. note::
+
+  by Borland
+
+*)
+function R_GetSpecPercent: Integer;
+begin
+  Result := R_GetSetting(300) / 10;
+end;
+
+
+(*
+R_GetWeight
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetWeight: Integer;
+
+Returns the player's current carried weight in kg.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_GetWeight: Integer;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, client_weight) * client_weight_Multiplier);
+end;
+
+(*
+R_GetLoginState
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetLoginState: Integer;
+
+Returns the player's current login state.
+10 = at title screen
+20 = logging in
+25 = rendering the world
+30 = map loaded
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_GetLoginState: Integer;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, client_login_state) * client_login_state_Multiplier);
+end;
+
+(*
+R_GetPlane
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetPlane: Integer;
+
+Returns the player's current plane, doesn't support going beneath ground i.e
+Lumbridge cellar. Each floor up adds 1 onto the default ground-level (0).
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_GetPlane: Integer;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, client_plane) * client_plane_Multiplier);
+end;
+
+(*
 R_WaitForAnimation
 ~~~~~~~~~~~
 
