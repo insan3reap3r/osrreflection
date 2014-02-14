@@ -1,14 +1,8 @@
 {$DEFINE REFLECTION}
+{$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
-{$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Misc.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Player.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
-{$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
-{$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
-//{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
 const
-  IncludeRevision = 12;
+  IncludeRevision = 13;
 
 (*
 CreateNewFiles
@@ -134,7 +128,7 @@ begin
   DeleteOldFiles;
   writeln('********** Notice **********');
   writeln('Massive thanks to Magorium, Dang, Hyperion, Swipe, dog_ and hexagon for supplying hooks and multipliers when we were in a tight spot!');
-  writeln('Current hooks brought to you by Dang from JH');
+  writeln('Current hooks brought to you by our own methods');
   writeln('****************************');
   writeln('Checking the Google Source-code for Hook updates...');
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
