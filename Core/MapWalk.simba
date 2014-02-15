@@ -23,6 +23,36 @@ begin
 end;
 
 (*
+R_WalkToTile
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkToTile(Tile: TPoint): boolean;
+
+Walks to specified Tile, Returns true once clicked and doesn't wait until
+we stop.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_WalkToTile(Tile: TPoint): boolean;
+var
+  P: TPoint;
+begin
+  Result := False;
+  if not R_TileOnMM(Tile) then
+    exit;
+  P := R_TileToMM(Tile);
+  Mmouse(P.x, P.y, 0, 0);
+  Wait(RandomRange(150, 220));
+  ClickMouse2(Mouse_Left);
+  result := True;
+end;
+
+(*
 R_WalkPath
 ~~~~~~~~~~~
 
@@ -34,7 +64,7 @@ Walks the path specified in a human like manner.
 
 .. note::
 
-  by AwkwardSaw
+  by AwkwardSaw, Modified By elfyyy
 
 *)
 function R_WalkPath(Path: TPointArray): boolean;
@@ -54,8 +84,6 @@ begin
     P := R_GetTileGlobal;
     for I := H downto 0 do
     begin
-      if Fails > 1 then
-        exit;
       if ((I - lP) > 3) then
         Continue
       else
@@ -63,19 +91,14 @@ begin
       MM := R_TileToMM(Path[I]);
       if MM = MMF then
         Inc(Fails);
-      D := Distance(MM.X, MM.Y, MMCX, MMCY);
-      if (D < 2) then
-        exit
-      else if (D < 70) then
+      if (R_DistanceFromTile(Path[i]) < 10) then
+        break;
+      if R_TileOnMM(Path[i]) then
       begin
-        MMouse(MM.x, MM.y, 0, 0);
-        wait(randomrange(90, 160));
-        ClickMouse2(mouse_left);
+        R_WalkToTile(Path[i]);
         MarkTime(K);
         repeat
         if not R_IsWalking then
-          break;
-        if TimeFromMark(K) > 500 then
           break;
         until(TimeFromMark(K) > 2000);
         MMF := MM;

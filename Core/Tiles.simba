@@ -103,7 +103,7 @@ var
   Loc: TPoint;
 begin
   Tile := point(iAbs(Tile.x), iAbs(Tile.y));
-  Loc := R_GetTileGlobal
+  Loc := Point(iAbs(R_GetTileGlobal.x),iAbs(R_GetTileGlobal.y));
   Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
 end;
 
@@ -126,7 +126,7 @@ function R_NearTile(TP:Tpoint; Dist:integer):Boolean;
 var
   Loc: TPoint;
 begin
-  Loc := R_GetTileGlobal
+  Loc := Point(iAbs(R_GetTileGlobal.x),iAbs(R_GetTileGlobal.y));
   Tp := point(iAbs(Tp.x), iAbs(Tp.y));
   Result := Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist;
 end;
