@@ -8,6 +8,9 @@
 (Reflection\Core\Includes.simba)
 (http://osrreflection.googlecode.com/git/Core/Includes.simba)
 
+(Reflection\Core\Interaction.simba)
+(http://osrreflection.googlecode.com/git/Core/Interaction.simba)
+
 (Reflection\Core\MapWalk.simba)
 (http://osrreflection.googlecode.com/git/Core/MapWalk.simba)
 

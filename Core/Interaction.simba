@@ -1,0 +1,414 @@
+(*
+R_IsUpAction
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_IsUpAction: Boolean;
+
+Returns true if there is uptext and it doesn't say "Walk here".
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_IsUpAction: Boolean;
+begin
+  Result:= false;
+  if (not(GetUpText = '') and not(IsUpText('Walk'))) then
+    Result:= true;
+end;
+
+(*
+R_OpenDoor
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_OpenDoor(DoorTile: TPoint; TileEdge: String): Boolean;
+
+Attempts to open the door on TileEdge ('N', 'S', 'E' or 'W') of DoorTile.
+Returns true if the door was opened.
+
+.. examples:: D = Door [T] = DoorTile
+
+      D
+     [T]      R_OpenDoor(T, 'N');
+
+
+     [T]D     R_OpenDoor(T, 'E');
+
+
+     [T]      R_OpenDoor(T, 'S');
+      D
+
+    D[T]      R_OpenDoor(T, 'W');
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_OpenDoor(DoorTile: TPoint; TileEdge: String): Boolean;
+var
+  a, b, i, Tilex, Tiley: Integer;
+  Deg: Extended;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  Deg:= 360-Floor(R_GetMinimapAngleDeg);
+  MakeCompass(TileEdge);
+  Tile2:= DoorTile;
+  if (Lowercase(TileEdge) = 'n') then
+    Tile2.y:= DoorTile.y + 1;
+  if (Lowercase(TileEdge) = 's') then
+    Tile2.y:= DoorTile.y - 1;
+  if (Lowercase(TileEdge) = 'e') then
+    Tile2.x:= DoorTile.x + 1;
+  if (Lowercase(TileEdge) = 'w') then
+    Tile2.x:= DoorTile.x - 1;
+  Tile2:= R_TileToMs(Tile2);
+  if (Tile2.x = 0) then
+    Exit;
+  Tilex:= Tile2.x;
+  Tiley:= Tile2.y;
+  for i:= 1 to 25 do
+  begin
+    a:= i + 1 + random(2);
+    for b:= 1 to 4 do
+    begin
+      if (b = 1) then
+        MouseBox(Tilex-a, Tiley-i, Tilex-i, Tiley+i, mouse_move);
+      if (b = 2) then
+        MouseBox(Tilex-i, Tiley+i, Tilex+i, Tiley+a, mouse_move);
+      if (b = 3) then
+        MouseBox(Tilex+i, Tiley-i, Tilex+a, Tiley+i, mouse_move);
+      if (b = 4) then
+        MouseBox(Tilex-i, Tiley-a, Tilex+i, Tiley-i, mouse_move);
+      wait(103 + random(88));
+      if IsUpTextMultiCustom(['Close', 'lose', 'ose', 'los', 'Open', 'Ope', 'pen']) then
+      begin
+        Result:= IsUpTextMultiCustom(['Close', 'lose', 'ose', 'los']); //Door is already open
+        if not(Result) then
+        begin
+          ClickMouse2(false);
+          wait(103 + random(288));
+          Result:= ChooseOptionMulti(['Open', 'Ope', 'pen']);
+        end;
+        if Result then
+        begin
+          i:= 25;
+          b:= 4;
+        end;
+      end;
+      wait(100 + random(50));
+    end;
+  end;
+  MakeCompass(Deg);
+end;
+
+(*
+R_ChooseOptionTile
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_ChooseOptionTile(Option: String; Tile: TPoint): Boolean;
+
+Moves the mouse randomly in a scaling box around Tile, when an action
+is found it will right-click and select Option from the available menu.
+Returns true if Option was clicked.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_ChooseOptionTile(Option: String; Tile: TPoint): Boolean;
+var
+  a, i, Tilex, Tiley: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  Tile2:= R_TileToMs(Tile);
+  if (Tile2.x = 0) then
+    Exit;
+  Tilex:= Tile2.x;
+  Tiley:= Tile2.y;
+  for i:=1 to 45 do
+  begin
+    a:= i + 5;
+    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
+    wait(103 + random(88));
+    if R_IsUpAction then
+    begin
+      ClickMouse2(false);
+      wait(103 + random(288));
+      Result:= ChooseOptionMultiEx([Option], 'action', ClickLeft);
+      if Result then
+      begin
+        i:= 45;
+      end;
+    end;
+    wait(100 + random(50));
+  end;
+end;
+
+(*
+R_ChooseOptionTileUptext
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_ChooseOptionTileUptext(Option, TileUptext: String; Tile: TPoint): Boolean;
+
+Moves the mouse randomly in a scaling box around Tile, when TileUptext
+is found it will right-click and select Option from the available menu.
+Returns true if Option was clicked.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_ChooseOptionTileUptext(Option, TileUptext: String; Tile: TPoint): Boolean;
+var
+  a, i, Tilex, Tiley: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  Tile2:= R_TileToMs(Tile);
+  if (Tile2.x = 0) then
+    Exit;
+  Tilex:= Tile2.x;
+  Tiley:= Tile2.y;
+  for i:=1 to 45 do
+  begin
+    a:= i + 5;
+    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
+    wait(103 + random(88));
+    if IsUpTextMultiCustom([TileUptext]) then
+    begin
+      ClickMouse2(false);
+      wait(103 + random(288));
+      Result:= ChooseOptionMultiEx([Option], 'action', ClickLeft);
+      if Result then
+      begin
+        i:= 45;
+      end;
+    end;
+    wait(100 + random(50));
+  end;
+end;
+
+(*
+R_ChooseOptionTileColour
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_ChooseOptionTileColour(Option: String; Tile: TPoint; Colour, Tolerance: Integer): Boolean;
+
+Does a FindColorSpiralTolerance check from Tile's mainscreen center point
+to it's edges, when the colour is found it will right-click and select
+Option from the available menu.
+Returns true if Option was clicked.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_ChooseOptionTileColour(Option: String; Tile: TPoint; Colour, Tolerance: Integer): Boolean;
+var
+  Tilex, Tiley, i: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  Tile2:= R_TileToMs(Tile);
+  if (Tile2.x = 0) then
+    Exit;
+  Tilex:= Tile2.x;
+  Tiley:= Tile2.y;
+  for i:=1 to 125 do
+  begin
+    if FindColorSpiralTolerance(Tilex, Tiley, Colour, Tilex-i, Tiley-i, Tilex+i, Tiley+i, Tolerance) then
+    begin
+      MouseBox(Tilex-2, Tiley-2, Tilex+2, Tiley+2, mouse_move);
+      wait(103 + random(88));
+      if R_IsUpAction then
+      begin
+        ClickMouse2(false);
+        wait(103 + random(288));
+        Result:= ChooseOptionMultiEx([Option], 'action', ClickLeft);
+        if Result then
+          i:= 125;
+      end;
+    end;
+    wait(100 + random(50));
+  end;
+end;
+
+(*
+R_ChooseOptionNpc
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_ChooseOptionNpc(Option: String; Npc: TNPC): Boolean;
+
+Moves the mouse randomly in a scaling box around Npc.Tile, when an action
+is found it will right-click and select Option from the available menu.
+Returns true if Option was clicked.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_ChooseOptionNpc(Option: String; Npc: TNPC): Boolean;
+var
+  a, i, Tilex, Tiley: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  for i:= 1 to 45 do
+  begin
+    Npc:= R_GetTNPC(Npc.Index); //Update the npc's co-ords
+    if not(Tile2 = R_TileToMs(Npc.Tile)) then
+      i:= 1;
+    Tile2:= R_TileToMs(Npc.Tile); //Convert to Ms point
+    if (Tile2.x = 0) then
+      Exit;
+    Tilex:= Tile2.x;
+    Tiley:= Tile2.y;
+    a:= i + 5;
+    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
+    wait(103 + random(88));
+    if IsUpTextMultiCustom([Capitalize(Npc.Name)]) then
+    begin
+      ClickMouse2(false);
+      wait(103 + random(288));
+      Result:= ChooseOptionMultiEx([Option], 'action', ClickLeft);
+      if Result then
+      begin
+        i:= 45;
+      end;
+    end;
+    wait(100 + random(50));
+  end;
+end;
+
+(*
+R_ChooseOptionNpcColour
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_ChooseOptionNpcColour(Option: String; Npc: TNPC; Colour, Tolerance: Integer): Boolean;
+
+Does a FindColorSpiralTolerance check from Npc.Tile's mainscreen center point
+to it's edges, when the colour is found it will right-click and select
+Option from the available menu.
+Returns true if Option was clicked.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_ChooseOptionNpcColour(Option: String; Npc: TNPC; Colour, Tolerance: Integer): Boolean;
+var
+  Tilex, Tiley, i: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  for i:=1 to 125 do
+  begin
+    Npc:= R_GetTNPC(Npc.Index); //Update the npc's co-ords
+    Tile2:= R_TileToMs(Point(Npc.Tile.x, Npc.Tile.y)); //Convert to Ms point
+    if not(Tile2 = R_TileToMs(Npc.Tile)) then
+      i:= 1;
+    if (Tile2.x = 0) then
+      Exit;
+    Tilex:= Tile2.x;
+    Tiley:= Tile2.y;
+    if FindColorSpiralTolerance(Tilex, Tiley, Colour, Tilex-i, Tiley-i, Tilex+i, Tiley+i, Tolerance) then
+    begin
+      MouseBox(Tilex-2, Tiley-2, Tilex+2, Tiley+2, mouse_move);
+      wait(103 + random(88));
+      if IsUpTextMultiCustom([Capitalize(Npc.Name)]) then
+      begin
+        ClickMouse2(false);
+        wait(103 + random(288));
+        Result:= ChooseOptionMultiEx([Option], 'action', ClickLeft);
+        if Result then
+          i:= 125;
+      end;
+    end;
+    wait(100 + random(50));
+  end;
+end;
+
+(*
+R_BankItems
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_BankItems(BoothTile: TPoint; DepositAll: Boolean; WithdrawAmount, WithdrawSlot: Integer);
+
+Attempts to bank at BoothTile.
+If DepositAll is true, all player items will be deposited.
+if WithdrawAmount is 0, no items will be withdrawn.
+Bank items will be withdrawn from WithdrawSlot.
+
+.. note::
+
+  by Krazy_Meerkat
+
+.. example::
+
+  R_BankItems(Point(x, y), true, 0, 0); //Open bank & deposit inventory
+  R_BankItems(Point(x, y), false, 2, 1); //Open bank & withdraw 2 from slot 1
+  R_BankItems(Point(x, y), true, 1, 2); //Open bank, deposit all & withdraw 1 from slot 2
+
+*)
+procedure R_BankItems(BoothTile: TPoint; DepositAll: Boolean; WithdrawAmount, WithdrawSlot: Integer);
+var
+  u,x,y: Integer;
+  BankPoint: Tpoint;
+begin
+  for u:= 0 to 100 do
+  begin
+    R_WalkPath([BoothTile]);
+    sleepandmovemouse(2000 + random(2500));
+    R_ChooseOptionTile('Bank B', BoothTile);
+    sleepandmovemouse(1000 + random(1500));
+    if BankScreen then u:= 100;
+  end;
+  if not BankScreen then
+  begin
+    writeln('[R_BankItems] Didn''t find BankScreen, logging out & terminating.');
+    if LoggedIn then LogOut;
+    TerminateScript;
+  end;
+  if DepositAll then
+  begin
+    for u:= 0 to 100 do
+    begin
+      wait(70 + random(50));
+      QuickDeposit('inv');
+      sleepandmovemouse(900 + random(450));
+      if FindColorTolerance(x,y,3818059,704,443,706,445,15) then u:= 100;
+    end;
+  end;
+  if (WithdrawSlot > 0) then
+    BankPoint := BankIndexToBankPoint(WithdrawSlot);
+  if (WithdrawAmount > 0) then
+    Withdraw(BankPoint.x, BankPoint.y, WithdrawAmount);
+  wait(70 + random(50));
+  CloseBank;
+  wait(70 + random(50));
+end;
