@@ -1,4 +1,5 @@
 {$include SRL-OSR/SRL/Reflection/Core/Hooks.simba}
+{$include SRL-OSR/SRL/Reflection/Core/Interaction.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Misc.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Player.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Tiles.simba}
