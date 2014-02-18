@@ -328,6 +328,7 @@ begin
   MarkTime(t);
   while R_GetAnimation = - 1 do
   begin
+  wait(500);
     if (TimeFromMark(t) >= timeout) then
       Exit;
   end;

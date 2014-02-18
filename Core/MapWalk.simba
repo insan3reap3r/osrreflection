@@ -100,7 +100,7 @@ begin
         repeat
         if not R_IsWalking then
           break;
-        until(TimeFromMark(K) > 2000);
+        until((TimeFromMark(K) > 2000) or FFlag(30));
         MMF := MM;
         if (I = H) then
           FFlag(5)
