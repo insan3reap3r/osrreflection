@@ -382,8 +382,8 @@ var
 begin
   for u:= 0 to 100 do
   begin
-    R_WalkPath([BoothTile]);
-    sleepandmovemouse(2000 + random(2500));
+    R_PerfectPath([BoothTile]);
+    sleepandmovemouse(500 + random(500));
     R_ChooseOptionTile('Bank B', BoothTile);
     sleepandmovemouse(1000 + random(1500));
     if BankScreen then u:= 100;
@@ -401,7 +401,7 @@ begin
       wait(70 + random(50));
       QuickDeposit('inv');
       sleepandmovemouse(900 + random(450));
-      if FindColorTolerance(x,y,3818059,704,443,706,445,15) then u:= 100;
+      if FindColorTolerance(x,y,3818059,704,443,706,445,0) then u:= 100;
     end;
   end;
   if (WithdrawSlot > 0) then
