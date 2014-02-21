@@ -358,9 +358,9 @@ begin
   for i:= 0 to high(path) do
     TPA[i]:= Path[i];
   SortTPAFrom(TPA, R_GetTileGlobal);
-    for g := 0 to high(path) do
-      if ((TPA[0].x=path[g].x) and (TPA[0].y=path[g].y)) then
-        f := g;
+  for g := 0 to high(path) do
+    if ((TPA[0].x=path[g].x) and (TPA[0].y=path[g].y)) then
+      f := g;
   for i:= f to High(Path) do
   begin
     if (i = High(Path)) then
@@ -390,7 +390,7 @@ begin
           wait(100+random(50));
           if not(R_TileOnMM(Path[i])) then
             R_WebWalk(Path[i]);
-      until(R_GetToTile(Path[i], Path[i+1]));
+        until(R_GetToTile(Path[i], Path[i+1]));
       end;
     end;
   end;
