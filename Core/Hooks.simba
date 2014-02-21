@@ -169,7 +169,7 @@ const
     client_menuOptions                                =   'fo.g';
     client_groundSettings                             =   'd.c';
     client_groundHeights                              =   'd.q';
-    client_npcIndices                                 =   'client.gt';
+    client_npcIndices                                 =   'client.be';
     client_chat_senders                               =   'client.li';
     client_chat_messages                              =   'client.ll';
     client_login_state                                =   'client.u';

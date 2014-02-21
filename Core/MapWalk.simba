@@ -69,7 +69,7 @@ Walks the path specified in a human like manner.
 *)
 function R_WalkPath(Path: TPointArray): boolean;
 var
-  I, K, H, T, D, Fails, lP: integer;
+  I, K, H, T, Fails, lP: integer;
   P, MM, MMF: TPoint;
 begin
   ColorToleranceSpeed(1);
@@ -340,10 +340,8 @@ R_PerfectPath
     R_PerfectPath(Path: TPointArray);
 
 Walks the path like a human would, if a point isn't visible on the MM it
-uses WebWalk until the point becomes visable. It's recommended that you
-don't put your points too close-together in a path, for best results
-keep points at least 5 tiles away from adjacent points (walk at least 5
-tiles away when making the path).
+uses WebWalk until the point becomes visable. Works with any amount of
+path points at any distance apart.
 
 .. note::
 
@@ -352,9 +350,18 @@ tiles away when making the path).
 *)
 procedure R_PerfectPath(Path: TPointArray);
 var
-  i: Integer;
+  i, e, f, g: Integer;
+  tpa: TPointArray;
 begin
-  for i:= 0 to High(Path) do
+  f:= 0;
+  SetArrayLength(TPA, length(Path));
+  for i:= 0 to high(path) do
+    TPA[i]:= Path[i];
+  SortTPAFrom(TPA, R_GetTileGlobal);
+    for g := 0 to high(path) do
+      if ((TPA[0].x=path[g].x) and (TPA[0].y=path[g].y)) then
+        f := g;
+  for i:= f to High(Path) do
   begin
     if (i = High(Path)) then
     begin
@@ -365,11 +372,26 @@ begin
       until(R_GetToTile(Path[i], Point(-1,-1)));
     end else
     begin
-      repeat
-        wait(100+random(50));
-        if not(R_TileOnMM(Path[i])) then
-          R_WebWalk(Path[i]);
+      for e:= f to High(Path) do
+      begin
+        if R_TileOnMM(Path[e]) then
+          i:= e;
+      end;
+      if (i = High(Path)) then
+      begin
+        repeat
+          wait(100+random(50));
+          if not(R_TileOnMM(Path[i])) then
+            R_WebWalk(Path[i]);
+        until(R_GetToTile(Path[i], Point(-1,-1)));
+      end else
+      begin
+        repeat
+          wait(100+random(50));
+          if not(R_TileOnMM(Path[i])) then
+            R_WebWalk(Path[i]);
       until(R_GetToTile(Path[i], Path[i+1]));
+      end;
     end;
   end;
 end;
