@@ -28,3 +28,6 @@
 
 (Reflection\Tools\Path Maker.simba)
 (http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba)
+
+(Reflection\Tools\Path Maker V2.simba)
+(http://osrreflection.googlecode.com/git/Tools/Path%20Maker%20V2.simba)
