@@ -91,8 +91,6 @@ begin
       MM := R_TileToMM(Path[I]);
       if MM = MMF then
         Inc(Fails);
-      if (R_DistanceFromTile(Path[i]) < 10) then
-        break;
       if R_TileOnMM(Path[i]) then
       begin
         R_WalkToTile(Path[i]);

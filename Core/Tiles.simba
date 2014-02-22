@@ -690,45 +690,40 @@ begin
 end;
 
 (*
-R_WalkToPointMS
+R_WalkToTileMS
 ~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function R_WalkToPointMS(Tp: Tpoint): Boolean;
+    function R_WalkToTileMS(Tile: Tpoint): Boolean;
 
     Converts a Tile Onscreen into a Tpoint coord on mainscreen and
     Clicks on tile.
 
 .. note::
 
-  by elfyyy, Modified by Krazy Meerkat
+  by elfyyy
 
 *)
-function R_WalkToPointMS(Tp: Tpoint): Boolean;
+function R_WalkToTileMS(Tile: Tpoint): Boolean;
 var
-  Me, Curr: Tpoint;
-  timeout: Integer;
+  TP, NewTile: TPoint;
 begin
-  Curr := R_GetTileGlobal;
-  if Curr = Tp then
+  Result := False;
+  NewTile := R_TileToMs(Tile);
+  if NewTile = Point(0, 0) then
     exit;
-  result := false;
-  Me := R_TileToMs(Tp);
-  if ((not(Me.x = 0))and(not(Me.y = 0))) then
-  begin
-    Mmouse(Me.x ,Me.y, 2,2);
-    wait(randomrange(220,380));
-    ClickMouse2(Mouse_Left);
-    timeout:= 0;
-    repeat
-      Wait(100);
-      if not(R_IsAnimating) then
-        timeout:= 100;
-      Inc(timeout);
-    until(timeout > 99);
-    result := (R_GetTileGlobal = Tp)
-  end;
+  Mmouse(NewTile.x, NewTile.y, 0, 0);
+  Wait(RandomRange(150, 220));
+  ClickMouse2(Mouse_Left);
+    result := True;
+end;
+
+
+//Staying for Compatibility
+function R_WalkToPointMS(Tp: Tpoint): Boolean;
+begin
+  Result := R_WalkToTileMS(TP);
 end;
 
 
