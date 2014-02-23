@@ -15,7 +15,23 @@
   end;
   TNPCArray = Array of TNPC;
 
- Var
+function NULL_NPC: TNPC;
+ begin
+  with Result do
+  begin
+    Name := '';
+    Tile := Point(0, 0);
+    Index :=  0;
+    Level := 0;
+    NpcID := 0;
+    Animation := 0;
+    HitPoints := 0;
+    Interacting := 0;
+    InCombat := False;
+  end;
+end;
+
+ var
   LocalIndexes: TintegerArray;
   DoIterate: Boolean;
 
@@ -74,12 +90,12 @@ begin //If the NpcIndex hook works, use it
 end;
 
 (*
-R_LoadNpcIndex
+R_LoadNpcIndexEx
 ~~~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_LoadNpcIndex(NPC: Variant):TintegerArray;
+    R_LoadNpcIndexEx(NPC: Variant; Sort: Boolean):TintegerArray;
 
 Searches valid index numbers Npc's with the name or Id that are
 within our loaded plane by searching the loacalindexarray. The TIA containing
@@ -88,10 +104,10 @@ in scripts.
 
 .. note::
 
-  by Elfyyy, Modified by Krazy_Meerkat
+  by elfyyy, Modified by Krazy_Meerkat
 
 *)
-function R_LoadNpcIndex(NPC: Variant):TintegerArray;
+function R_LoadNpcIndexEx(NPC: Variant; Sort: Boolean):TintegerArray;
 var
   i, k, s: Integer;
   NPCNode, NPCDef, NameInt, TNpcID: integer;
@@ -101,35 +117,50 @@ begin
   DoIterate := False;
   T := R_GetIndices;
   s := high(T);
-  Setlength(Result, s);
+  Setlength(Result, s + 1);
   k := 0;
   if length(result) = 0 then
     exit;
-  for i := 0 to s do
+  if Sort then
   begin
-    NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
-    NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
-    if VariantIsString(NPC) then
+    for i := 0 to s do
     begin
-      NameInt := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
-      Name := Lowercase(Trim(R_GetJavaString(NameInt, 512)));
-      if Name = LowerCase(NPC) then
+      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+      NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
+      if Sort then
+      if VariantIsString(NPC) then
       begin
-        Result[k] := T[i];
-        inc(k);
-      end;
-      SmartFreeObject(SmartCurrentTarget, NameInt);
-    end else
-    begin
-      TNpcID := SmartGetFieldInt(SmartCurrentTarget, NPCDef, NpcDefinition_id) * NpcDefinition_id_Multiplier;
-      if TNpcID = NPC then
+        NameInt := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
+        Name := Lowercase(Trim(R_GetJavaString(NameInt, 512)));
+        if Name = LowerCase(NPC) then
+        begin
+          Result[k] := T[i];
+          inc(k);
+        end;
+        SmartFreeObject(SmartCurrentTarget, NameInt);
+      end else
       begin
-        Result[k] := T[i];
-        inc(k);
+        TNpcID := SmartGetFieldInt(SmartCurrentTarget, NPCDef, NpcDefinition_id) * NpcDefinition_id_Multiplier;
+        if TNpcID = NPC then
+        begin
+          Result[k] := T[i];
+          inc(k);
+        end;
       end;
+      SmartFreeObject(SmartCurrentTarget, NPCNode);
+      SmartFreeObject(SmartCurrentTarget, NPCDef);
     end;
-    SmartFreeObject(SmartCurrentTarget, NPCNode);
-    SmartFreeObject(SmartCurrentTarget, NPCDef);
+  end else
+  begin
+    for i := 0 to s do
+    begin
+      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+      NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
+      Result[k] := T[i];
+      inc(k);
+      SmartFreeObject(SmartCurrentTarget, NPCNode);
+      SmartFreeObject(SmartCurrentTarget, NPCDef);
+    end;
   end;
   if k = 0 then
   begin
@@ -140,6 +171,26 @@ begin
     Result := R_GetIndices;
   end;
   result:= RemoveDeadTIA(result);
+end;
+
+(*
+R_LoadNpcIndex
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_LoadNpcIndex(NPC: Variant):TintegerArray;
+
+See R_LoadNpcIndexEx
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_LoadNpcIndex(NPC: Variant):TintegerArray;
+begin
+  result := R_LoadNpcIndexEx(NPC, True);
 end;
 
 (*
@@ -221,6 +272,45 @@ begin
 end;
 
 (*
+R_GetAllNpcs
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetNpcs(NPC: variant): array of TNPC;
+
+   Returns all Nearby Npc's and sorts by distance.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetAllNPCs: TNPCArray;
+var
+  NPCs: TIntegerArray;
+  C, I, J, H: Integer;
+  NewNPCArray: TNPCArray;
+begin
+  NPCs := R_LoadNPCIndexEx('', False);
+  H := High(NPCs);
+  SetLength(Result, H + 1);
+  for I := 0 to H do begin
+    Result[I] := R_GetTNPC(NPCs[I]);
+    if (Result[I].Name = '') then
+      Inc(C);
+  end;
+  SetLength(NewNPCArray, H + 1 - C);
+  for I := 0 to H do begin
+    if not (Result[I].Name = '') then begin
+      NewNPCArray[J] := Result[I];
+      Inc(J);
+    end;
+  end;
+  Result := R_SortNPCs(NewNPCArray);
+end;
+
+(*
 R_GetNpcs
 ~~~~~~~~~~
 
@@ -232,7 +322,7 @@ R_GetNpcs
 
 .. note::
 
-  by Elfyyy
+  by elfyyy
 
 *)
 function R_GetNpcs(NPC: variant): array of TNPC;
@@ -265,7 +355,7 @@ R_FindNpc
 
 .. note::
 
-  by Elfyyy
+  by elfyyy
 
 *)
 function R_FindNpc(NPC: variant; var TheNPC: TNPC): Boolean;
@@ -298,12 +388,17 @@ If none, the npc's values will be 0
 *)
 function R_InteractingNpc:TNPC;
 var
-Local, InteractingIndex: Integer;
+  Local, InteractingIndex: Integer;
+  Temp: TNPC;
 begin
-  Local:= SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
-  InteractingIndex:= SmartGetFieldInt(SmartCurrentTarget, Local, Actor_interacting) * Actor_interacting_Multiplier;
+  Local := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  InteractingIndex := SmartGetFieldInt(SmartCurrentTarget, Local, Actor_interacting) * Actor_interacting_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Local);
-  result:= R_GetTNPC(InteractingIndex);
+  Temp := R_GetTNPC(InteractingIndex);
+  if (Temp.Name = '') and (iabs(Temp.Animation) > 10000) then
+    Result := NULL_NPC
+  else
+  Result := Temp;
 end;
 
 (*
@@ -355,6 +450,7 @@ Returns true if the TNPC is a valid npc
 function R_IsValidTNPC(Npc: TNPC):Boolean;
 begin
   Result:= false;
-  if ((Npc.Tile.x > 0) or(Npc.Tile.y > 0)) then
-    Result:= true;
+  if (Npc.Name = '') and (iabs(Npc.Animation) > 10000) then
+    exit;
+  Result := True;
 end;

@@ -119,7 +119,7 @@ const
 
 {*NpcDefinition Multipliers*}
     NpcDefinition_id_Multiplier                       =   -79078109;
-    NpcDefinition_level_Multiplier                    =   837975239;
+    NpcDefinition_level_Multiplier                    =   1018636169;
 
 
 {*Npc*}
