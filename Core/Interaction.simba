@@ -341,7 +341,7 @@ begin
     a:= i + 5;
     MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
     wait(103 + random(88));
-    if IsUpTextMultiCustom([Capitalize(Npc.Name)]) then
+    if R_IsUpAction then
     begin
       ClickMouse2(false);
       wait(103 + random(288));
@@ -394,7 +394,7 @@ begin
     begin
       MouseBox(Tilex-2, Tiley-2, Tilex+2, Tiley+2, mouse_move);
       wait(103 + random(88));
-      if IsUpTextMultiCustom([Capitalize(Npc.Name)]) then
+      if R_IsUpAction then
       begin
         ClickMouse2(false);
         wait(103 + random(288));

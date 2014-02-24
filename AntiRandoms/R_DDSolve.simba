@@ -1,0 +1,20 @@
+{* R_DDSolve
++Detection and solving
++By: Krazy_Meerkat
++
++*}
+
+function R_DetectDD: Boolean;
+var
+  me: Tpoint;
+begin
+  result:= false;
+  me:= R_GetTileGlobal;
+  if (((me.x > 3157) and (me.x < 3169)) and ((me.y > 4815) and (me.y < 4825))) then
+    result:= true;
+end;
+
+function R_SolveDD: Boolean; //Need objects, using SRL solver for now
+begin
+  result:= DD_Solve;
+end;
