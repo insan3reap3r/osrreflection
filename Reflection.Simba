@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 21;
+  IncludeRevision = 22;
 
 (*
 CreateNewFiles
@@ -209,5 +209,6 @@ begin
   end else
   begin
     writeLn('You have the latest version of Reflection.');
+    R_SetupRandoms;
   end;
 end;

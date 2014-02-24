@@ -26,6 +26,24 @@
 (Reflection\Core\Tiles.simba)
 (http://osrreflection.googlecode.com/git/Core/Tiles.simba)
 
+(Reflection\AntiRandoms\AntiRandoms.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/AntiRandoms.simba)
+
+(Reflection\AntiRandoms\R_DDSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_DDSolve.simba)
+
+(Reflection\AntiRandoms\R_ForesterSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_ForesterSolve.simba)
+
+(Reflection\AntiRandoms\R_MazeSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_MazeSolve.simba)
+
+(Reflection\AntiRandoms\R_MimeSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_MimeSolve.simba)
+
+(Reflection\AntiRandoms\R_PrisonPeteSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_PrisonPeteSolve.simba)
+
 (Reflection\Tools\Path Maker.simba)
 (http://osrreflection.googlecode.com/git/Tools/Path%20Maker.simba)
 

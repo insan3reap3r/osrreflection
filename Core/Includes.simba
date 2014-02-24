@@ -5,4 +5,4 @@
 {$include SRL-OSR/SRL/Reflection/Core/MapWalk.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Npc.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Interaction.simba}
-//{$include SRL-OSR/SRL/Reflection/AntiRandoms/Antirandoms.simba}
+{$include SRL-OSR/SRL/Reflection/AntiRandoms/AntiRandoms.simba}
