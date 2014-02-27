@@ -107,7 +107,7 @@ end;
 R_InFight
 ~~~~~~~~~~~
 
-.. code-block:: pascal
+. code-block:: pascal
 
     function R_InFight: Boolean;
 
