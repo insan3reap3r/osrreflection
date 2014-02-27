@@ -1,0 +1,147 @@
+{$include_once R_DDSolve.simba}
+{$include_once R_ForesterSolve.simba}
+{$include_once R_MazeSolve.simba}
+{$include_once R_MimeSolve.simba}
+{$include_once R_PrisonPeteSolve.simba}
+
+type
+  R_Random = record
+    RandName: String;
+    SolveRandom, DetectRandom: function(): Boolean;
+end;
+
+var
+  R_Randoms : array[0..15] of R_Random;
+  R_CombatRandoms: Boolean;
+
+procedure R_SetupRandoms;
+var
+  i: Integer;
+begin
+  for i:= 0 to high(R_Randoms) do
+  begin
+    case i of
+      0:
+      begin
+        R_Randoms[i].RandName := 'Mime';
+        R_Randoms[i].DetectRandom := @R_DetectMime;
+        R_Randoms[i].SolveRandom := @R_SolveMime; //Solved
+      end;
+      1:
+      begin
+        R_Randoms[i].RandName := 'Drill Demon';
+        R_Randoms[i].DetectRandom := @R_DetectDD;
+        R_Randoms[i].SolveRandom := @R_SolveDD; //SRL Solver for now
+      end;
+      2:
+      begin
+        R_Randoms[i].RandName := 'Prison Pete';
+        R_Randoms[i].DetectRandom := @R_DetectPrisonPete;
+        R_Randoms[i].SolveRandom := @R_SolvePrisonPete; //Detection only
+      end;
+      3:
+      begin
+        R_Randoms[i].RandName := 'Maze';
+        R_Randoms[i].DetectRandom := @R_DetectMaze;
+        R_Randoms[i].SolveRandom := @R_SolveMaze; //Detection only
+      end;
+      4:
+      begin
+        R_Randoms[i].RandName := 'Evil Bob';
+        R_Randoms[i].DetectRandom := @EB_Detect;
+        R_Randoms[i].SolveRandom := @EB_Solve; //SRL Solver for now
+      end;
+      5:
+      begin
+        R_Randoms[i].RandName := 'Mordaut';
+        R_Randoms[i].DetectRandom := @MD_Detect;
+        R_Randoms[i].SolveRandom := @MD_Solve; //SRL Solver for now
+      end;
+      6:
+      begin
+        R_Randoms[i].RandName := 'Certer';
+        R_Randoms[i].DetectRandom := @CT_Detect;
+        R_Randoms[i].SolveRandom := @CT_Solve; //SRL Solver for now
+      end;
+      7:
+      begin
+        R_Randoms[i].RandName := 'Abyss';
+        R_Randoms[i].DetectRandom := @Abyss_Detect;
+        R_Randoms[i].SolveRandom := @Abyss_Solve; //SRL Solver for now
+      end;
+      8:
+      begin
+        R_Randoms[i].RandName := 'Frog';
+        R_Randoms[i].DetectRandom := @Frog_Detect;
+        R_Randoms[i].SolveRandom := @Frog_Solve; //SRL Solver for now
+      end;
+      9:
+      begin
+        R_Randoms[i].RandName := 'Pinball';
+        R_Randoms[i].DetectRandom := @PB_Detect;
+        R_Randoms[i].SolveRandom := @PB_Solve; //SRL Solver for now
+      end;
+      10:
+      begin
+        R_Randoms[i].RandName := 'Pillory Cage';
+        R_Randoms[i].DetectRandom := @PL_Detect;
+        R_Randoms[i].SolveRandom := @PL_Solve; //SRL Solver for now
+      end;
+      11:
+      begin
+        R_Randoms[i].RandName := 'Cap''n Arnav';
+        R_Randoms[i].DetectRandom := @CA_Detect;
+        R_Randoms[i].SolveRandom := @CA_Solve; //SRL Solver for now
+      end;
+      12:
+      begin
+        R_Randoms[i].RandName := 'Quiz Master';
+        R_Randoms[i].DetectRandom := @Quiz_Detect;
+        R_Randoms[i].SolveRandom := @Quiz_Solve; //SRL Solver for now
+      end;
+      13:
+      begin
+        R_Randoms[i].RandName := 'Beekeeper';
+        R_Randoms[i].DetectRandom := @BK_Detect;
+        R_Randoms[i].SolveRandom := @BK_Solve; //SRL Solver for now
+      end;
+      14:
+      begin
+        R_Randoms[i].RandName := 'Rewards';
+        R_Randoms[i].DetectRandom := @RD_Detect;
+        R_Randoms[i].SolveRandom := @RD_Solve; //SRL Solver for now
+      end;
+      15:
+      begin
+        R_Randoms[i].RandName := 'Freaky Forester';
+        R_Randoms[i].DetectRandom := @R_DetectForester;
+        R_Randoms[i].SolveRandom := @R_SolveForester; //Solved
+      end;
+    end;
+  end;
+end;
+
+procedure R_SolveRandoms;
+var
+  i: integer;
+begin
+  for i := 0 to high(R_Randoms) do
+  begin
+    if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].DetectRandom <> nil) and (R_Randoms[i].DetectRandom()) then
+    begin
+      writeln('[Reflection Anti-Randoms] '+R_Randoms[i].RandName+' random detected! Solving...');
+    if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].SolveRandom <> nil) and (R_Randoms[i].SolveRandom()) then
+      begin
+        writeln('[Reflection Anti-Randoms] Failed '+R_Randoms[i].RandName+' random, logging out.');
+        players[currentPlayer].active := false;
+        logout;
+      end else
+        writeln('[Reflection Anti-Randoms] Solved '+R_Randoms[i].RandName+' random!');
+    end;
+  end;
+  if R_CombatRandoms then
+    if SRL_infight then
+      runaway(RandomDirection, False, 1, RandomRange(2000,4000));
+  FindTalk;
+  FindMod;
+end;

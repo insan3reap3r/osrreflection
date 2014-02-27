@@ -200,7 +200,7 @@ begin
       TerminateScript;
     end;
   end;
- { if ((R_GetLoginState < 10) or (R_GetLoginState > 30)) then
+  if ((R_GetLoginState < 10) or (R_GetLoginState > 30)) then
   begin
     writeln('Hooks are out-dated. Please be patient while we update..');
     writeln('You might be seeing this by mistake, make sure that');
@@ -209,5 +209,6 @@ begin
   end else
   begin
     writeLn('You have the latest version of Reflection.');
-  end;}
+    R_SetupRandoms;
+  end;
 end;

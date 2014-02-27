@@ -395,7 +395,7 @@ begin
   InteractingIndex := SmartGetFieldInt(SmartCurrentTarget, Local, Actor_interacting) * Actor_interacting_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Local);
   Temp := R_GetTNPC(InteractingIndex);
-  if (Temp.Name = '') and (iabs(Temp.Animation) > 10000) then
+  if ((Temp.Name = '') or (iabs(Temp.Animation) > 10000)) then
     Result := NULL_NPC
   else
   Result := Temp;
@@ -450,7 +450,7 @@ Returns true if the TNPC is a valid npc
 function R_IsValidTNPC(Npc: TNPC):Boolean;
 begin
   Result:= false;
-  if (Npc.Name = '') and (iabs(Npc.Animation) > 10000) then
+  if ((Npc.Name = '') or (Npc.Tile.x < 1)) then
     exit;
   Result := True;
 end;
