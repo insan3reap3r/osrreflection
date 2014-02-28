@@ -23,12 +23,12 @@ begin
 end;
 
 (*
-R_WalkToTile
+R_WalkToTileMM
 ~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function R_WalkToTile(Tile: TPoint): boolean;
+    function R_WalkToTileMM(Tile: TPoint): boolean;
 
 Walks to specified Tile, Returns true once clicked and doesn't wait until
 we stop.
@@ -38,7 +38,7 @@ we stop.
   by elfyyy
 
 *)
-function R_WalkToTile(Tile: TPoint): boolean;
+function R_WalkToTileMM(Tile: TPoint): boolean;
 var
   P: TPoint;
 begin
@@ -53,175 +53,53 @@ begin
 end;
 
 (*
-R_WalkPath
-~~~~~~~~~~~
+R_WalkToTileMS
+~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function R_WalkPath(Path: TPointArray): boolean;
+    function R_WalkToTileMS(Tile: TPoint): Boolean;
 
-Walks the path specified in a human like manner.
-
-.. note::
-
-  by AwkwardSaw, Modified By elfyyy
-
-*)
-function R_WalkPath(Path: TPointArray): boolean;
-var
-  I, K, H, T, Fails, lP: integer;
-  P, MM, MMF: TPoint;
-begin
-  ColorToleranceSpeed(1);
-  H := High(Path);
-  T := GetSystemTime + 10000 + Random(2000);
-  Fails := 0;
-  lP := 0;
-  while (not Result) and (GetSystemTime < T) and (Fails < 5) do
-  begin
-    if (not LoggedIn()) then
-      Exit;
-    P := R_GetTileGlobal;
-    for I := H downto 0 do
-    begin
-      if ((I - lP) > 3) then
-        Continue
-      else
-        lP := I;
-      MM := R_TileToMM(Path[I]);
-      if MM = MMF then
-        Inc(Fails);
-      if R_TileOnMM(Path[i]) then
-      begin
-        R_WalkToTile(Path[i]);
-        MarkTime(K);
-        repeat
-        if not R_IsWalking then
-          break;
-        until((TimeFromMark(K) > 2000) or FFlag(30));
-        MMF := MM;
-        if (I = H) then
-          FFlag(5)
-        else
-          FFlag(25);
-        T := getSystemTime + 7000 + Random(1000);
-        Break;
-      end;
-    end;
-    Result := (I = H);
-  end;
-  FFlag(5);
-end;
-
-(*
-R_BlindWalk
-~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    function R_BlindWalk(P: TPoint): Boolean;
-
-Uses R_WalkPath and creates a path in a straight line to walk from current
-tile to tile specified.
+Walks to the tile using mainscreen.
 
 .. note::
 
-  by Flight
+  by mormonman
 
 *)
-function R_BlindWalk(P: TPoint): Boolean;
+function R_WalkToTileMS(Tile: TPoint): boolean;
 var
-  Tries, Fails: Integer;
-  M: TPoint;
-  ctrlPoints: TPointArray;
+  P: TPoint;
+  x, y, t: Integer;
 begin
-  repeat
-    inc(Fails);
-    if Fails > 1 then
-      exit;
-    if (not LoggedIn()) then
-      Exit;
-    M := R_GetTileGlobal;
-    if (M.X = - 1) then
-      Continue;
-    if (Length(ctrlPoints) = 0) then
-      ctrlPoints := TPABetweenPoints(M, P, 5 + Random(2), 2);
-    Inc(Tries);
-    if (Tries > 20) then
-      Exit;
-    Result := R_WalkPath(ctrlPoints);
-  until (Result);
-end;
-
-(*
-R_GetToTile
-~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
-
-Walks to the tile using the minimap and reflection.
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-function R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
-var
-   msTile: TPoint;
-   t: Integer;
-begin
-  Result := false;
-  msTile := R_TileToMM(TheTile);
-  if not(rs_OnMiniMap(msTile)) then
+  if not LoggedIn then
     Exit;
+  P := R_TileToMS(Tile);
+  if (P.x = -1) and (P.y = -1) then
+    exit;
+  MMouse(P.x, P.y, 5, 5);
+  GetMousePos(x, y);
+  if R_WaitUpText('alk here', 50) then
+    Mouse(x, y, 0, 0, True) else
+    begin
+      Mouse(x, y, 0, 0, False);
+      Wait(RandomRange(400, 500));
+      if not R_ChooseOption('Walk here') then
+        R_ChooseOption('Cancel')
+    end;
+  Wait(RandomRange(120, 180));
   t := getsystemtime;
-  if (NextPoint.x = -1) then
-  begin
-    repeat
-      msTile := R_TileToMM(TheTile);
-      Mouse(msTile.x, msTile.y, 1, 1, true);
-      Wait(RandomRange(80, 100));
-      if (not(R_IsWalking)) then
-      begin
-        repeat
-          wait(50+random(50));
-        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
-      end;
-      repeat
-        wait(50+random(50));
-      until(not(R_IsWalking));
-    until((R_NearTile(TheTile, 5)) or ((GetSystemTime - t) > 59999));
-  end;
-  if (NextPoint.x > -1) then
-  begin
-    repeat
-      msTile := R_TileToMM(TheTile);
-      Mouse(msTile.x, msTile.y, 1, 1, true);
-      Wait(RandomRange(80, 100));
-      if (not(R_IsWalking)) then
-      begin
-        repeat
-          wait(50+random(50));
-        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
-      end;
-      repeat
-        wait(50+random(50));
-      until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or not(R_IsWalking));
-    until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or ((GetSystemTime - t) > 59999));
-  end;
+  FFlag(5);
   Result := (GetSystemTime - t) < 60000;
 end;
 
 (*
 R_WindPath
-~~~~~~~~~~~
+~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_WindPath(xs, ys, xe, ye, gravity, wind, minWait, maxWait, maxStep, targetArea: extended): TPointArray;
+    function R_WindPath(xs, ys, xe, ye, gravity, wind, minWait, maxWait, maxStep, targetArea: extended): TPointArray;
 
 Generates a blind path of points!
 
@@ -280,6 +158,366 @@ begin
     lastdist:= dist;
   end;
 end;
+
+(*
+R_BlindWalkMSEx
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_BlindWalkMSEx(Tile: TPoint; Dist: Integer): Boolean;
+
+Walks blindly using WindPathMS! Does NOT consider walls or obstacles. Dist is how
+close to tile to return true.
+
+.. note::
+
+  by mormonman
+
+*)
+function R_BlindWalkMSEx(Tile: TPoint; Dist: Integer): Boolean;
+var
+  I, Tries: Integer;
+  M, P: TPoint;
+  CTRLPoints: TPointArray;
+begin
+  P := Tile;
+  repeat
+    M := R_GetTileGlobal;
+    CtrlPoints := R_WindPath(M.x, M.y, P.x, P.y, 5.0, 2.5, 0.0, 0.0, 1.5, 1.0);
+    Inc(Tries);
+    if(Tries > 20)then
+      Exit;
+    for I:= High(CtrlPoints) downto 0 do
+      if R_WalkToTileMS(CtrlPoints[i]) then
+      begin
+        Result := R_DistanceFromTile(Tile) <= Dist;
+        Break;
+      end;
+  until(Result);
+end;
+
+(*
+R_BlindWalkMS
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_BlindWalkMS(Tile: TPoint): Boolean;
+
+Walks blindly using WindPathMS! Does NOT consider walls or obstacles.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_BlindWalkMS(Tile: TPoint): Boolean;
+begin
+  Result := R_BlindWalkMsEx(Tile, 2);
+end;
+
+(*
+R_WalkPatMMEx
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkPathMMEx(Path: TPointArray; Reverse: boolean): boolean;
+
+Walks the path specified on the minimap in a human like manner. Reverse walks
+path in oppsite direction.
+
+.. note::
+
+  by AwkwardSaw & elfyyy
+
+*)
+function R_WalkPathMMEx(Path: TPointArray; Reverse: boolean): boolean;
+var
+  I, K, H, T, Fails, lP: integer;
+  P, MM, MMF: TPoint;
+begin
+  ColorToleranceSpeed(1);
+  T := GetSystemTime + 10000 + Random(2000);
+  Fails := 0;
+  lP := 0;
+  if Reverse then
+    InvertTpa(Path);
+  H := High(Path);
+  while (not Result) and (GetSystemTime < T) and (Fails < 5) do
+  begin
+    if (not LoggedIn()) then
+      Exit;
+    P := R_GetTileGlobal;
+    for I := H downto 0 do
+    begin
+      if ((I - lP) > 3) then
+        Continue
+      else
+        lP := I;
+      MM := R_TileToMM(Path[I]);
+      if MM = MMF then
+        Inc(Fails);
+      if R_TileOnMM(Path[i]) then
+      begin
+        R_WalkToTileMM(Path[i]);
+        MarkTime(K);
+        repeat
+        if not R_IsWalking then
+          break;
+        until((TimeFromMark(K) > 2000) or FFlag(30));
+        MMF := MM;
+        if (I = H) then
+          FFlag(5)
+        else
+          FFlag(25);
+        T := getSystemTime + 7000 + Random(1000);
+        Break;
+      end;
+    end;
+    Result := (I = H);
+  end;
+  FFlag(5);
+end;
+
+(*
+R_WalkPathMM
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkPathMM(Path: TPointArray): boolean;
+
+Walks the path specified on the minimap in a human like manner.
+
+.. note::
+
+  elfyyy
+
+*)
+function R_WalkPathMM(Path: TPointArray): boolean;
+begin
+  Result := R_WalkPathMMEx(Path, False);
+end;
+
+(*
+R_WalkPathEx
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkPathMMEx(Path: TPointArray; Reverse: boolean; DistToMsWalk: integer): boolean;
+
+Walks the path specified on the minimap and then mainscreen in a human like manner. Reverse walks
+path in oppsite direction. DistToMsWalk is how far away from final tile to start using mainscreen.
+
+.. note::
+
+  by AwkwardSaw & elfyyy
+
+*)
+function R_WalkPathEx(Path: TPointArray; Reverse: boolean; DistToMsWalk: integer): boolean;
+var
+  I, K, H, T, Fails, lP: integer;
+  P, MM, MMF: TPoint;
+begin
+  ColorToleranceSpeed(1);
+  T := GetSystemTime + 10000 + Random(2000);
+  Fails := 0;
+  lP := 0;
+  if Reverse then
+    InvertTpa(Path);
+  H := High(Path);
+  while (not Result) and (GetSystemTime < T) and (Fails < 5) and (R_DistanceFromTile(Path[H]) >= DistToMsWalk) do
+  begin
+    if (not LoggedIn()) then
+      Exit;
+    P := R_GetTileGlobal;
+    for I := H downto 0 do
+    begin
+      if ((I - lP) > 3) then
+        Continue
+      else
+        lP := I;
+      MM := R_TileToMM(Path[I]);
+      if MM = MMF then
+        Inc(Fails);
+      if R_TileOnMM(Path[i]) then
+      begin
+        R_WalkToTileMM(Path[i]);
+        MarkTime(K);
+        repeat
+        if not R_IsWalking then
+          break;
+        until((TimeFromMark(K) > 2000) or FFlag(30));
+        MMF := MM;
+        if (I = H) then
+          FFlag(5)
+        else
+          FFlag(25);
+        T := getSystemTime + 7000 + Random(1000);
+        Break;
+      end;
+    end;
+    Result := (I = H);
+  end;
+  if DistToMsWalk > 0 then
+    Result := R_BlindWalkMS(Path[H]);
+end;
+
+(*
+R_WalkPath
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WalkPathMMEx(Path: TPointArray): boolean;
+
+Walks the path specified on the minimap in a human like manner. Reverse walks
+path in oppsite direction.
+
+.. note::
+
+  elfyyy
+
+*)
+function R_WalkPath(Path: TPointArray): boolean;
+begin
+  Result := R_WalkPathEx(Path, False, 0);
+end;
+
+(*
+R_BlindWalkEx
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_BlindWalkEx(Tile: TPoint; FinishMs: Boolean; DistToMsWalk: integer): Boolean;
+
+Uses R_WalkPath and creates a path in a straight line to walk from current
+tile to tile specified. FinishMs will finish the path by using mainscreen and
+
+.. note::
+
+  by Flight
+
+*)
+function R_BlindWalkEx(Tile: TPoint; FinishMs: Boolean; DistToMsWalk: integer): Boolean;
+var
+  Tries, Fails: Integer;
+  M: TPoint;
+  ctrlPoints: TPointArray;
+begin
+  repeat
+    inc(Fails);
+    if Fails > 1 then
+      exit;
+    if (not LoggedIn()) then
+      Exit;
+    M := R_GetTileGlobal;
+    if (M.X = - 1) then
+      Continue;
+    if (Length(ctrlPoints) = 0) then
+      ctrlPoints := TPABetweenPoints(M, Tile, 5 + Random(2), 2);
+    Inc(Tries);
+    if (Tries > 20) then
+      Exit;
+    if FinishMs then
+      Result := R_WalkPathEx(ctrlPoints, False, DistToMsWalk)
+    else R_WalkPath(CtrlPoints);
+  until (Result);
+end;
+
+(*
+R_BlindWalk
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_BlindWalk(Tile: TPoint): Boolean;
+
+Uses R_WalkPath and creates a path in a straight line to walk from current
+tile to tile specified.
+
+.. note::
+
+  by Flight
+
+*)
+function R_BlindWalk(Tile: Tpoint): boolean;
+begin
+  Result := R_BlindWalkEx(Tile, False, 0);
+end;
+
+
+
+(*
+R_GetToTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
+
+Walks to the tile using the minimap and reflection.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
+var
+   msTile: TPoint;
+   t: Integer;
+begin
+  Result := false;
+  msTile := R_TileToMM(TheTile);
+  if not(rs_OnMiniMap(msTile)) then
+    Exit;
+  t := getsystemtime;
+  if (NextPoint.x = -1) then
+  begin
+    repeat
+      msTile := R_TileToMM(TheTile);
+      Mouse(msTile.x, msTile.y, 1, 1, true);
+      Wait(RandomRange(80, 100));
+      if (not(R_IsWalking)) then
+      begin
+        repeat
+          FindNormalRandoms;
+          wait(50+random(50));
+        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
+      end;
+      repeat
+        FindNormalRandoms;
+        wait(50+random(50));
+      until(not(R_IsWalking));
+    until((R_NearTile(TheTile, 5)) or ((GetSystemTime - t) > 59999));
+  end;
+  if (NextPoint.x > -1) then
+  begin
+    repeat
+      msTile := R_TileToMM(TheTile);
+      Mouse(msTile.x, msTile.y, 1, 1, true);
+      Wait(RandomRange(80, 100));
+      if (not(R_IsWalking)) then
+      begin
+        repeat
+          FindNormalRandoms;
+          wait(50+random(50));
+        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
+      end;
+      repeat
+        FindNormalRandoms;
+        wait(50+random(50));
+      until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or not(R_IsWalking));
+    until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or ((GetSystemTime - t) > 59999));
+  end;
+  Result := (GetSystemTime - t) < 60000;
+end;
+
 
 (*
 R_WebWalk

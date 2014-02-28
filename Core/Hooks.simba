@@ -154,6 +154,7 @@ const
     Widget_getText                                    =   'bq';
     Widget_getItems                                   =   'dd';
     Widget_getID                                      =   'r';
+    Widget_getChildren                                =   'db';
 
 {*Widget Multipliers*}
     Widget_getRelativeX_Multiplier                    =   -2121745643;
@@ -165,8 +166,8 @@ const
 {*client*}
     client_menuCount                                  =   'client.ig';
     client_friends                                    =   'client.ox';
-    client_menuActions                                =   'f.e';
-    client_menuOptions                                =   'fo.g';
+    client_menuActions                                =   'client.ia';
+    client_menuOptions                                =   'client.ik';
     client_groundSettings                             =   'd.c';
     client_groundHeights                              =   'd.q';
     client_npcIndices                                 =   'client.be';
@@ -186,10 +187,10 @@ const
     client_cameraY                                    =   'bx.fl';
     client_cameraX                                    =   'j.fb';
     client_cameraZ                                    =   'eu.ff';
-    client_menuX                                      =   'client.hu';
-    client_menuY                                      =   'client.hi';
-    client_menuWidth                                  =   'client.hf';
-    client_menuHeight                                 =   'client.hz';
+    client_menuX                                      =   'k.hu';
+    client_menuY                                      =   'd.hi';
+    client_menuWidth                                  =   'ce.hf';
+    client_menuHeight                                 =   'bz.hz';
     client_isMenuOpen                                 =   'client.hd';
     client_levels                                     =   'client.hl';
     client_real_levels                                =   'client.ha';
@@ -220,10 +221,10 @@ const
     client_cameraY_Multiplier                         =   1835714533;
     client_cameraX_Multiplier                         =   -505879127;
     client_cameraZ_Multiplier                         =   1649041549;
-    client_menuX_Multiplier                           =   1325021093;
-    client_menuY_Multiplier                           =   -600216070;
+    client_menuX_Multiplier                           =   -611332983;
+    client_menuY_Multiplier                           =   1956352275;
     client_menuWidth_Multiplier                       =   -1953640879;
-    client_menuHeight_Multiplier                      =   -1474146457;
+    client_menuHeight_Multiplier                      =   165301275;
     client_run_energy_Multiplier                      =   -816811303;
     client_weight_Multiplier                          =   1247755591;
     client_plane_Multiplier                           =   274177001;

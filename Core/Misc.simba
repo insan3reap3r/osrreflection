@@ -194,7 +194,6 @@ Gets the setting value at the specified index.
   by Drags111
 
 *}
-
 function R_GetSetting(Setting: Integer): Integer;
 var
   SA: TIntegerArray;
@@ -207,4 +206,278 @@ begin
     writeln('Incorrect setting index passed to GetSetting + R_GetSetting');
     Result := -1;
   end;
+end;
+
+{*RemoveFormatting
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function RemoveFormatting(Text: String): String;
+
+  Removes Unwanted formating from string for uptext.
+
+.. note::
+
+  by Frement
+
+*}
+function RemoveFormatting(Text: String): String;
+var
+  P1, P2: Integer;
+begin
+  repeat
+    P1 := Pos('<', Text);
+    P2 := Pos('>', Text);
+    Text := Copy(Text, 0, P1 - 1) + Copy(Text, P2 + 1, Length(Text) - P2);
+  until(Pos('<', Text) = 0);
+  Result := Replace(Text, '  ', ' ');
+end;
+
+{*R_GetMenuIndex
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMenuIndex(Option: String; Options: TStringArray): Integer;
+
+  Returns Menu index of giveen option.
+
+.. note::
+
+  by Frement
+
+*}
+function R_GetMenuIndex(Option: String; Options: TStringArray): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to High(Options) do begin
+    if (Pos(Option, Options[I]) > 0) then begin
+      Result := I;
+      Exit;
+    end;
+  end;
+end;
+
+{*R_IsMenuOpen
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsMenuOpen: Boolean;
+
+  Returns true if menu is open.
+
+.. note::
+
+  by Frement
+
+*}
+function R_IsMenuOpen: Boolean;
+begin
+  Result := SmartGetFieldBoolean(SmartCurrentTarget, 0, client_isMenuOpen);
+end;
+
+{*R_GetMenuOptions
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetMenuOptions: TStringArray;
+
+  Returns array of menu options.
+
+.. note::
+
+  by Frement
+
+*}
+function R_GetMenuOptions: TStringArray;
+var
+  ActInt, OptInt, Count, I, J: Integer;
+  Act, Opt: String;
+begin
+  Count := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuCount) * client_menuCount_Multiplier;
+  SetLength(Result, Count);
+  for I := Count - 1 downto 0 do begin
+    ActInt := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_menuActions, I);
+    OptInt := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_menuOptions, I);
+    Act := Trim(R_GetJavaString(ActInt, 512));
+    Opt := RemoveFormatting(Trim(R_GetJavaString(OptInt, 512)));
+    Result[J] := Trim(Act + ' ' + Opt);
+    Inc(J);
+  end;
+end;
+
+{*R_ChooseOption
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_ChooseOption(Option: String): Boolean;
+
+  Clicks on given option in open menu
+
+.. note::
+
+  by Frement
+
+*}
+function R_ChooseOption(Option: String): Boolean;
+var
+  Index, MenuX, MenuY, MenuWidth, XOff, YOff: Integer;
+  Options: TStringArray;
+begin
+  Options := R_GetMenuOptions;
+  if (not R_IsMenuOpen) then
+    Exit;
+  Index := R_GetMenuIndex(Option, Options);
+  if (Index = -1) then
+    Exit;
+  MenuX := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuX) * client_menuX_Multiplier + 4;
+  MenuY := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuY) * client_menuY_Multiplier + 4;
+  MenuWidth := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuWidth) * client_menuWidth_Multiplier;
+  XOff := RandomRange(4, MenuWidth - 4);
+  YOff := RandomRange(20, 25) + (Index * 15);
+  MMouse(MenuX + XOff, MenuY + YOff, 2, 2);
+  Sleep(RandomRange(100, 250));
+  ClickMouse2(Mouse_Left);
+  Result := True;
+end;
+
+{*R_GetUpText
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetUpText: String;
+
+  Returns uptext
+
+.. note::
+
+  by Frement
+
+*}
+function R_GetUpText: String;
+var
+  Options: TStringArray;
+begin
+  Options := R_GetMenuOptions;
+  if ((High(Options) - 1) > 0) then
+    Result := Options[0] + ' / ' + ToStr(High(Options) - 1) + ' more options'
+  else
+    Result := Options[0];
+  if (Result = 'Cancel') then
+    Result := '';
+end;
+
+(*
+R_IsUpTextMulti
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsUpTextMulti(UpText: TStringArray): Boolean;
+
+Returns true if any instance of the UpText is found.
+
+.. note::
+
+  by Drags111
+
+*)
+function R_IsUpTextMulti(UpText: TStringArray): Boolean;
+var
+  I, T: integer;
+  UT: String;
+begin
+  Result := False;
+  MarkTime(T);
+  while(UT = '')do
+  begin
+    UT := R_GetUpText;
+    if(TimeFromMark(T) > 1000)then
+      Exit;
+    Wait(50+Random(50));
+  end;
+  for I := 0 to High(UpText) do
+  begin
+    Result := Pos(Trim(Lowercase(UpText[I])), UT) > 0;
+    if Result then Exit;
+  end;
+end;
+
+(*
+R_IsUpText
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsUpText(UpText: string): Boolean;
+
+Description: Returns true if UpText is found.
+
+.. note::
+
+  by Drags111
+
+*)
+function R_IsUpText(UpText: string): Boolean;
+begin
+  Result := R_IsUpTextMulti([UpText]);
+end;
+
+(*
+R_WaitUpTextMulti
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WaitUpTextMulti(S: TStringArray; Time: Integer): Boolean;
+
+Waits for an uptext in the UpText array.
+
+.. note::
+
+  by Naike
+
+*)
+function R_WaitUpTextMulti(S: TStringArray; Time: Integer): Boolean;
+var
+  T: Integer;
+begin
+  Result := False;
+  T := GetSystemTime + Time;
+  while (GetSystemTime < T) do
+  begin
+    if R_IsUpTextMulti(S) then
+    begin
+      Result := True;
+      Exit;
+    end;
+    Wait(20 + Random(10));
+  end;
+end;
+
+(*
+R_WaitUpText
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WaitUpText(S: String; Time: Integer): Boolean;
+
+Waits for the UpText
+
+.. note::
+
+  by Naike
+
+*)
+function R_WaitUpText(S: String; Time: Integer): Boolean;
+begin
+  Result := R_WaitUpTextMulti([S], Time);
 end;
