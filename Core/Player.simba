@@ -104,26 +104,6 @@ begin
 end;
 
 (*
-R_InFight
-~~~~~~~~~~~
-
-. code-block:: pascal
-
-    function R_InFight: Boolean;
-
-Returns true if player is in combat.
-
-.. note::
-
-  by elfyyy
-
-*)
-function R_InFight: boolean;
-begin
-  Result := (Round(R_InteractingNpc().Hitpoints) > 0);
-end;
-
-(*
 R_GetHealth
 ~~~~~~~~~~~
 
