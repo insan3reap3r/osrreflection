@@ -210,5 +210,6 @@ begin
   begin
     writeLn('You have the latest version of Reflection.');
     R_SetupRandoms;
+    R_SetupCurves;
   end;
 end;
