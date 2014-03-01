@@ -16,7 +16,7 @@ By: Turpinator & Krazy_Meerkat
 
 const
 {how randy do you like it?}
-randy = 2;
+randy = 0;
 {number of tiles between path points}
 PathDistance = 5;
 

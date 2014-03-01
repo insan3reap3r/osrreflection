@@ -194,6 +194,66 @@ begin
 end;
 
 (*
+R_IsAutoRetaliateOn
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsAutoRetaliateOn
+
+Returns true if autoretaliate is on.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_IsAutoRetaliateOn: Boolean;
+begin
+  Result := R_GetSetting(172) = 0;
+end;
+
+(*
+R_IsRunOn
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsRunOn
+
+Returns true if Run is on.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_IsRunOn: Boolean;
+begin
+  Result := R_GetSetting(173) = 1;
+end;
+
+(*
+R_IsPosioned
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsPosioned
+
+Returns true if Posioned.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_IsPosioned: Boolean;
+begin
+  Result := R_GetSetting(102) > 0;
+end;
+
+(*
 R_AutoCasting
 ~~~~~~~~~~~~~
 
@@ -211,8 +271,6 @@ Examples:
 
 .. code-block:: pascal
 
-    if not(R_AutoCasting) then
-      SetAutoCast;
 *)
 function R_AutoCasting: Boolean;
 begin

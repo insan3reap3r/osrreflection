@@ -548,7 +548,7 @@ above given tile.
 
 .. note::
 
-  by Frement & elfyyy
+  by elfyyy
 
 *)
 function R_TileToMsHeight(Tile: Tpoint; Height: integer): Tpoint;
