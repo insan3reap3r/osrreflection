@@ -224,14 +224,24 @@ end;
 *}
 function RemoveFormatting(Text: String): String;
 var
-  P1, P2: Integer;
+  I: Integer;
+  Skip: Boolean;
 begin
-  repeat
-    P1 := Pos('<', Text);
-    P2 := Pos('>', Text);
-    Text := Copy(Text, 0, P1 - 1) + Copy(Text, P2 + 1, Length(Text) - P2);
-  until(Pos('<', Text) = 0);
-  Result := Replace(Text, '  ', ' ');
+  for I := 1 to Length(Text) do begin
+    if (Text[I] = '<') then
+      Skip := True;
+
+    if (Skip) and (Text[I] = '>') then begin
+      Skip := False;
+      Continue;
+    end;
+
+    if (Skip) then
+      Continue;
+
+    Result := Result + Text[I];
+  end;
+  Result := Replace(Result, '  ', ' ');
 end;
 
 {*R_GetMenuIndex
