@@ -6,7 +6,7 @@
 
 *}
   Type TNPC = Record
-    Name: String;
+    Name, OverHeadText: String;
     Tile: TPoint;
     Index, Level, NpcID: Integer;
     Animation, HitPoints: Integer;
@@ -210,14 +210,16 @@ Returns the npc with a given index id
 *)
 function R_GetTNPC(NpcIndex: Integer): TNPC;
 var
-NPCNode, Def, NameInt: Integer;
+NPCNode, Def, NameInt, OverHeadInt: Integer;
 begin
   NPCNode:= SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, NpcIndex);
   Def:= SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
   NameInt := SmartGetFieldObject(SmartCurrentTarget, Def, NpcDefinition_name);
+  OverHeadInt := SmartGetFieldObject(SmartCurrentTarget, NPCNode,  Actor_ActiveText);
   with result do
   begin
-    Name := Capitalize(Lowercase(Trim(R_GetJavaString(NameInt, 512))));
+    Name := Capitalize(Lowercase(Trim(R_GetJavaString(OverHeadInt, 512))));
+    OverHeadText := Trim(R_GetJavaString(OverHeadInt, 512));
     Tile.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localX) * Actor_localX_Multiplier) div 128;
     Tile.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localY) * Actor_localY_Multiplier) div 128;
     Index:= NpcIndex;

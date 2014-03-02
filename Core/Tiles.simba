@@ -231,8 +231,9 @@ function R_DistanceFromTile(Tile: TPoint): integer;
 var
   Loc: TPoint;
 begin
-  Tile := point(iAbs(Tile.x), iAbs(Tile.y));
-  Loc := Point(iAbs(R_GetTileGlobal.x),iAbs(R_GetTileGlobal.y));
+  Loc := Point(R_GetTileGlobal.x, R_GetTileGlobal.y);
+  if (Loc.x > 20000) or (Loc.y > 20000) then
+    exit;
   Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
 end;
 
@@ -251,13 +252,9 @@ Returns true if player is within the distance specified to the tile.
   by elfyyy
 
 *)
-function R_NearTile(TP:Tpoint; Dist:integer):Boolean;
-var
-  Loc: TPoint;
+function R_NearTile(Tile:Tpoint; Dist:integer):Boolean;
 begin
-  Loc := Point(iAbs(R_GetTileGlobal.x),iAbs(R_GetTileGlobal.y));
-  Tp := point(iAbs(Tp.x), iAbs(Tp.y));
-  Result := Distance(TP.x, TP.y, Loc.x, Loc.y) < Dist;
+  Result := R_DistanceFromTile(Tile) < Dist;
 end;
 
 (*

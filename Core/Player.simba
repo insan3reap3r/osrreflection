@@ -254,6 +254,33 @@ begin
 end;
 
 (*
+R_DidTeleport
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_DidTeleport: Boolean;
+
+Returns true if player teleported.
+
+.. note::
+  Example:
+
+    WaitFunc(@R_DidTeleport, 200, 30000)
+
+  by elfyyy
+
+*)
+function R_DidTeleport: Boolean;
+var
+  Temp: TPoint;
+begin
+  Temp := R_GetTileGlobal;
+  wait(1500);
+  Result := R_DistanceFromTile(Temp) > 20;
+end;
+
+(*
 R_AutoCasting
 ~~~~~~~~~~~~~
 

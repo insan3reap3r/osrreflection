@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 24;
+  IncludeRevision = 25;
 
 (*
 CreateNewFiles
@@ -103,6 +103,38 @@ begin
 end;
 
 (*
+HooksUpdated
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function HooksUpdated: Boolean;
+
+  Checks to see if hooks are updated and if SetupSRL is above SetupReflection
+
+.. note::
+
+  by elfyyy
+
+*)
+function HooksValid: Boolean;
+begin
+  if MouseSpeed = 0 then
+  begin
+    Writeln('It appears SetupSRL is below SetupReflection in current script');
+    Writeln('Please Change the order in the mainloop. ~ Reflection');
+    terminatescript;
+  end;
+  if ((R_GetLoginState < 10) or (R_GetLoginState > 30)) then
+  begin
+    Writeln('Reflection Hooks are outdated');
+    Writeln('No need to post about it, we are currently working on it. ~ Reflection dev''s');
+    Result := False;
+  end else
+  Result := True;
+end;
+
+(*
 SetupReflection
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -126,11 +158,7 @@ var
 begin
   CreateNewFiles;
   DeleteOldFiles;
-  writeln('********** Notice **********');
-  writeln('Massive thanks to Magorium, Dang, Hyperion, Swipe, dog_ and hexagon for supplying hooks and multipliers when we were in a tight spot!');
-  writeln('Current hooks brought to you by our own methods');
-  writeln('****************************');
-  writeln('Checking the Google Source-code for Hook updates...');
+  ClearDebug;
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
   if (trim(OnlineVersion) > ReflectionRevision) then
   begin
@@ -150,8 +178,6 @@ begin
       CloseFile(NewFile);
     end;
   end else
-    writeLn('You have the latest Hooks.');
-  writeln('Checking the Google Source-code for Reflection updates...');
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Include%20Rev.txt');
   if (StrToInt(OnlineVersion) > IncludeRevision) then
   begin
@@ -200,16 +226,10 @@ begin
       TerminateScript;
     end;
   end;
-  if ((R_GetLoginState < 10) or (R_GetLoginState > 30)) then
+  if HooksValid then
   begin
-    writeln('Hooks are out-dated. Please be patient while we update..');
-    writeln('You might be seeing this by mistake, make sure that');
-    writeln('SetupSRL; is above SetupReflection; in the script.');
-    TerminateScript;
-  end else
-  begin
-    writeLn('You have the latest version of Reflection.');
     R_SetupRandoms;
     R_SetupCurves;
-  end;
+  end else
+    TerminateScript;
 end;
