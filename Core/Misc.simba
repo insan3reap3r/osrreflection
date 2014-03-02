@@ -347,7 +347,7 @@ begin
     Exit;
   Index := R_GetMenuIndex(Option, Options);
   if (Index = -1) then
-    Exit;
+    Index := R_GetMenuIndex('Cancel', Options);
   MenuX := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuX) * client_menuX_Multiplier + 4;
   MenuY := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuY) * client_menuY_Multiplier + 4;
   MenuWidth := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuWidth) * client_menuWidth_Multiplier;
