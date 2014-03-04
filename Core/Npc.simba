@@ -424,6 +424,29 @@ begin
 end;
 
 (*
+R_IsValidTNPC
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_IsValidTNPC(Npc: TNPC):Boolean;
+
+Returns true if the TNPC is a valid npc
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_IsValidTNPC(Npc: TNPC):Boolean;
+begin
+  Result:= False;
+  if ((Npc.Name = '') or (Npc.Tile.x < 1) or (Npc.Tile.x > 50000)) then
+    exit;
+  Result := True;
+end;
+
+(*
 R_FindFreeNpc
 ~~~~~~~~~~~~~~
 
@@ -443,36 +466,14 @@ var
 i: Integer;
 temp: TNPCArray;
 begin
+  Result:= NULL_NPC;
   temp := R_GetNpcs(NPC);
   for i:= 0 to high(temp) do
   begin
-    if not(temp[i].InCombat) then
+    if *not(temp[i].InCombat) and (R_IsValidTNPC(temp[i]))) then
     begin
       result:= temp[i];
       break;
     end;
   end;
-end;
-
-(*
-R_IsValidTNPC
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_IsValidTNPC(Npc: TNPC):Boolean;
-
-Returns true if the TNPC is a valid npc
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-function R_IsValidTNPC(Npc: TNPC):Boolean;
-begin
-  Result:= false;
-  if ((Npc.Name = '') or (Npc.Tile.x < 1)) then
-    exit;
-  Result := True;
 end;
