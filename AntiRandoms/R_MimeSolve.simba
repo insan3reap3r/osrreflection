@@ -23,7 +23,7 @@ begin
   result:= false;
   repeat
     MimeEmote:= -1;
-    R_FindNpc('mime', MimeNPC);
+    R_FindNpc('Mime', MimeNPC);
     if (not(MimeNPC.Animation = -1) and not(MimeNPC.Animation = 858)) then
     begin //scan emote
     MimeEmote:= MimeNPC.Animation;

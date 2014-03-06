@@ -118,6 +118,7 @@ begin
   SetupSRL;
   SetupReflection;
   SMART_ClearCanvas;
+  AddOnTerminate('SMART_ClearCanvas');
   if (not LoggedIn) then
   begin
     Writeln('Log into OSR before you start the script');

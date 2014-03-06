@@ -16,6 +16,10 @@ begin
     result:= true;
 end;
 
+(**
+ * Author: elfyyy
+ * Description: Finds and talks to sergeant
+ *)
 function R_TalkToSergeant: Boolean;
 var
   Sergeant: TNPC;
@@ -39,7 +43,11 @@ begin
   end;
 end;
 
-procedure R_LoadSigns; //Taken from Reflection2
+(**
+ * Author: Taken from Reflection2
+ * Description: Uses setting array to determine mat layout.
+ *)
+procedure R_LoadSigns;
 var
   Setting: Integer;
 begin
@@ -192,6 +200,10 @@ begin
   end;
 end;
 
+(**
+ * Author: elfyyy
+ * Description: Gets current assignment, ensuring we are talking to sergeant first.
+ *)
 function R_GetAssignment: integer;
 begin
 if not AreTalking then
@@ -207,6 +219,10 @@ if not AreTalking then
     Result := 4;
 end;
 
+(**
+ * Author: Krazy_Meerkat
+ * Description: Solves Drill Demon random.
+ *)
 function R_SolveDD: boolean;
 var
   i, FailTime: integer;

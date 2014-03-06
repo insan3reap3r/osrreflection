@@ -64,7 +64,7 @@ begin
   Result:= false;
   if (not loggedIn) then
     exit;
-  FMan:= R_FindFreeNpc('freaky forester');
+  FMan:= R_FindFreeNpc('Freaky Forester');
   if (R_IsValidTNPC(FMan)) then
   begin
     R_PerfectPath([FMan.Tile]);

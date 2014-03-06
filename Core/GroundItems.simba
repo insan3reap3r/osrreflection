@@ -45,7 +45,7 @@ Gets all ground items on a tile specified by Tile.
 *)
 Function R_GetGroundItemsAt(Tile: TPoint): TGroundItemArray;
 var
-   X, Y, BaseX, BaseY, Plane, _Head, _Next, _Node, _Nodes, ID, Quantity: Integer;
+   BaseX, BaseY, Plane, _Head, _Next, _Node, _Nodes, ID, Quantity: Integer;
 begin
   BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;

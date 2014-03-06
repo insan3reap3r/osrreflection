@@ -41,7 +41,7 @@ begin
       begin
         R_Randoms[i].RandName := 'Drill Demon';
         R_Randoms[i].DetectRandom := @R_DetectDD;
-        R_Randoms[i].SolveRandom := @R_SolveDD; //SRL Solver for now
+        R_Randoms[i].SolveRandom := @R_SolveDD; //Solved
       end;
       2:
       begin
@@ -190,11 +190,7 @@ begin
         if R_WaitUptext(FoundNPC.Name, 200) then begin
           ClickMouse2(Mouse_Left);
           Wait(RandomRange(1000, 1800));
-          ClickToContinue;
-          ChatWait;
-          ClickToContinue;
-          ChatWait;
-          ClickToContinue;
+          DoConversation('', True);
         end;
         if R_NearTile(StartLoc, 20) then begin
           writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random Solved!');
@@ -277,16 +273,19 @@ begin
 end;
 
 {*******************************************************************************
-function R_FNRWait(Time: integer): Boolean;
+function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
 by: elfyyy
 Description: Used instead of Wait() or Sleep() and checks for Reflection Randoms.
+WaitPerLoop is the time frequancy to check for randoms. 50-100 is average.
 *******************************************************************************}
-function R_FNRWait(Time: integer): Boolean;
+function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
 var
   StartTime: integer;
 begin
   Result := False;
   MarkTime(StartTime);
-  while (not result) or (GetSystemTime - StartTime > Time) do
+  while (not result) or (GetSystemTime - StartTime > Time) do begin
     Result := R_FindNormalRandoms;
+    wait(WaitPerLoop);
+  end;
 end;
