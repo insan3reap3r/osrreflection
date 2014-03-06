@@ -118,10 +118,10 @@ begin
   SetupSRL;
   SetupReflection;
   SMART_ClearCanvas;
-  if not(LoggedIn) then
+  if (not LoggedIn) then
   begin
-    writeln('Log into OSR before you start the script');
-    terminatescript;
+    Writeln('Log into OSR before you start the script');
+    TerminateScript;
   end;
   repeat
     GetRealMousePos(MX, MY);
@@ -136,11 +136,12 @@ begin
             if (IsRealMouseLeftDown) then begin
               AddPt(Point(Tile.X + X - 5, Tile.Y + Y - 5));
               repeat
-                wait(100);
-              until(not(IsRealMouseLeftDown));
+                Sleep(100);
+              until(not IsRealMouseLeftDown);
+            end;
           end else
             SMART_DrawTextEx(False, Tiles[X][Y].X, Tiles[X][Y].Y, 'UpChars07', '+', clYellow);
-    wait(100);
+    Sleep(100);
     ClearDebug;
     DebugPts;
   until(False);
