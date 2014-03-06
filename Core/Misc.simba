@@ -157,6 +157,27 @@ begin
 end;
 
 (*
+R_Return
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_Return(var B: Boolean; F: function: Boolean): Boolean;
+
+  Performs a lape function in pascalscript
+
+.. note::
+
+  by Frement
+
+*)
+function R_Return(var B: Boolean; F: function: Boolean): Boolean;
+begin
+  B := F();
+  Result := B;
+end;
+
+(*
 R_GetSettingArray
 ~~~~~~~~~~~~~~~~~
 
@@ -417,7 +438,7 @@ begin
   end;
   for I := 0 to High(UpText) do
   begin
-    Result := Pos(Trim(Lowercase(UpText[I])), UT) > 0;
+    Result := Pos(Trim(UpText[I]), UT) > 0;
     if Result then Exit;
   end;
 end;
@@ -492,4 +513,30 @@ Waits for the UpText
 function R_WaitUpText(S: String; Time: Integer): Boolean;
 begin
   Result := R_WaitUpTextMulti([S], Time);
+end;
+
+(*
+R_GetPlayerName
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetPlayerName: String;
+
+  Gets current player name
+
+.. note::
+
+  by Frement
+
+*)
+function R_GetPlayerName: String;
+var
+  _Player, _PlayerName: Integer;
+begin
+  _Player := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  _PlayerName := SmartGetFieldObject(SmartCurrentTarget, _Player, Player_name);
+  Result := R_GetJavaString(_PlayerName, 512);
+  SmartFreeObject(SmartCurrentTarget, _PlayerName);
+  SmartFreeObject(SmartCurrentTarget, _Player);
 end;

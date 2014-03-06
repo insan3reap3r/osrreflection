@@ -20,6 +20,7 @@ function NULL_NPC: TNPC;
   with Result do
   begin
     Name := '';
+    OverHeadText := '';
     Tile := Point(0, 0);
     Index :=  0;
     Level := 0;
@@ -131,8 +132,8 @@ begin
       if VariantIsString(NPC) then
       begin
         NameInt := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
-        Name := Lowercase(Trim(R_GetJavaString(NameInt, 512)));
-        if Name = LowerCase(NPC) then
+        Name := (Trim(R_GetJavaString(NameInt, 512)));
+        if Pos(NPC, Name) > 0 then
         begin
           Result[k] := T[i];
           inc(k);
@@ -150,6 +151,7 @@ begin
       SmartFreeObject(SmartCurrentTarget, NPCNode);
       SmartFreeObject(SmartCurrentTarget, NPCDef);
     end;
+    k := 1;
   end else
   begin
     for i := 0 to s do
@@ -218,7 +220,7 @@ begin
   OverHeadInt := SmartGetFieldObject(SmartCurrentTarget, NPCNode,  Actor_ActiveText);
   with result do
   begin
-    Name := Capitalize(Lowercase(Trim(R_GetJavaString(OverHeadInt, 512))));
+    Name := Trim(R_GetJavaString(NameInt, 512));
     OverHeadText := Trim(R_GetJavaString(OverHeadInt, 512));
     Tile.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localX) * Actor_localX_Multiplier) div 128;
     Tile.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localY) * Actor_localY_Multiplier) div 128;
@@ -238,6 +240,7 @@ begin
   SmartFreeObject(SmartCurrentTarget, NPCNode);
   SmartFreeObject(SmartCurrentTarget, Def);
   SmartFreeObject(SmartCurrentTarget, NameInt);
+  SmartFreeObject(SmartCurrentTarget, OverHeadInt);
 end;
 
 (*
@@ -261,7 +264,10 @@ var
   tpa: TPointArray;
 begin
   L := GetArrayLength(NPCs);
-  if L < 1 then Exit;
+  if L < 1 then begin;
+    Result := NPCs;
+    exit;
+  end;
   SetArrayLength(TPA, L);
   SetArrayLength(Result, L);
   for i := 0 to L-1 do
@@ -423,27 +429,27 @@ begin
   Result := (Round(R_InteractingNpc().Hitpoints) > 0);
 end;
 
-(*
-R_IsValidTNPC
-~~~~~~~~~~~~~~
+	(*
+	R_IsValidTNPC
+	~~~~~~~~~~~~~~
 
-.. code-block:: pascal
+	.. code-block:: pascal
 
-    R_IsValidTNPC(Npc: TNPC):Boolean;
+	    R_IsValidTNPC(Npc: TNPC):Boolean;
 
-Returns true if the TNPC is a valid npc
+	Returns true if the TNPC is a valid npc
 
-.. note::
+	.. note::
 
-  by Krazy_Meerkat
+	  by Krazy_Meerkat
 
-*)
-function R_IsValidTNPC(Npc: TNPC):Boolean;
-begin
-  Result:= False;
-  if ((Npc.Name = '') or (Npc.Tile.x < 1) or (Npc.Tile.x > 50000)) then
-    exit;
-  Result := True;
+	*)
+	function R_IsValidTNPC(Npc: TNPC):Boolean;
+	begin
+	  Result:= False;
+	  if ((Npc.Name = '') or (Npc.Tile.x < 1) or (Npc.Tile.x > 50000)) then
+	    exit;
+Result := True;
 end;
 
 (*
@@ -470,7 +476,7 @@ begin
   temp := R_GetNpcs(NPC);
   for i:= 0 to high(temp) do
   begin
-    if *not(temp[i].InCombat) and (R_IsValidTNPC(temp[i]))) then
+    if not(temp[i].InCombat) and (R_IsValidTNPC(temp[i])) then
     begin
       result:= temp[i];
       break;

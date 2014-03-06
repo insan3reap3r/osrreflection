@@ -11,13 +11,23 @@ type
 end;
 
 var
-  R_Randoms : array[0..15] of R_Random;
-  R_CombatRandoms: Boolean;
+  R_Randoms : array[0..13] of R_Random;
+  R_CombatRandoms, R_Reincarnate: Boolean;
+  R_RunAwayDirection: String;
 
+
+{*******************************************************************************
+procedure R_SetupRandoms;
+by: Krazy Meerkat
+Description: Sets up all need info for Reflection Randoms
+*******************************************************************************}
 procedure R_SetupRandoms;
 var
   i: Integer;
 begin
+  R_RunAwayDirection := 'random';
+  R_Reincarnate := False;
+  R_CombatRandoms := True;
   for i:= 0 to high(R_Randoms) do
   begin
     case i of
@@ -59,59 +69,41 @@ begin
       end;
       6:
       begin
-        R_Randoms[i].RandName := 'Certer';
-        R_Randoms[i].DetectRandom := @CT_Detect;
-        R_Randoms[i].SolveRandom := @CT_Solve; //SRL Solver for now
-      end;
-      7:
-      begin
         R_Randoms[i].RandName := 'Abyss';
         R_Randoms[i].DetectRandom := @Abyss_Detect;
         R_Randoms[i].SolveRandom := @Abyss_Solve; //SRL Solver for now
       end;
-      8:
-      begin
-        R_Randoms[i].RandName := 'Frog';
-        R_Randoms[i].DetectRandom := @Frog_Detect;
-        R_Randoms[i].SolveRandom := @Frog_Solve; //SRL Solver for now
-      end;
-      9:
+      7:
       begin
         R_Randoms[i].RandName := 'Pinball';
         R_Randoms[i].DetectRandom := @PB_Detect;
         R_Randoms[i].SolveRandom := @PB_Solve; //SRL Solver for now
       end;
-      10:
+      8:
       begin
         R_Randoms[i].RandName := 'Pillory Cage';
         R_Randoms[i].DetectRandom := @PL_Detect;
         R_Randoms[i].SolveRandom := @PL_Solve; //SRL Solver for now
       end;
-      11:
-      begin
-        R_Randoms[i].RandName := 'Cap''n Arnav';
-        R_Randoms[i].DetectRandom := @CA_Detect;
-        R_Randoms[i].SolveRandom := @CA_Solve; //SRL Solver for now
-      end;
-      12:
+      9:
       begin
         R_Randoms[i].RandName := 'Quiz Master';
         R_Randoms[i].DetectRandom := @Quiz_Detect;
         R_Randoms[i].SolveRandom := @Quiz_Solve; //SRL Solver for now
       end;
-      13:
+      10:
       begin
         R_Randoms[i].RandName := 'Beekeeper';
         R_Randoms[i].DetectRandom := @BK_Detect;
         R_Randoms[i].SolveRandom := @BK_Solve; //SRL Solver for now
       end;
-      14:
+      11:
       begin
         R_Randoms[i].RandName := 'Rewards';
         R_Randoms[i].DetectRandom := @RD_Detect;
         R_Randoms[i].SolveRandom := @RD_Solve; //SRL Solver for now
       end;
-      15:
+      12:
       begin
         R_Randoms[i].RandName := 'Freaky Forester';
         R_Randoms[i].DetectRandom := @R_DetectForester;
@@ -121,27 +113,180 @@ begin
   end;
 end;
 
-procedure R_SolveRandoms;
+{*******************************************************************************
+procedure R_FindDead;
+by: elfyyy
+Description: Returns True if player is dead unless R_Reincarnate = True
+*******************************************************************************}
+function R_FindDead: Boolean;
+begin
+  if R_Reincarnate then
+    Result := False
+  else
+  Result := (R_GetHealth = 0);
+  if Result then begin
+    writeln('[Reflection Anti-Randoms] Detected we are dead, logging out.');
+    Wait(15000);
+    logout;
+    players[currentPlayer].active := false;
+  end;
+end;
+
+{*******************************************************************************
+procedure R_FindCombatRandom;
+by: elfyyy
+Description: Returns True if player is in a Combat random.
+*******************************************************************************}
+function R_FindCombatRandom: boolean;
+var
+  Names: TStringArray;
+  Temp: TNPC;
+begin
+  Result := False;
+  Names := ['security', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'zombie', 'tree spirit', 'ent'];
+  Temp := R_InteractingNPC;
+  if (StrInArr(Lowercase(Temp.Name), Names)) then
+    Result := True;
+  if Result then
+    writeln('[Reflection Anti-Randoms] Combat random detected! Running away...');
+end;
+
+{*******************************************************************************
+procedure R_FindTalk;
+by: elfyyy
+Description: Solves all talking randoms.
+*******************************************************************************}
+function R_FindTalk: Boolean;
+var
+  Temp: TNPCArray;
+  Temp1: TNPC;
+  RandList: TStringArray;
+  i, f: integer;
+  FoundNPC, FrogPrincess: TNPC;
+  Loc, StartLoc: Tpoint;
+  PName: String;
+begin
+  Result := False;
+  RandList := ['frog', 'certer', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'pirate', 'security', 'rick turpentine','mysterious old man'];
+  Temp := R_GetAllNPCs;
+  for i := 0 to High(Temp) do
+    if (StrInArr(Lowercase(Temp[i].Name), RandList)) then begin
+      PName := lowercase(R_GetPlayerName);
+      MarkTime(f);
+      if Pos('frog', Lowercase(Temp[i].Name)) <= 0 then begin
+        while Pos(PName, Lowercase(Temp1.OverHeadText)) <= 0 do begin
+          R_FindNPC(Temp[i].Name, Temp1);
+          wait(200);
+          if TimeFromMark(f) > 10000 then
+            exit;
+        end;
+        Result := True;
+        StartLoc := R_GetTileGlobal;
+        writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random detected! Solving...');
+        R_FindNPC(Temp[i].Name, FoundNPC);
+        Loc := FoundNPC.Tile;
+        Loc := R_TileToMs(Loc);
+        Mmouse(Loc.x, Loc.y, 0, 0);
+        if R_WaitUptext(FoundNPC.Name, 200) then begin
+          ClickMouse2(Mouse_Left);
+          Wait(RandomRange(1000, 1800));
+          ClickToContinue;
+          ChatWait;
+          ClickToContinue;
+          ChatWait;
+          ClickToContinue;
+        end;
+        if R_NearTile(StartLoc, 20) then begin
+          writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random Solved!');
+          exit;
+        end else begin
+          writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random failed! Logging out...');
+          logout;
+          players[currentPlayer].active := false;
+        end;
+      end else begin
+        writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random detected! Solving...');
+        R_FindNpc('Princess', FrogPrincess);
+        while Pos(PName, FrogPrincess.OverHeadText) <> 0 do begin
+          wait(200);
+          if TimeFromMark(f) > 10000 then
+            exit;
+      end;
+      R_FindNpc('Princess', FrogPrincess);
+      Result := True;
+      Loc := FrogPrincess.Tile;
+      Loc := R_TileToMs(Loc);
+      Mmouse(Loc.x, Loc.y, 0, 0);
+      if R_WaitUptext('rincess', 200) then begin
+        ClickMouse2(Mouse_Left);
+        Wait(5000);
+        ClickToContinue;
+        ChatWait;
+        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+        ChatWait;
+        ClickToContinue;
+        ChatWait;
+        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+        ClickToContinue;
+        ClickToContinue;
+      end;
+    end;
+  end;
+end;
+
+{*******************************************************************************
+procedure R_FindNormalRandoms;
+by: Krazy Meerkat, elfyyy, & Frement
+Description: Solves all Randoms using Reflection first, and SRL solvers second
+*******************************************************************************}
+function R_FindNormalRandoms: Boolean;
 var
   i: integer;
 begin
+  Result := False;
   for i := 0 to high(R_Randoms) do
   begin
     if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].DetectRandom <> nil) and (R_Randoms[i].DetectRandom()) then
     begin
+      Result := True;
       writeln('[Reflection Anti-Randoms] '+R_Randoms[i].RandName+' random detected! Solving...');
     if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].SolveRandom <> nil) and (R_Randoms[i].SolveRandom()) then
+      begin
+        writeln('[Reflection Anti-Randoms] Solved '+R_Randoms[i].RandName+' random!');
+        Exit;
+      end else
       begin
         writeln('[Reflection Anti-Randoms] Failed '+R_Randoms[i].RandName+' random, logging out.');
         players[currentPlayer].active := false;
         logout;
-      end else
-        writeln('[Reflection Anti-Randoms] Solved '+R_Randoms[i].RandName+' random!');
+        Exit;
+      end;
     end;
   end;
   if R_CombatRandoms then
-    if SRL_infight then
-      runaway(RandomDirection, False, 1, RandomRange(2000,4000));
-  FindTalk;
-  FindMod;
+    if R_FindCombatRandom then begin
+      R_RunAway(R_RunAwayDirection, 30, True);
+        Exit;
+      end;
+  if (R_Return(Result, @R_FindTalk)) then
+    Exit;
+  if (R_Return(Result, @FindMod)) then
+    Exit;
+  if (R_Return(Result, @R_FindDead)) then
+    Exit;
+end;
+
+{*******************************************************************************
+function R_FNRWait(Time: integer): Boolean;
+by: elfyyy
+Description: Used instead of Wait() or Sleep() and checks for Reflection Randoms.
+*******************************************************************************}
+function R_FNRWait(Time: integer): Boolean;
+var
+  StartTime: integer;
+begin
+  Result := False;
+  MarkTime(StartTime);
+  while (not result) or (GetSystemTime - StartTime > Time) do
+    Result := R_FindNormalRandoms;
 end;

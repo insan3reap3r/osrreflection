@@ -450,6 +450,44 @@ begin
   Result := R_BlindWalkEx(Tile, False, 0);
 end;
 
+(*
+R_RunAway
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_RunAway(Direction: String; Distance: Integer; RunBack: Boolean);
+
+  Runs away a given distance in a given direction. Will Run back to orginal
+  location if RunBack = True.
+
+.. note::
+
+  by elfyyy
+
+*)
+procedure R_RunAway(Direction: String; Distance: Integer; RunBack: Boolean);
+var
+  Loc, ToRun: Tpoint;
+  Dir: TStringArray;
+begin
+  Loc := R_GetTileGlobal;
+  Direction := Lowercase(Direction);
+  if Direction = 'random' then begin
+    Dir := ['n', 'e', 's', 'w'];
+    Direction := Dir[RandomRange(0, 3)];
+  end;
+  case Direction of
+    'n': ToRun := Point(RandomRange(Loc.x -3, Loc.x + 3), Loc.y + RandomRange(Distance - 3, Distance + 3));
+    'e': ToRun := Point(Loc.x + RandomRange(Distance - 3, Distance + 3), RandomRange(Loc.y -3, Loc.y + 3));
+    's': ToRun := Point(RandomRange(Loc.x -3, Loc.x + 3), Loc.y - RandomRange(Distance - 3, Distance + 3));
+    'w': ToRun := Point(Loc.x - RandomRange(Distance - 3, Distance + 3), RandomRange(Loc.y -3, Loc.y + 3));
+  end;
+  R_BlindWalk(ToRun);
+  Wait(RandomRange(15000, 30000));
+  if RunBack then
+    R_BlindWalk(Loc);
+end;
 
 
 (*

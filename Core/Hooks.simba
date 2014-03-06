@@ -141,10 +141,25 @@ const
 {*Player Multipliers*}
     Player_level_Multiplier                           =   1031346335;
 
+{*Region*}
+    Region                                            =   'cn';
+    Region_sceneObjects                               =   'd';
+    Region_sceneTiles                                 =   'k';
+
+{*WorldObject*}
+    WorldObject                                       =   'cv';
+    WorldObject_hash                                  =   'r';
+    WorldObject_Get_x                                 =   'p';
+    WorldObject_Get_y                                 =   'k';
+{*WorldObject Multipliers*}
+    WorldObject_hash_Multiplier                       =   -625948697;
+    WorldObject_Get_x_Multiplier                      =   -1822114149;
+    WorldObject_Get_y_Multiplier                      =   -2078625945;
+
 {*SceneTile*}
     SceneTile                                         =   'cj';
     SceneTile_worldObjects                            =   'b';
-
+    Region_GetTiles                                   =   'k';
 {*Widget*}
     Widget                                            =   'fl';
     Widget_getRelativeX                               =   'n';
