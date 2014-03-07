@@ -344,6 +344,25 @@ begin
   end;
 end;
 
+{*R_OptionExists
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_OptionExists(Option: String): Boolean;
+
+  Checks if an option exists, without opening the menu.
+
+.. note::
+
+  by Frement
+
+*}
+function R_OptionExists(Option: String): Boolean;
+begin
+  Result := (R_GetMenuIndex(Option, R_GetMenuOptions) <> -1);
+end; 
+
 {*R_ChooseOption
 ~~~~~~~~~~~~
 
@@ -378,6 +397,38 @@ begin
   Sleep(RandomRange(100, 250));
   ClickMouse2(Mouse_Left);
   Result := True;
+end;
+
+{*R_WaitChooseOption
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WaitChooseOption(Option: String; Time: Integer): Boolean;
+
+  Waits until option is found and clicks it.
+
+.. note::
+
+  by Frement
+
+*}
+function R_WaitChooseOption(Option: String; Time: Integer): Boolean;
+var
+  T: Integer;
+begin
+  Result := False;
+  T := GetSystemTime + Time;
+  while (GetSystemTime < T) do
+  begin
+    if (R_IsMenuOpen) then
+    begin
+      R_ChooseOption(Option);
+      Result := True;
+      Exit;
+    end;
+    Wait(20 + Random(20));
+  end;
 end;
 
 {*R_GetUpText
