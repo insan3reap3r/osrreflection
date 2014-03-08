@@ -55,3 +55,6 @@
 
 (Reflection\Core\GroundItems.simba)
 (http://osrreflection.googlecode.com/git/Core/GroundItems.simba)
+
+(Reflection\Core\Objects.simba)
+(http://osrreflection.googlecode.com/git/Core/Objects.simba)
