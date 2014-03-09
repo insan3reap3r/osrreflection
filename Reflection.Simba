@@ -158,7 +158,6 @@ var
 begin
   CreateNewFiles;
   DeleteOldFiles;
-  ClearDebug;
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
   if (trim(OnlineVersion) > ReflectionRevision) then
   begin
