@@ -107,7 +107,7 @@ begin
       begin
         R_Randoms[i].RandName := 'Freaky Forester';
         R_Randoms[i].DetectRandom := @R_DetectForester;
-        R_Randoms[i].SolveRandom := @R_SolveForester; //Solved
+        R_Randoms[i].SolveRandom := @SolveForester; //SRL Solver for now
       end;
     end;
   end;

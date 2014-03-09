@@ -237,14 +237,16 @@ function R_WalkPathMMEx(Path: TPointArray; Reverse: boolean): boolean;
 var
   I, K, H, T, Fails, lP: integer;
   P, MM, MMF: TPoint;
+  Temp: TPointArray;
 begin
+  Temp := CopyTPA(Path);
   ColorToleranceSpeed(1);
   T := GetSystemTime + 10000 + Random(2000);
   Fails := 0;
   lP := 0;
   if Reverse then
-    InvertTpa(Path);
-  H := High(Path);
+    InvertTpa(Temp);
+  H := High(Temp);
   while (not Result) and (GetSystemTime < T) and (Fails < 5) do
   begin
     if (not LoggedIn()) then
@@ -256,12 +258,12 @@ begin
         Continue
       else
         lP := I;
-      MM := R_TileToMM(Path[I]);
+      MM := R_TileToMM(Temp[I]);
       if MM = MMF then
         Inc(Fails);
-      if R_TileOnMM(Path[i]) then
+      if R_TileOnMM(Temp[i]) then
       begin
-        R_WalkToTileMM(Path[i]);
+        R_WalkToTileMM(Temp[i]);
         MarkTime(K);
         repeat
         if not R_IsWalking then
@@ -321,15 +323,17 @@ function R_WalkPathEx(Path: TPointArray; Reverse: boolean; DistToMsWalk: integer
 var
   I, K, H, T, Fails, lP: integer;
   P, MM, MMF: TPoint;
+  Temp: TPointArray;
 begin
+  Temp := CopyTPA(Path);
   ColorToleranceSpeed(1);
   T := GetSystemTime + 10000 + Random(2000);
   Fails := 0;
   lP := 0;
   if Reverse then
-    InvertTpa(Path);
+    InvertTpa(Temp);
   H := High(Path);
-  while (not Result) and (GetSystemTime < T) and (Fails < 5) and (R_DistanceFromTile(Path[H]) >= DistToMsWalk) do
+  while (not Result) and (GetSystemTime < T) and (Fails < 5) and (R_DistanceFromTile(Temp[H]) >= DistToMsWalk) do
   begin
     if (not LoggedIn()) then
       Exit;
@@ -340,12 +344,12 @@ begin
         Continue
       else
         lP := I;
-      MM := R_TileToMM(Path[I]);
+      MM := R_TileToMM(Temp[I]);
       if MM = MMF then
         Inc(Fails);
-      if R_TileOnMM(Path[i]) then
+      if R_TileOnMM(Temp[i]) then
       begin
-        R_WalkToTileMM(Path[i]);
+        R_WalkToTileMM(Temp[i]);
         MarkTime(K);
         repeat
         if not R_IsWalking then
@@ -363,7 +367,7 @@ begin
     Result := (I = H);
   end;
   if DistToMsWalk > 0 then
-    Result := R_BlindWalkMS(Path[H]);
+    Result := R_BlindWalkMS(Temp[H]);
 end;
 
 (*

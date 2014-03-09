@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 28;
+  IncludeRevision = 29;
 
 (*
 CreateNewFiles
@@ -230,6 +230,7 @@ begin
   begin
     R_SetupRandoms;
     R_SetupCurves;
+    Writeln('Reflection succesfully setup!');
   end else
     TerminateScript;
 end;
