@@ -460,7 +460,7 @@ R_RunAway
 
 .. code-block:: pascal
 
-    R_RunAway(Direction: String; Distance: Integer; RunBack: Boolean);
+    function R_RunAway(Direction: String; Distance: Integer; RunBack: Boolean);
 
   Runs away a given distance in a given direction. Will Run back to orginal
   location if RunBack = True.

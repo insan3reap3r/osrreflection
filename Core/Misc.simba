@@ -162,9 +162,9 @@ R_Return
 
 .. code-block:: pascal
 
-    R_Return(var B: Boolean; F: function: Boolean): Boolean;
+    function R_Return(var B: Boolean; F: function: Boolean): Boolean;
 
-  Performs a lape function in pascalscript
+function Performs a lape function in pascalscript
 
 .. note::
 
@@ -236,7 +236,7 @@ end;
 
     function RemoveFormatting(Text: String): String;
 
-  Removes Unwanted formating from string for uptext.
+Removes Unwanted formating from string for uptext.
 
 .. note::
 
@@ -272,7 +272,7 @@ end;
 
     function R_GetMenuIndex(Option: String; Options: TStringArray): Integer;
 
-  Returns Menu index of giveen option.
+Returns Menu index of giveen option.
 
 .. note::
 
@@ -299,7 +299,7 @@ end;
 
     function R_IsMenuOpen: Boolean;
 
-  Returns true if menu is open.
+Returns true if menu is open.
 
 .. note::
 
@@ -318,7 +318,7 @@ end;
 
     function R_GetMenuOptions: TStringArray;
 
-  Returns array of menu options.
+Returns array of menu options.
 
 .. note::
 
@@ -351,7 +351,7 @@ end;
 
     function R_OptionExists(Option: String): Boolean;
 
-  Checks if an option exists, without opening the menu.
+Checks if an option exists, without opening the menu.
 
 .. note::
 
@@ -370,7 +370,7 @@ end;
 
     function R_ChooseOption(Option: String): Boolean;
 
-  Clicks on given option in open menu
+Clicks on given option in open menu
 
 .. note::
 
@@ -406,7 +406,7 @@ end;
 
     function R_WaitChooseOption(Option: String; Time: Integer): Boolean;
 
-  Waits until option is found and clicks it.
+Waits until option is found and clicks it.
 
 .. note::
 
@@ -438,7 +438,7 @@ end;
 
     function R_GetUpText: String;
 
-  Returns uptext
+Returns uptext
 
 .. note::
 
@@ -574,7 +574,7 @@ R_GetPlayerName
 
     function R_GetPlayerName: String;
 
-  Gets current player name
+Gets current player name
 
 .. note::
 

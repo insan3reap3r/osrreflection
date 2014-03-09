@@ -42,7 +42,7 @@ R_GetIndices
 
 .. code-block:: pascal
 
-    R_GetIndices:TintegerArray;
+    function R_GetIndices:TintegerArray;
 
 Searches npc array and returns valid npc index's. Will refresh when
 the npc array is emtpy for the first run or when Npc isn't found. NOT
@@ -96,7 +96,7 @@ R_LoadNpcIndexEx
 
 .. code-block:: pascal
 
-    R_LoadNpcIndexEx(NPC: Variant; Sort: Boolean):TintegerArray;
+    function R_LoadNpcIndexEx(NPC: Variant; Sort: Boolean):TintegerArray;
 
 Searches valid index numbers Npc's with the name or Id that are
 within our loaded plane by searching the loacalindexarray. The TIA containing
@@ -201,7 +201,7 @@ R_GetTNPC
 
 .. code-block:: pascal
 
-    R_GetTNPC(NpcIndex: Integer): TNPC;
+    function R_GetTNPC(NpcIndex: Integer): TNPC;
 
 Returns the npc with a given index id
 
@@ -249,7 +249,7 @@ R_SortNPCs
 
 .. code-block:: pascal
 
-    R_SortNPCs(NPCs: TNPCArray): TNPCArray;
+    function R_SortNPCs(NPCs: TNPCArray): TNPCArray;
 
 Sorts NPCs by distance from you.
 
@@ -287,7 +287,7 @@ R_GetAllNpcs
 
     R_GetNpcs(NPC: variant): array of TNPC;
 
-   Returns all Nearby Npc's and sorts by distance.
+Returns all Nearby Npc's and sorts by distance.
 
 .. note::
 
@@ -324,9 +324,9 @@ R_GetNpcs
 
 .. code-block:: pascal
 
-    R_GetNpcs(NPC: variant): array of TNPC;
+    function R_GetNpcs(NPC: variant): array of TNPC;
 
-   Returns all data in a TNPCArray for npc with given name or id.
+Returns all data in a TNPCArray for npc with given name or id.
 
 .. note::
 
@@ -356,10 +356,10 @@ R_FindNpc
 
 .. code-block:: pascal
 
-    R_FindNpc(NPC: variant; var TheNPC: TNPC): Boolean;
+    function R_FindNpc(NPC: variant; var TheNPC: TNPC): Boolean;
 
-   Returns true if the Npc specified by the variant NPC is found
-   and stores it in TheNPC.
+Returns true if the Npc specified by the variant NPC is found
+and stores it in TheNPC.
 
 .. note::
 
@@ -380,18 +380,18 @@ end;
 
 (*
 R_InteractingNpc
-~~~~~~~~~~~~~~
+~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_InteractingNpc:TNPC;
+    function R_InteractingNpc:TNPC;
 
 Returns the npc we are interacting with.
 If none, the npc's values will be 0
 
 .. note::
 
-  by Krazy_Meerkat
+  by Krazy Meerkat
 
 *)
 function R_InteractingNpc:TNPC;
@@ -411,9 +411,9 @@ end;
 
 (*
 R_InFight
-~~~~~~~~~~~
+~~~~~~~~~~
 
-. code-block:: pascal
+.. code-block:: pascal
 
     function R_InFight: Boolean;
 
@@ -429,21 +429,21 @@ begin
   Result := (Round(R_InteractingNpc().Hitpoints) > 0);
 end;
 
-	(*
-	R_IsValidTNPC
-	~~~~~~~~~~~~~~
+(*
+R_IsValidTNPC
+~~~~~~~~~~~~~~
 
-	.. code-block:: pascal
+.. code-block:: pascal
 
-	    R_IsValidTNPC(Npc: TNPC):Boolean;
+    R_IsValidTNPC(Npc: TNPC):Boolean;
 
-	Returns true if the TNPC is a valid npc
+Returns true if the TNPC is a valid npc
 
-	.. note::
+.. note::
 
 	  by Krazy_Meerkat
 
-	*)
+*)
 	function R_IsValidTNPC(Npc: TNPC):Boolean;
 	begin
 	  Result:= False;
