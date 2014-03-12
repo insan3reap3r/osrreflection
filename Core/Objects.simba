@@ -270,14 +270,14 @@ begin
 end;
 
 (*
-R_GetObjectDistance
+R_GetObjectsDistance
 ~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+    function GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
 
-Returns a TRSObject of object of given ObjType at Tile
+Returns a TRSObjectArray of objects of given ObjType at distance away from player
 
   OBJ_GAME            = 0;
   OBJ_WALL            = 1;
@@ -289,7 +289,7 @@ Returns a TRSObject of object of given ObjType at Tile
   by elfyyy
 
 *)
-function R_GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+function R_GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
 var
   BaseX, BaseY, X, Y, i: integer;
   Position: TPoint;
