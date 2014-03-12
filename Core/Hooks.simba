@@ -159,7 +159,7 @@ const
 
 {*BoundaryObject*}
     BoundaryObject                                    =   'v';
-    Boundary_hash                                     =   'r';
+    Boundary_hash                                     =   'y';
     Boundary_Get_x                                    =   'c';
     Boundary_Get_y                                    =   'p';
 

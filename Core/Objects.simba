@@ -219,7 +219,7 @@ begin
     OBJ_GAME: ObjFunction := @R_GetGameObject;
     OBJ_WALL: ObjFunction := @R_GetWallObject;
     OBJ_FLOORDECORATION: ObjFunction := @R_GetFloorDecorationObject;
-    OBJ_BOUNDARY: ObjFunction := @R_GetFloorDecorationObject;
+    OBJ_BOUNDARY: ObjFunction := @R_GetBoundaryObject;
   end;
   for x := 0 to 103 do
   for y := 0 to 103 do
@@ -262,7 +262,7 @@ begin
     OBJ_GAME: ObjFunction := @R_GetGameObject;
     OBJ_WALL: ObjFunction := @R_GetWallObject;
     OBJ_FLOORDECORATION: ObjFunction := @R_GetFloorDecorationObject;
-    OBJ_BOUNDARY: ObjFunction := @R_GetFloorDecorationObject;
+    OBJ_BOUNDARY: ObjFunction := @R_GetBoundaryObject;
   end;
   BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
@@ -270,14 +270,14 @@ begin
 end;
 
 (*
-R_GetObjectsDistance
+R_GetObjectDistance
 ~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
+    function GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
 
-Returns a TRSObjectArray of objects of given ObjType at distance away from player
+Returns a TRSObject of object of given ObjType at Tile
 
   OBJ_GAME            = 0;
   OBJ_WALL            = 1;
@@ -289,7 +289,7 @@ Returns a TRSObjectArray of objects of given ObjType at distance away from playe
   by elfyyy
 
 *)
-function R_GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
+function R_GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
 var
   BaseX, BaseY, X, Y, i: integer;
   Position: TPoint;
