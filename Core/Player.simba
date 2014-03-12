@@ -262,11 +262,10 @@ R_DidTeleport
     function R_DidTeleport: Boolean;
 
 Returns true if player teleported.
+Example:
+WaitFunc(@R_DidTeleport, 200, 30000)
 
 .. note::
-  Example:
-
-    WaitFunc(@R_DidTeleport, 200, 30000)
 
   by elfyyy
 

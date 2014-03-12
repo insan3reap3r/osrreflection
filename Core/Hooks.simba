@@ -151,15 +151,50 @@ const
     WorldObject_hash                                  =   'r';
     WorldObject_Get_x                                 =   'p';
     WorldObject_Get_y                                 =   'k';
+
 {*WorldObject Multipliers*}
     WorldObject_hash_Multiplier                       =   -625948697;
     WorldObject_Get_x_Multiplier                      =   -1822114149;
     WorldObject_Get_y_Multiplier                      =   -2078625945;
 
+{*BoundaryObject*}
+    BoundaryObject                                    =   'v';
+    Boundary_hash                                     =   'r';
+    Boundary_Get_x                                    =   'c';
+    Boundary_Get_y                                    =   'p';
+
+{*BoundaryObject*}
+    Boundary_hash_Multiplier                          =   -1835477601;
+    Boundary_Get_x_Multiplier                         =   552243625;
+    Boundary_Get_y_Multiplier                         =   -1169632001;
+
+{*FloorDecorationObject*}
+    FloorDecorationObject                             =   'd';
+    FloorDecoration_hash                              =   'm';
+    FloorDecoration_Get_x                             =   'c';
+    FloorDecoration_Get_y                             =   'p';
+
+{*FloorDecorationObject*}
+    FloorDecoration_hash_Multiplier                   =   -161289939;
+    FloorDecoration_Get_x_Multiplier                  =   738760159;
+    FloorDecoration_Get_y_Multiplier                  =   -2104026075;
+
+{*WallObject*}
+    WallObject                                        =   'y';
+    Wall_hash                                         =   'l';
+    Wall_Get_x                                        =   'c';
+    Wall_Get_y                                        =   'p';
+
+{*FloorDecorationObject*}
+    Wall_hash_Multiplier                              =   -567327193;
+    Wall_Get_x_Multiplier                             =   955314811;
+    Wall_Get_y_Multiplier                             =   458371101;
+
 {*SceneTile*}
     SceneTile                                         =   'cj';
     SceneTile_worldObjects                            =   'b';
     Region_GetTiles                                   =   'k';
+
 {*Widget*}
     Widget                                            =   'fl';
     Widget_getRelativeX                               =   'n';

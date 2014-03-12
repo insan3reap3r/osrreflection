@@ -1,9 +1,26 @@
+  const
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+
   type TRSObject = record
     ID: Integer;
     ObjectType: Integer;
     Tile: TPoint;
   end;
   TRSObjectArray = Array of TRSObject;
+
+function NULL_TRSObject: TRSObject;
+ begin
+  with Result do
+  begin
+    ID := 0;
+    ObjectType := 0;
+    Tile := Point(0, 0);
+  end;
+end;
 
   (*
 RSObject
@@ -14,6 +31,7 @@ RSObject
     function RSObject(ID, ObjectType: Integer; Tile: TPoint): TRSObject;
 
 Constructs a new RSObject
+
 .. note::
 
   by elfyyy
@@ -27,93 +45,269 @@ begin
 end;
 
 (*
-R_GetGameObjectAt
+R_GetGameObject
 ~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_GetGameObjectAt(Tile: Tpoint): TRSObject;
+    function R_GetGameObject(x, y: integer): TRSObject;
 
-Returns a TRSObject of a GameObject at given tile.
+Returns a TRSObjectArray of GameObject, NOT to be called in scripts
 
 .. note::
 
   by elfyyy
 
 *)
-function R_GetGameObjectAt(Tile: Tpoint): TRSObject;
+function R_GetGameObject(x, y: integer): TRSObject;
 var
-  BaseX, BaseY, TheRegion, TheTile, TheObjects, ID, i: integer;
+  TheRegion, Tile, TheObjects, i, ID: integer;
   tileO:tpoint;
 begin
-  BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
-  BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
   TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
-  TheTile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion,Region_sceneTiles,0,Tile.x - Basex, Tile.y- BaseY);
+  Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles, R_GetPlane, x, y);
   for i := 0 to 5 do
   begin
-    TheObjects := SmartGetFieldArrayObject(SmartCurrentTarget,TheTile,SceneTile_worldObjects,i);
+    TheObjects := SmartGetFieldArrayObject(SmartCurrentTarget, Tile, SceneTile_worldObjects, i);
     if(not (TheObjects = 0)) then
     begin
       TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_Get_x) * WorldObject_Get_x_Multiplier) div 128;
       TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_Get_y) * WorldObject_Get_y_Multiplier) div 128;
-      begin
-        ID := SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_hash) * WorldObject_hash_Multiplier ;
-        ID := (ID shr 14) and $7fff;
-      end;
+      ID := SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_hash) * WorldObject_hash_Multiplier ;
+      ID := (ID shr 14) and $7fff;
     end;
+    if ID = 0 then
+      break;
     SmartFreeObject(SmartCurrentTarget, TheObjects);
   end;
-  SmartFreeObject(SmartCurrentTarget, TheTile);
-  Result := RSObject(ID, 0, Tileo)
+    SmartFreeObject(SmartCurrentTarget, Tile);
+  Result := RSObject(ID, 0, tileo);
 end;
 
 (*
-R_GetAllGameObjects
+R_GetWallObject
 ~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function R_GetAllGameObjects: TRSObjectArray;
+    function R_GetWallObject(x, y: integer): TRSObject;
 
-Returns a TRSObjectArray of ALL GameObjects in region
+Returns a TRSObjectArray of WallObject, NOT to be called in scripts
 
 .. note::
 
   by elfyyy
 
 *)
-function R_GetAllGameObjects: TRSObjectArray;
+function R_GetWallObject(x, y: integer): TRSObject;
 var
-  TheRegion, Tile, TheObjects, x, y, i, ID, c: integer;
+  TheRegion, Tile, TheObject, ID: integer;
   tileO:tpoint;
 begin
   TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
-  setlength(Result, 1);
-  for X := 0 to 103 do
-  for Y := 0 to 103 do
+  Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles, R_GetPlane, x, y);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, WallObject);
+  if(not (TheObject = 0)) then
   begin
-    Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion,Region_sceneTiles,0,x,y);
-    for i := 0 to 5 do
-    begin
-      TheObjects := SmartGetFieldArrayObject(SmartCurrentTarget,Tile,SceneTile_worldObjects,i);
-      if(not (TheObjects = 0)) then
-      begin
-        TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_Get_x) * WorldObject_Get_x_Multiplier) div 128;
-        TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_Get_y) * WorldObject_Get_y_Multiplier) div 128;
-       begin
-         ID := SmartGetFieldInt(SmartCurrentTarget, TheObjects, WorldObject_hash) * WorldObject_hash_Multiplier ;
-         ID := (ID shr 14) and $7fff;
-       end;
-      end;
-      if ID = 0 then
-        break;
-      Setlength(Result, c+1);
-      Result[c] := RSObject(ID, 0, tileo);
-      inc(c);
-      ID := 0;
-      SmartFreeObject(SmartCurrentTarget, TheObjects);
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_Get_x) * Wall_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_Get_y) * Wall_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_hash) * Wall_hash_Multiplier;
+    ID := (ID shr 14) and $7fff;
+  end;
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  Result := RSObject(ID, 1, tileo);
+end;
+
+(*
+R_GetFloorDecorationObject
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetFloorDecorationObject(x, y: integer): TRSObject;
+
+Returns a TRSObjectArray of FloorDecorationObject, NOT to be called in scripts
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetFloorDecorationObject(x, y: integer): TRSObject;
+var
+  TheRegion, Tile, TheObject, ID: integer;
+  tileO:tpoint;
+begin
+  TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
+  Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles, R_GetPlane, x, y);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, FloorDecorationObject);
+  if(not (TheObject = 0)) then
+  begin
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_Get_x) * FloorDecoration_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_Get_y) * FloorDecoration_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_hash) * FloorDecoration_hash_Multiplier;
+    ID := (ID shr 14) and $7fff;
+  end;
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  Result := RSObject(ID, 2, tileo);
+end;
+
+(*
+R_GetBoundaryObject
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetBoundaryObject(x, y: integer): TRSObject;
+
+Returns a TRSObjectArray of BoundaryObject, NOT to be called in scripts
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetBoundaryObject(x, y: integer): TRSObject;
+var
+  TheRegion, Tile, TheObject, ID: integer;
+  tileO:tpoint;
+begin
+  TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
+  Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles,R_GetPlane, x, y);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, BoundaryObject);
+  if(not (TheObject = 0)) then
+  begin
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_Get_x) * Boundary_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_Get_y) * Boundary_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_hash) * Boundary_hash_Multiplier;
+    ID := (ID shr 14) and $7fff;
+  end;
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  Result := RSObject(ID, 3, tileo);
+end;
+
+(*
+R_GetAllObjects
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetAllObjects(ObjType: integer): TRSObject;
+
+Returns a TRSObjectArray of ALL objects of given ObjType
+
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetAllObjects(ObjType: integer): TRSObjectArray;
+var
+  ObjFunction: function(x, y: integer): TRSObject;
+  x, y, i: integer;
+  Temp: TRSObject;
+begin
+  case ObjType of
+    OBJ_GAME: ObjFunction := @R_GetGameObject;
+    OBJ_WALL: ObjFunction := @R_GetWallObject;
+    OBJ_FLOORDECORATION: ObjFunction := @R_GetFloorDecorationObject;
+    OBJ_BOUNDARY: ObjFunction := @R_GetFloorDecorationObject;
+  end;
+  for x := 0 to 103 do
+  for y := 0 to 103 do
+  begin
+  Temp := ObjFunction(x, y);
+    if Temp.Tile = Point(0, 0) then
+      Continue;
+  SetLength(Result, Length(Result) + 1);
+  Result[i] := Temp;
+  inc(i);
+  end;
+end;
+
+(*
+R_GetObjectAt
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetObjectAt(ObjType: integer; Tile: TPoint): TRSObject;
+
+Returns a TRSObject of object of given ObjType at Tile
+
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetObjectAt(ObjType: integer; Tile: TPoint): TRSObject;
+var
+  ObjFunction: function(x, y: integer): TRSObject;
+  BaseX, BaseY: integer;
+begin
+  case ObjType of
+    OBJ_GAME: ObjFunction := @R_GetGameObject;
+    OBJ_WALL: ObjFunction := @R_GetWallObject;
+    OBJ_FLOORDECORATION: ObjFunction := @R_GetFloorDecorationObject;
+    OBJ_BOUNDARY: ObjFunction := @R_GetFloorDecorationObject;
+  end;
+  BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
+  BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
+  Result := ObjFunction(Tile.X - BaseX, Tile.Y - BaseY);
+end;
+
+(*
+R_GetObjectDistance
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+
+Returns a TRSObject of object of given ObjType at Tile
+
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+var
+  BaseX, BaseY, X, Y, i: integer;
+  Position: TPoint;
+  Temp: TRSObject;
+begin
+  BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
+  BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
+  Position := R_GetTileGlobal;
+  Position := Point(Position.X - BaseX, Position.Y - BaseY);
+  Distance := Round(Distance / 2);
+  for X := Position.X - Distance to Position.X + Distance do begin
+    for Y := Position.Y - Distance to Position.Y + Distance do begin
+      Temp := R_GetObjectAt(ObjType, Point(BaseX + X, BaseY + Y));
+      if Temp.Tile = Point(0, 0) then
+        continue;
+      SetLength(Result, Length(Result) + 1);
+      Result[i] := Temp;
+      inc(i);
     end;
-    SmartFreeObject(SmartCurrentTarget, Tile);
   end;
 end;
