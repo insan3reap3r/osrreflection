@@ -16,11 +16,21 @@ var
   R_RunAwayDirection: String;
 
 
-{*******************************************************************************
-procedure R_SetupRandoms;
-by: Krazy Meerkat
-Description: Sets up all need info for Reflection Randoms
-*******************************************************************************}
+(*
+R_SetupRandoms
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+  procedure R_SetupRandoms;
+  
+Sets up all need info for Reflection Randoms
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
 procedure R_SetupRandoms;
 var
   i: Integer;
@@ -113,11 +123,21 @@ begin
   end;
 end;
 
-{*******************************************************************************
-procedure R_FindDead;
-by: elfyyy
-Description: Returns True if player is dead unless R_Reincarnate = True
-*******************************************************************************}
+(*
+R_FindDead
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindDead: Boolean;
+  
+Returns True if player is dead unless R_Reincarnate = True
+
+.. note::
+
+  by elfyyy
+
+*)
 function R_FindDead: Boolean;
 begin
   if R_Reincarnate then
@@ -132,11 +152,21 @@ begin
   end;
 end;
 
-{*******************************************************************************
-procedure R_FindCombatRandom;
-by: elfyyy
-Description: Returns True if player is in a Combat random.
-*******************************************************************************}
+(*
+R_FindCombatRandom
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindCombatRandom: boolean;
+  
+Returns True if player is in a Combat random.
+
+.. note::
+
+  by elfyyy
+
+*)
 function R_FindCombatRandom: boolean;
 var
   Names: TStringArray;
@@ -151,11 +181,21 @@ begin
     writeln('[Reflection Anti-Randoms] Combat random detected! Running away...');
 end;
 
-{*******************************************************************************
-procedure R_FindTalk;
-by: elfyyy
-Description: Solves all talking randoms.
-*******************************************************************************}
+(*
+R_FindTalk
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindTalk: Boolean;
+  
+Solves all talking randoms.
+
+.. note::
+
+  by elfyyy
+
+*)
 function R_FindTalk: Boolean;
 var
   Temp: TNPCArray;
@@ -230,11 +270,21 @@ begin
   end;
 end;
 
-{*******************************************************************************
-procedure R_FindNormalRandoms;
-by: Krazy Meerkat, elfyyy, & Frement
-Description: Solves all Randoms using Reflection first, and SRL solvers second
-*******************************************************************************}
+(*
+R_FindNormalRandoms
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindNormalRandoms: Boolean;
+  
+Solves all Randoms using Reflection first, and SRL solvers second
+
+.. note::
+
+  by Krazy Meerkat, elfyyy, & Frement
+
+*)
 function R_FindNormalRandoms: Boolean;
 var
   i: integer;
@@ -272,12 +322,22 @@ begin
     Exit;
 end;
 
-{*******************************************************************************
-function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
-by: elfyyy
-Description: Used instead of Wait() or Sleep() and checks for Reflection Randoms.
+(*
+R_FNRWait
+~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
+  
+Used instead of Wait() or Sleep() and checks for Reflection Randoms.
 WaitPerLoop is the time frequancy to check for randoms. 50-100 is average.
-*******************************************************************************}
+
+.. note::
+
+  by elfyyy
+
+*)
 function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
 var
   StartTime: integer;
