@@ -141,16 +141,15 @@ Returns True if player is dead unless R_Reincarnate = True
 *)
 function R_FindDead: Boolean;
 begin
-  if R_Reincarnate then
-    Result := False
-  else
   Result := (R_GetHealth = 0);
   if Result then begin
     writeln('[Reflection Anti-Randoms] Detected we are dead, logging out.');
     Inc(R_Deaths);
-    Wait(15000);
-    logout;
-    players[currentPlayer].active := false;
+    if (not R_Reincarnate) then begin
+      Wait(15000);
+      LogOut;
+      Players[CurrentPlayer].Active := False;
+    end;
   end;
 end;
 
