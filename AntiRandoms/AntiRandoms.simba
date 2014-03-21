@@ -8,13 +8,14 @@ type
   R_Random = record
     RandName: String;
     SolveRandom, DetectRandom: function(): Boolean;
+    Solved, Failed: Integer;
 end;
 
 var
   R_Randoms : array[0..13] of R_Random;
   R_CombatRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
-
+  R_Deaths, R_TalksSolved, R_TalksFailed: Integer;
 
 (*
 R_SetupRandoms
@@ -140,15 +141,15 @@ Returns True if player is dead unless R_Reincarnate = True
 *)
 function R_FindDead: Boolean;
 begin
-  if R_Reincarnate then
-    Result := False
-  else
   Result := (R_GetHealth = 0);
   if Result then begin
     writeln('[Reflection Anti-Randoms] Detected we are dead, logging out.');
-    Wait(15000);
-    logout;
-    players[currentPlayer].active := false;
+    Inc(R_Deaths);
+    if (not R_Reincarnate) then begin
+      Wait(15000);
+      LogOut;
+      Players[CurrentPlayer].Active := False;
+    end;
   end;
 end;
 
@@ -245,9 +246,11 @@ begin
         end;
         if R_NearTile(StartLoc, 20) then begin
           writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random Solved!');
+          Inc(R_TalksSolved);
           exit;
         end else begin
           writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random failed! Logging out...');
+          Inc(R_TalksFailed);
           logout;
           players[currentPlayer].active := false;
         end;
@@ -310,10 +313,12 @@ begin
     if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].SolveRandom <> nil) and (R_Randoms[i].SolveRandom()) then
       begin
         writeln('[Reflection Anti-Randoms] Solved '+R_Randoms[i].RandName+' random!');
+        Inc(R_Randoms[i].Solved);
         Exit;
       end else
       begin
         writeln('[Reflection Anti-Randoms] Failed '+R_Randoms[i].RandName+' random, logging out.');
+        Inc(R_Randoms[i].Failed);
         players[currentPlayer].active := false;
         logout;
         Exit;
