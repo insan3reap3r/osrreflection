@@ -170,15 +170,26 @@ Returns True if player is in a Combat random.
 function R_FindCombatRandom: boolean;
 var
   Names: TStringArray;
-  Temp: TNPC;
+  Temp: TNPCArray;
+  FoundNpc: TNPC;
+  i: integer;
 begin
   Result := False;
+  if (not R_InFight) then
+    exit;
   Names := ['security', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'zombie', 'tree spirit', 'ent'];
-  Temp := R_InteractingNPC;
-  if (StrInArr(Lowercase(Temp.Name), Names)) then
-    Result := True;
+  Temp := R_GetAllNpcs;
+  for i := 0 to high(Temp) do
+  if (StrInArr(Lowercase(Temp[i].Name), Names)) then
+  begin
+    R_FindNpc(Temp[i].Name, FoundNpc);
+    if (not R_NearTile(FoundNpc.Tile, 10)) then
+      exit
+    else
+      Result := True;
+  end;
   if Result then
-    writeln('[Reflection Anti-Randoms] Combat random detected! Running away...');
+    writeln('[Reflection Anti-Randoms] ''' + (FoundNpc.Name) + ''' Combat random detected! Running away...');
 end;
 
 (*

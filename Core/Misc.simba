@@ -361,7 +361,7 @@ Checks if an option exists, without opening the menu.
 function R_OptionExists(Option: String): Boolean;
 begin
   Result := (R_GetMenuIndex(Option, R_GetMenuOptions) <> -1);
-end; 
+end;
 
 {*R_ChooseOption
 ~~~~~~~~~~~~
@@ -590,4 +590,47 @@ begin
   Result := R_GetJavaString(_PlayerName, 512);
   SmartFreeObject(SmartCurrentTarget, _PlayerName);
   SmartFreeObject(SmartCurrentTarget, _Player);
+end;
+
+(*
+R_GetClientLoopCycle
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetClientLoopCycle: integer;
+
+Returns the current value of the client loop cycle
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetClientLoopCycle: integer;
+begin
+  result :=  SmartGetFieldInt(SmartCurrentTarget, 0, client_LoopCycle) * client_LoopCycle_Multiplier;
+end;
+
+(*
+R_GetActorLoopCycle
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetActorLoopCycle: integer;
+
+Returns the current value of the Actor loop cycle
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_GetActorLoopCycle: integer;
+var
+  Me: Integer;
+begin
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  result :=  SmartGetFieldInt(SmartCurrentTarget, me, Actor_combatCycle) * Actor_combatCycle_Multiplier;
 end;

@@ -256,6 +256,7 @@ const
     client_addChatMessage                             =   'd.dr';
     client_getObjectContext                           =   'az.g';
     client_getItemDefinition                          =   'aj.a';
+    client_LoopCycle                                  =   'client.e';
 
 {*client Multipliers*}
     client_menuCount_Multiplier                       =   -1915726707;
@@ -278,3 +279,4 @@ const
     client_run_energy_Multiplier                      =   -816811303;
     client_weight_Multiplier                          =   1247755591;
     client_plane_Multiplier                           =   274177001;
+    client_LoopCycle_Multiplier                       =   -1661840307;
