@@ -51,7 +51,7 @@ begin
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
   Plane := SmartGetFieldInt(SmartCurrentTarget, 0, client_plane) * client_plane_Multiplier;
   _Nodes := SmartGetFieldArray3DObject(SmartCurrentTarget, 0, client_groundItems, Plane, Tile.X - BaseX, Tile.Y - BaseY);
-  //_Head := SmartGetFieldObject(SmartCurrentTarget, _Nodes, NodeQueue_getHead);
+  _Head := SmartGetFieldObject(SmartCurrentTarget, _Nodes, LinkedList_head);
   _Next := SmartGetFieldObject(SmartCurrentTarget, _Head, Node_next);
   while (_Next <> -1) and (_Next <> 0) and (_Next <> _Head) do
   begin
