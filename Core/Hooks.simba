@@ -239,7 +239,7 @@ const
     client_baseY                                      =   'ah.cr';
     client_baseX                                      =   's.cw';
     client_widgets                                    =   'fc.l';
-    client_groundHeights                              =   'client.db';
+    client_groundHeights                              =   'n.l';
     client_cameraPitch                                =   'cn.fc';
     client_cameraYaw                                  =   'x.fq';
     client_cameraX                                    =   'be.fn';
@@ -253,7 +253,7 @@ const
     client_map_offset                                 =   'client.dn';
     client_map_scale                                  =   'client.fl';
     client_menuActions                                =   'client.ip';
-    client_groundSettings                             =   'n.g';
+    client_groundSettings                             =   'n.b';
     client_npcIndices                                 =   'client.bw';
     client_menuOptions                                =   'client.ir';
     client_levels                                     =   'client.hr';
