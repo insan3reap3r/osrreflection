@@ -109,9 +109,9 @@ begin
   TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, WallObject);
   if(not (TheObject = 0)) then
   begin
-    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_Get_x) * Wall_Get_x_Multiplier) div 128;
-    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_Get_y) * Wall_Get_y_Multiplier) div 128;
-    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, Wall_hash) * Wall_hash_Multiplier;
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, WallObject_Get_x) * WallObject_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, WallObject_Get_y) * WallObject_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, WallObject_hash) * WallObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
   SmartFreeObject(SmartCurrentTarget, TheObject);
@@ -144,9 +144,9 @@ begin
   TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, FloorDecorationObject);
   if(not (TheObject = 0)) then
   begin
-    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_Get_x) * FloorDecoration_Get_x_Multiplier) div 128;
-    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_Get_y) * FloorDecoration_Get_y_Multiplier) div 128;
-    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecoration_hash) * FloorDecoration_hash_Multiplier;
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecorationObject_Get_x) * FloorDecorationObject_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecorationObject_Get_y) * FloorDecorationObject_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecorationObject_hash) * FloorDecorationObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
   SmartFreeObject(SmartCurrentTarget, TheObject);
@@ -179,9 +179,9 @@ begin
   TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, BoundaryObject);
   if(not (TheObject = 0)) then
   begin
-    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_Get_x) * Boundary_Get_x_Multiplier) div 128;
-    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_Get_y) * Boundary_Get_y_Multiplier) div 128;
-    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, Boundary_hash) * Boundary_hash_Multiplier;
+    TileO.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, BoundaryObject_Get_x) * BoundaryObject_Get_x_Multiplier) div 128;
+    TileO.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, TheObject, BoundaryObject_Get_y) * BoundaryObject_Get_y_Multiplier) div 128;
+    ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, BoundaryObject_hash) * BoundaryObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
   SmartFreeObject(SmartCurrentTarget, TheObject);
