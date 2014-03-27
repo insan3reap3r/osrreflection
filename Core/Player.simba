@@ -234,21 +234,21 @@ begin
 end;
 
 (*
-R_IsPosioned
+R_IsPoisoned
 ~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function R_IsPosioned
+    function R_IsPoisoned
 
-Returns true if Posioned.
+Returns true if Poisoned.
 
 .. note::
 
   by elfyyy
 
 *)
-function R_IsPosioned: Boolean;
+function R_IsPoisoned: Boolean;
 begin
   Result := R_GetSetting(102) > 0;
 end;

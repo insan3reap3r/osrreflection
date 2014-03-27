@@ -24,7 +24,7 @@ R_SetupRandoms
 .. code-block:: pascal
 
   procedure R_SetupRandoms;
-  
+
 Sets up all need info for Reflection Randoms
 
 .. note::
@@ -131,7 +131,7 @@ R_FindDead
 .. code-block:: pascal
 
   function R_FindDead: Boolean;
-  
+
 Returns True if player is dead unless R_Reincarnate = True
 
 .. note::
@@ -160,7 +160,7 @@ R_FindCombatRandom
 .. code-block:: pascal
 
   function R_FindCombatRandom: boolean;
-  
+
 Returns True if player is in a Combat random.
 
 .. note::
@@ -178,10 +178,10 @@ begin
   Result := False;
   if (not R_InFight) then
     exit;
-  Names := ['security', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'zombie', 'tree spirit', 'ent'];
+  Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'zombie', 'tree spirit', 'ent'];
   Temp := R_GetAllNpcs;
   for i := 0 to high(Temp) do
-  if (StrInArr(Lowercase(Temp[i].Name), Names)) then
+  if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
   begin
     R_FindNpc(Temp[i].Name, FoundNpc);
     if (not R_NearTile(FoundNpc.Tile, 10)) then
@@ -200,7 +200,7 @@ R_FindTalk
 .. code-block:: pascal
 
   function R_FindTalk: Boolean;
-  
+
 Solves all talking randoms.
 
 .. note::
@@ -213,16 +213,16 @@ var
   Temp: TNPCArray;
   Temp1: TNPC;
   RandList: TStringArray;
-  i, f: integer;
+  i, f, t: integer;
   FoundNPC, FrogPrincess: TNPC;
   Loc, StartLoc: Tpoint;
   PName: String;
 begin
   Result := False;
-  RandList := ['frog', 'certer', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'pirate', 'security', 'rick turpentine','mysterious old man'];
+  RandList := ['frog', 'certer', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'pirate', 'security guard', 'rick turpentine','mysterious old man'];
   Temp := R_GetAllNPCs;
   for i := 0 to High(Temp) do
-    if (StrInArr(Lowercase(Temp[i].Name), RandList)) then begin
+    if (ExactStrInArr(Lowercase(Temp[i].Name), RandList)) then begin
       PName := lowercase(R_GetPlayerName);
       MarkTime(f);
       if Pos('frog', Lowercase(Temp[i].Name)) <= 0 then begin
@@ -255,19 +255,17 @@ begin
           players[currentPlayer].active := false;
         end;
       end else begin
-        writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random detected! Solving...');
-        R_FindNpc('Princess', FrogPrincess);
-        while Pos(PName, FrogPrincess.OverHeadText) <> 0 do begin
-          wait(200);
-          if TimeFromMark(f) > 10000 then
-            exit;
-      end;
-      R_FindNpc('Princess', FrogPrincess);
-      Result := True;
+        writeln('[Reflection Anti-Randoms] Frog random detected! Solving...');
+        MarkTime(T);
+        repeat
+        R_FindNpc(1329, FrogPrincess);
+        if (not R_NearTile(FrogPrincess.Tile, 10)) then
+          R_BlindWalk(FrogPrincess.tile);
+      R_FindNpc(1329, FrogPrincess);
       Loc := FrogPrincess.Tile;
       Loc := R_TileToMs(Loc);
       Mmouse(Loc.x, Loc.y, 0, 0);
-      if R_WaitUptext('rincess', 200) then begin
+      if R_WaitUptext('Frog', 200) then begin
         ClickMouse2(Mouse_Left);
         Wait(5000);
         ClickToContinue;
@@ -279,7 +277,12 @@ begin
         FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
         ClickToContinue;
         ClickToContinue;
+        if (not R_FindNpc('Frog', FrogPrincess)) then
+          Result := True;
       end;
+      until(result) or (TimeFromMark(T) > 40000)
+    writeln('[Reflection Anti-Randoms] Frog random Solved!');
+
     end;
   end;
 end;
@@ -291,7 +294,7 @@ R_FindNormalRandoms
 .. code-block:: pascal
 
   function R_FindNormalRandoms: Boolean;
-  
+
 Solves all Randoms using Reflection first, and SRL solvers second
 
 .. note::
@@ -345,7 +348,7 @@ R_FNRWait
 .. code-block:: pascal
 
   function R_FNRWait(Time, WaitPerLoop: integer): Boolean;
-  
+
 Used instead of Wait() or Sleep() and checks for Reflection Randoms.
 WaitPerLoop is the time frequancy to check for randoms. 50-100 is average.
 

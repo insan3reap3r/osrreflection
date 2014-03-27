@@ -232,7 +232,7 @@ var
   Loc: TPoint;
 begin
   Loc := Point(R_GetTileGlobal.x, R_GetTileGlobal.y);
-  if (Loc.x > 20000) or (Loc.y > 20000) then
+  if (Loc.x > 20000) or (Loc.y > 20000) or (Loc.x < -20000) or (Loc.y < -20000) then
     exit;
   Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
 end;
@@ -424,6 +424,33 @@ begin
 end;
 
 (*
+ashr
+~~~~
+
+.. code-block:: pascal
+
+    function ashr(x: Integer; d: Byte): Integer;
+
+Performs an arithmetic shift right.
+
+.. note::
+
+  by Dgby714
+
+*)
+function ashr(x: Integer; d: Byte): Integer;
+var
+  Bit: Integer;
+  I: Integer;
+begin
+  Bit := (1 shl 31) and x;
+  Result := x;
+
+  for I := 1 to d do
+    Result := (Result shr 1) or Bit;
+end;
+
+(*
 R_TileToMSEx
 ~~~~~~~~~~~
 
@@ -457,23 +484,19 @@ begin
   CurveCosY := CURVECOS[Floor(CurveY)];
   CurveSinX := CURVESIN[Floor(CurveX)];
   CurveSinY := CURVESIN[Floor(CurveY)];
-  TempCalculation := (Floor((CurveCosX * X) + (Y * CurveSinX))) shr 16;
-  if (TempCalculation > 32000) then
-    TempCalculation := -(65535 - TempCalculation);
-  Y := (Floor((Y * CurveCosX) - (X * CurveSinX))) shr 16;
+  TempCalculation := ashr(Round((CurveCosX * X) + (Y * CurveSinX)), 16);
+  Y := ashr(Round((Y * CurveCosX) - (X * CurveSinX)), 16);
   X := Round(TempCalculation);
-  TempCalculation := (Floor((Z * CurveCosY) - (Y * CurveSinY))) shr 16;
-  if (TempCalculation > 32000) then
-    TempCalculation := -(65535 - TempCalculation);
-  Y := (Floor((Z * CurveSinY) - ((-CurveCosY) * Y))) shr 16;
+  TempCalculation := ashr(Round((Z * CurveCosY) - (Y * CurveSinY)), 16);
+  Y := ashr(Round((Z * CurveSinY) - ((-CurveCosY) * Y)), 16);
   Z := Round(TempCalculation);
-  if (Y = 0) then begin
+  if (Y < 50) then begin
     Result := Point(-1, -1);
     Exit;
   end else begin
-    CalculatedScreenPosX := Floor((((Floor(X) shl 9) / Y)));
+    CalculatedScreenPosX := Round((((Floor(X) shl 9) / Y)));
     IncEx(CalculatedScreenPosX, 256);
-    CalculatedScreenPosY := Floor((((Floor(Z) shl 9) / Y)));
+    CalculatedScreenPosY := Round((((Floor(Z) shl 9) / Y)));
     IncEx(CalculatedScreenPosY, 167);
     Result := Point(CalculatedScreenPosX, CalculatedScreenPosY);
   end;

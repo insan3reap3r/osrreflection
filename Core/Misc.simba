@@ -634,3 +634,34 @@ begin
   Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
   result :=  SmartGetFieldInt(SmartCurrentTarget, me, Actor_combatCycle) * Actor_combatCycle_Multiplier;
 end;
+
+(*
+StrInArr
+~~~~~~~~
+
+
+
+    function StrInArr(str: string; arrS: TStringArray): Boolean;
+
+Returns True if EXACT str is found in the Array. Case sensitive.
+
+.. note::
+
+    by elfyyy
+
+Example:
+
+.. code-block:: pascal
+
+*)
+function ExactStrInArr(str: string; arrS: TStringArray): Boolean;
+var
+  I, H: Integer;
+begin
+  Result := True;
+  H := High(arrS);
+  for I := 0 to H do
+    if arrS[I] = Str then
+      Exit;
+  Result := False;
+end;
