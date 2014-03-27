@@ -252,10 +252,10 @@ const
     client_compassAngle                               =   'client.dm';
     client_map_offset                                 =   'client.dn';
     client_map_scale                                  =   'client.fl';
-    client_menuActions                                =   'client.ir';
+    client_menuActions                                =   'client.ip';
     client_groundSettings                             =   'n.g';
     client_npcIndices                                 =   'client.bw';
-    client_menuOptions                                =   'client.ls';
+    client_menuOptions                                =   'client.ir';
     client_levels                                     =   'client.hr';
     client_real_levels                                =   'client.hw';
     client_experiences                                =   'client.hf';
