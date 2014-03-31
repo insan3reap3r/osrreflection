@@ -333,6 +333,8 @@ begin
   Count := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuCount) * client_menuCount_Multiplier;
   SetLength(Result, Count);
   for I := Count - 1 downto 0 do begin
+    Act := '';
+    Opt := '';
     ActInt := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_menuActions, I);
     OptInt := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_menuOptions, I);
     Act := Trim(R_GetJavaString(ActInt, 512));
