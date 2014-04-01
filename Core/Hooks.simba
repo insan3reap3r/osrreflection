@@ -40,7 +40,7 @@ const
 {*Actor*}
     Actor                                             =   'ar';
     Actor_hitDamages                                  =   'am';
-    Actor_combatCycle                                 =   'bu';
+    Actor_combatCycle                                 =   'ao';
     Actor_activeText                                  =   'ac';
     Actor_pathX                                       =   'bf';
     Actor_pathY                                       =   'bk';
@@ -52,7 +52,7 @@ const
     Actor_health                                      =   'ab';
 
 {*Actor Multipliers*}
-    Actor_combatCycle_Multiplier                      =   1295005681;
+    Actor_combatCycle_Multiplier                      =   -582781327;
     Actor_localX_Multiplier                           =   -815838945;
     Actor_localY_Multiplier                           =   -558424057;
     Actor_animation_Multiplier                        =   1518369061;

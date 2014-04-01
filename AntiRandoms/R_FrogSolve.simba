@@ -1,0 +1,85 @@
+{* R_FrogSolve
++Detection and solving
++By: elfyyy
++
++ ToDo = Add support for frog cave*}
+
+
+(** function R_FindFrog
+ * Description: Finds Frog and checks to see if it is our random
+ *)
+function R_FindFrog: Boolean;
+var
+  Temp: TNPC;
+  TheNulls: TNPCArray;
+  t, i:  integer;
+  PName: String;
+begin
+  Result := False;
+  if R_FindNpc('Frog', Temp) then
+  begin
+    if (not R_NearTile(Temp.Tile, 5)) then
+      Exit;
+    PName := lowercase(R_GetPlayerName);
+    TheNulls := R_GetNpcs('null');
+    if length(TheNulls) = 0 then
+      Exit;
+    MarkTime(t);
+    for i := 0 to high(TheNulls) do
+    begin
+      if TimeFromMark(t) > 10000 then
+        Exit;
+      if Pos(PName, Lowercase(TheNulls[i].OverHeadText)) >= 0 then
+      begin
+        Result := True;
+      end;
+      if i = high(TheNulls) then
+      begin
+        TheNulls := R_GetNpcs('null');
+        i := 0;
+      end;
+    end;
+  end;
+end;
+
+(**
+ * function R_SolveFrog
+ * Description: Solves frog random
+ *)
+function R_SolveFrog: Boolean;
+var
+  T: integer;
+  Loc: TPoint;
+  FrogPrincess: TNPC;
+begin
+  MarkTime(T);
+  Result := False;
+  repeat
+  if not R_FindNpc('Frog', FrogPrincess) then
+  begin
+    Result := True;
+    Exit;
+  end;
+  R_FindNpc('Frog', FrogPrincess);
+  Loc := FrogPrincess.Tile;
+  Loc := R_TileToMs(Loc);
+  Mmouse(Loc.x, Loc.y, 0, 0);
+  if R_WaitUptext('Frog', 200) then
+  begin
+    ClickMouse2(Mouse_Left);
+    Wait(5000);
+    ClickToContinue;
+    ChatWait;
+    FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+    ChatWait;
+    ClickToContinue;
+    ChatWait;
+    FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+    ClickToContinue;
+    ClickToContinue;
+    Wait(1500);
+    if (not R_FindNpc('Frog', FrogPrincess)) then
+      Result := True;
+  end;
+  until(result) or (TimeFromMark(T) > 40000)
+end;

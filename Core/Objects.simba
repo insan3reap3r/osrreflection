@@ -270,14 +270,14 @@ begin
 end;
 
 (*
-R_GetObjectDistance
-~~~~~~~~~~
+R_GetObjectsDistance
+~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+    function GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
 
-Returns a TRSObject of object of given ObjType at Tile
+Returns a TRSObjectArray of objects of given ObjType within the distance specified
 
   OBJ_GAME            = 0;
   OBJ_WALL            = 1;
@@ -289,7 +289,7 @@ Returns a TRSObject of object of given ObjType at Tile
   by elfyyy
 
 *)
-function R_GetObjectDistance(ObjType, Distance: integer): TRSObjectArray;
+function R_GetObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
 var
   BaseX, BaseY, X, Y, i: integer;
   Position: TPoint;
@@ -309,5 +309,59 @@ begin
       Result[i] := Temp;
       inc(i);
     end;
+  end;
+end;
+
+(*
+R_FindObjectDistance
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function FindObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
+
+Returns the nearest TRSObject of given ObjType within the given distance as TheObj while the
+result is a boolean.
+
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_FindObjectDistance(var TheObj: TRSObject; ID, ObjType, Distance: integer): Boolean;
+var
+  BaseX, BaseY, X, Y, i: integer;
+  Position: TPoint;
+  Locations: TpointArray;
+  Temp: TRSObject;
+  temp1:TRSObjectArray;
+begin
+  BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
+  BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
+  Position := R_GetTileGlobal;
+  Position := Point(Position.X - BaseX, Position.Y - BaseY);
+  Distance := Round(Distance / 2);
+  for X := Position.X - Distance to Position.X + Distance do begin
+    for Y := Position.Y - Distance to Position.Y + Distance do begin
+      Temp := R_GetObjectAt(ObjType, Point(BaseX + X, BaseY + Y));
+      if (Temp.Tile = Point(0, 0)) or (Temp.ID <> ID) then
+        continue;
+      SetLength(temp1, Length(temp1) + 1);
+      temp1[i] := Temp;
+      SetLength(Locations, Length(Locations) + 1);
+      Locations[i] := Temp.Tile;
+      inc(i);
+    end;
+  end;
+  Result := Length(Temp1) > 0;
+  if Result then
+  begin
+    SortTpaFrom(Locations, R_GetTileGlobal);
+    TheObj := Temp1[0];
   end;
 end;

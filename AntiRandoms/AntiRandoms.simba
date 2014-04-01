@@ -3,6 +3,7 @@
 {$include_once R_MazeSolve.simba}
 {$include_once R_MimeSolve.simba}
 {$include_once R_PrisonPeteSolve.simba}
+{$include_once R_FrogSolve.simba}
 
 type
   R_Random = record
@@ -15,7 +16,9 @@ var
   R_Randoms : array[0..13] of R_Random;
   R_CombatRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
-  R_Deaths, R_TalksSolved, R_TalksFailed: Integer;
+  R_Deaths: Integer;
+
+{$include_once R_TalkRandoms.simba}
 
 (*
 R_SetupRandoms
@@ -120,6 +123,18 @@ begin
         R_Randoms[i].DetectRandom := @R_DetectForester;
         R_Randoms[i].SolveRandom := @R_SolveForester; //SRL Solver for now
       end;
+      13:
+      begin
+        R_Randoms[i].RandName := '';
+        R_Randoms[i].DetectRandom := @R_FindTalk;
+        R_Randoms[i].SolveRandom := @R_SolveTalk;
+      end;
+      14:
+      begin
+        R_Randoms[i].RandName := 'Frog';
+        R_Randoms[i].DetectRandom := @R_FindFrog;
+        R_Randoms[i].SolveRandom := @R_SolveFrog;
+      end;
     end;
   end;
 end;
@@ -176,7 +191,7 @@ var
   i: integer;
 begin
   Result := False;
-  if (not R_InFight) then
+  if (not R_UnderAttack) then
     exit;
   Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'zombie', 'tree spirit', 'ent'];
   Temp := R_GetAllNpcs;
@@ -191,100 +206,6 @@ begin
   end;
   if Result then
     writeln('[Reflection Anti-Randoms] ''' + (FoundNpc.Name) + ''' Combat random detected! Running away...');
-end;
-
-(*
-R_FindTalk
-~~~~~~~~~~
-
-.. code-block:: pascal
-
-  function R_FindTalk: Boolean;
-
-Solves all talking randoms.
-
-.. note::
-
-  by elfyyy
-
-*)
-function R_FindTalk: Boolean;
-var
-  Temp: TNPCArray;
-  Temp1: TNPC;
-  RandList: TStringArray;
-  i, f, t: integer;
-  FoundNPC, FrogPrincess: TNPC;
-  Loc, StartLoc: Tpoint;
-  PName: String;
-begin
-  Result := False;
-  RandList := ['frog', 'certer', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'pirate', 'security guard', 'rick turpentine','mysterious old man'];
-  Temp := R_GetAllNPCs;
-  for i := 0 to High(Temp) do
-    if (ExactStrInArr(Lowercase(Temp[i].Name), RandList)) then begin
-      PName := lowercase(R_GetPlayerName);
-      MarkTime(f);
-      if Pos('frog', Lowercase(Temp[i].Name)) <= 0 then begin
-        while Pos(PName, Lowercase(Temp1.OverHeadText)) <= 0 do begin
-          R_FindNPC(Temp[i].Name, Temp1);
-          wait(200);
-          if TimeFromMark(f) > 10000 then
-            exit;
-        end;
-        Result := True;
-        StartLoc := R_GetTileGlobal;
-        writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random detected! Solving...');
-        R_FindNPC(Temp[i].Name, FoundNPC);
-        Loc := FoundNPC.Tile;
-        Loc := R_TileToMs(Loc);
-        Mmouse(Loc.x, Loc.y, 0, 0);
-        if R_WaitUptext(FoundNPC.Name, 200) then begin
-          ClickMouse2(Mouse_Left);
-          Wait(RandomRange(1000, 1800));
-          DoConversation('', True);
-        end;
-        if R_NearTile(StartLoc, 20) then begin
-          writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random Solved!');
-          Inc(R_TalksSolved);
-          exit;
-        end else begin
-          writeln('[Reflection Anti-Randoms] '+Temp[i].Name+' random failed! Logging out...');
-          Inc(R_TalksFailed);
-          logout;
-          players[currentPlayer].active := false;
-        end;
-      end else begin
-        writeln('[Reflection Anti-Randoms] Frog random detected! Solving...');
-        MarkTime(T);
-        repeat
-        R_FindNpc(1329, FrogPrincess);
-        if (not R_NearTile(FrogPrincess.Tile, 10)) then
-          R_BlindWalk(FrogPrincess.tile);
-      R_FindNpc(1329, FrogPrincess);
-      Loc := FrogPrincess.Tile;
-      Loc := R_TileToMs(Loc);
-      Mmouse(Loc.x, Loc.y, 0, 0);
-      if R_WaitUptext('Frog', 200) then begin
-        ClickMouse2(Mouse_Left);
-        Wait(5000);
-        ClickToContinue;
-        ChatWait;
-        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
-        ChatWait;
-        ClickToContinue;
-        ChatWait;
-        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
-        ClickToContinue;
-        ClickToContinue;
-        if (not R_FindNpc('Frog', FrogPrincess)) then
-          Result := True;
-      end;
-      until(result) or (TimeFromMark(T) > 40000)
-    writeln('[Reflection Anti-Randoms] Frog random Solved!');
-
-    end;
-  end;
 end;
 
 (*
@@ -333,8 +254,6 @@ begin
       R_RunAway(R_RunAwayDirection, 30, True);
         Exit;
       end;
-  if (R_Return(Result, @R_FindTalk)) then
-    Exit;
   if (R_Return(Result, @FindMod)) then
     Exit;
   if (R_Return(Result, @R_FindDead)) then

@@ -1,0 +1,110 @@
+
+var
+  TalkRandomName: string;
+
+(*
+R_FindTalk
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindTalk: Boolean;
+
+Finds all talking randoms.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_FindTalk: Boolean;
+var
+  i, f: integer;
+  PName: String;
+  RandList: TStringArray;
+  Temp: TNPCArray;
+  loc: TPoint;
+begin
+  Result := False;
+  RandList := ['miles', 'giles', 'sandwhich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
+  Temp := R_GetAllNPCs;
+  for i := 0 to High(Temp) do
+    if (ExactStrInArr(Lowercase(Temp[i].Name), RandList)) then
+  begin
+    if (not R_NearTile(Temp[i].Tile, 4)) then
+      Exit;
+    PName := lowercase(R_GetPlayerName);
+    TalkRandomName := Temp[i].Name;
+    MarkTime(f);
+    while Pos(PName, Lowercase(Temp[i].OverHeadText)) <= 0 do
+    begin
+      R_FindNPC(TalkRandomName, Temp[i]);
+      wait(200);
+      if TimeFromMark(f) > 10000 then
+        exit;
+    end;
+    if lowercase(TalkRandomName) = 'mysterious old man' then
+    begin
+      loc := R_GetTileGlobal;
+      Wait(RandomRange(5000, 7500));
+      if (not R_NearTile(loc, 10)) then
+        Exit;
+    end;
+    Result := True;
+    R_Randoms[13].RandName := TalkRandomName;
+  end;
+end;
+
+(*
+R_SolveTalk
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+  function R_FindTalk: Boolean;
+
+Solves all talking randoms.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_SolveTalk: Boolean;
+var
+  f: integer;
+  FoundNPC: TNPC;
+  Loc, StartLoc: Tpoint;
+begin
+  Result := False;
+  MarkTime(f);
+  if (TalkRandomName = 'Miles') or (TalkRandomName = 'Giles') or (TalkRandomName = 'Sandwhich lady') then
+    Exit;
+  begin
+    StartLoc := R_GetTileGlobal;
+    MarkTime(f);
+    repeat
+    if (not R_FindNPC(TalkRandomName, FoundNPC)) then
+      Break;
+    Loc := FoundNPC.Tile;
+    Loc := R_TileToMs(Loc);
+    Mmouse(Loc.x, Loc.y, 0, 0);
+    if R_WaitUptext('Talk to ' + FoundNPC.Name, 200) then
+      ClickMouse2(Mouse_Left)
+    else
+    begin
+      ClickMouse2(Mouse_Right);
+      R_ChooseOption('Talk');
+    end;
+    while R_IsWalking do
+      Wait(RandomRange(1000, 1800));
+    DoConversation('', True);
+    Wait(RandomRange(1400, 2200));
+    until TimeFromMark(f) > 30000;
+    if R_NearTile(StartLoc, 20) then
+    begin
+      Result := True
+      exit;
+    end;
+  end;
+end;

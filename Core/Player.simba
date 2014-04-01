@@ -438,3 +438,23 @@ function R_InFight: Boolean;
 begin
   result := (R_GetActorLoopCycle > R_GetClientLoopCycle) or (Round(R_InteractingNpc().Hitpoints) > 0);
 end;
+
+(*
+R_UnderAttack
+~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_InFight: Boolean;
+
+Returns true if player is under attack.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_UnderAttack: Boolean;
+begin
+  result := (R_GetActorLoopCycle > R_GetClientLoopCycle);
+end;
