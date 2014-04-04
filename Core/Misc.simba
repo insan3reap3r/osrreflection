@@ -635,6 +635,7 @@ var
 begin
   Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
   result :=  SmartGetFieldInt(SmartCurrentTarget, me, Actor_combatCycle) * Actor_combatCycle_Multiplier;
+  SmartFreeObject(SmartCurrentTarget, Me);
 end;
 
 (*
