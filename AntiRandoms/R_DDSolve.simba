@@ -226,14 +226,21 @@ end;
 function R_SolveDD: boolean;
 var
   i, FailTime: integer;
-  MatTile: Tpoint;
+  MatTile, MatTileMS: Tpoint;
 begin
   Result := False;
   MarkTime(FailTime);
   repeat
   result := not R_DetectDD;
-  if FindNPCChatTextMulti(['actually', 'take'], nothing) then
+  if (FindNPCChatTextMulti(['orders', 'corps'], nothing)) then
+  begin
     ClickTocontinue;
+    Sleep(250 + Random(250));
+    ClickToContinue;
+    Sleep(250 + Random(250));
+  end;
+  if (FindNPCChatTextMulti(['actually', 'take'], nothing)) then
+    ClickToContinue;
   R_LoadSigns;
   i := R_GetAssignment;
   case i of
@@ -242,11 +249,11 @@ begin
     RDemonVars_Signs[2]: MatTile := Point(3164, 4820);
     RDemonVars_Signs[3]: MatTile := Point(3166, 4820);
   end;
-  MatTile := R_TileToMs(MatTile);
-  if MatTile.x = -1 then
+  MatTileMS := R_TileToMS(MatTile);
+  if MatTileMS.x = -1 then
     R_WalkToTileMM(MatTile);
-  Mmouse(MatTile.x,MAtTile.y,0,0);
-  if R_WaitUptext('Exercise mat', 250) then begin
+  Mmouse(MatTileMS.x, MatTileMS.y, 2, 2);
+  if R_WaitUptext('Exercise mat', 500) then begin
     ClickMouse2(Mouse_Left);
     while R_IsWalking do
       wait(200);
@@ -254,7 +261,6 @@ begin
    end;
    until((result) or (TimeFromMark(FailTime) > 300000));
 end;
-
 
 
 
