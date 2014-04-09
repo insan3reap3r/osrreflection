@@ -13,7 +13,7 @@ type
 end;
 
 var
-  R_Randoms : array[0..13] of R_Random;
+  R_Randoms : array[0..14] of R_Random;
   R_CombatRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
   R_Deaths: Integer;
