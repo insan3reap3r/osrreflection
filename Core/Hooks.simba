@@ -273,7 +273,7 @@ const
     client_npcs                                       =   'client.bm';
     client_groundItems                                =   'client.hi';
     client_widgetSettings                             =   'client.bk';
-    client_settings                                   =   'client.b';
+    client_settings                                   =   'fp.r';
     client_menuX                                      =   'q.ho';
     client_menuY                                      =   'bu.hz';
     client_LoopCycle                                  =   'client.a';
