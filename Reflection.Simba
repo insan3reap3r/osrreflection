@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 44;
+  IncludeRevision = 45;
 
 (*
 CreateNewFiles
