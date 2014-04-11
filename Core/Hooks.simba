@@ -41,7 +41,7 @@ const
     Actor                                             =   'ao';
     Actor_hitDamages                                  =   'an';
     //Actor_combatCycle                                 =   'az';
-    Actor_combatCycle                                 =   'aq';
+    Actor_combatCycle                                 =   'ad';
     Actor_activeText                                  =   'av';
     Actor_pathX                                       =   'bb';
     Actor_pathY                                       =   'bc';
@@ -59,7 +59,7 @@ const
     Actor_maxHealth_Multiplier                        =   5200087;
     Actor_health_Multiplier                           =   612124946;
     //Actor_localX_Multiplier                           =   -806469611;
-    Actor_combatCycle_Multiplier                      =   2106578479;
+    Actor_combatCycle_Multiplier                      =   -720305353;
     Actor_localX_Multiplier                           =   -806469611;
     Actor_localY_Multiplier                           =   -54698801;
 
@@ -116,11 +116,11 @@ const
     NpcDefinition_name                                =   'z';
     NpcDefinition_id                                  =   'j';
 
-    NpcDefinition_level                               =   'y';
+    NpcDefinition_level                               =   'l';
 
 {*NpcDefinition Multipliers*}
     NpcDefinition_id_Multiplier                       =   1323050653;
-    NpcDefinition_level_Multiplier                    =   1771562085;
+    NpcDefinition_level_Multiplier                    =   -222798041;
 
 {*Npc*}
     Npc                                               =   'v';
@@ -276,13 +276,13 @@ const
     client_menuY                                      =   'bu.hz';
 
     client_plane                                      =   'da.hx';
-    client_LoopCycle                                  =   'client.a';
+    client_LoopCycle                                  =   'client.b';
 
 {*Client Multipliers*}
     client_menuCount_Multiplier                       =   -815878001;
     client_baseY_Multiplier                           =   -316692777;
     client_baseX_Multiplier                           =   798455051;
-    client_menuWidth_Multiplier                       =   109232400;
+    client_menuWidth_Multiplier                       =   54633017;
     client_cameraPitch_Multiplier                     =   -1469741367;
     client_cameraYaw_Multiplier                       =   -881937579;
     client_cameraX_Multiplier                         =   1131536837;
@@ -297,6 +297,6 @@ const
     client_menuX_Multiplier                           =   -1475507675;
     client_menuY_Multiplier                           =   -643638235;
 
-    client_LoopCycle_Multiplier                       =   46907387;
+    client_LoopCycle_Multiplier                       =   -616118339;
     client_plane_Multiplier                      =   2109014229;
 
