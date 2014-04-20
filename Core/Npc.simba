@@ -379,6 +379,34 @@ begin
 end;
 
 (*
+R_FindNpcDistance
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_FindNpc(NPC: variant; var TheNPC: TNPC; Distance: integer): Boolean;
+
+Returns true if the Npc specified by the variant NPC is found within the distance specified
+and stores it in TheNPC.
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_FindNpcDistance(NPC: variant; var TheNPC: TNPC; Distance: integer): Boolean;
+var
+temp: TNPCArray;
+begin
+  result := False;
+  temp := R_GetNpcs(NPC);
+  if (length(temp) = 0) or (not R_NearTile(temp[0].Tile, Distance)) then
+    exit;
+  result := true;
+  TheNpc := temp[0];
+end;
+
+(*
 R_InteractingNpc
 ~~~~~~~~~~
 
