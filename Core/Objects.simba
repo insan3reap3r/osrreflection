@@ -326,7 +326,7 @@ R_FindObjectDistance
 
 .. code-block:: pascal
 
-    function FindObjectsDistance(ObjType, Distance: integer): TRSObjectArray;
+    function FindObjectDistance(ObjType, Distance: integer): TRSObjectArray;
 
 Returns the nearest TRSObject of given ObjType within the given distance as TheObj while the
 result is a boolean.
@@ -353,6 +353,58 @@ begin
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
   Position := R_GetTileGlobal;
   Position := Point(Position.X - BaseX, Position.Y - BaseY);
+  Distance := Round(Distance / 2);
+  for X := Position.X - Distance to Position.X + Distance do begin
+    for Y := Position.Y - Distance to Position.Y + Distance do begin
+      Temp := R_GetObjectAt(ObjType, Point(BaseX + X, BaseY + Y));
+      if (Temp.Tile = Point(0, 0)) or (Temp.ID <> ID) then
+        continue;
+      SetLength(temp1, Length(temp1) + 1);
+      temp1[i] := Temp;
+      SetLength(Locations, Length(Locations) + 1);
+      Locations[i] := Temp.Tile;
+      inc(i);
+    end;
+  end;
+  Result := Length(Temp1) > 0;
+  if Result then
+  begin
+    SortTpaFrom(Locations, R_GetTileGlobal);
+    TheObj := Temp1[0];
+  end;
+end;
+
+(*
+R_FindObjectNearTile
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_FindObjectNearTile(ObjType, Distance: integer): TRSObjectArray;
+
+Returns the nearest TRSObject of given ObjType within the given distance to StartTile.
+
+  OBJ_GAME            = 0;
+  OBJ_WALL            = 1;
+  OBJ_FLOORDECORATION = 2;
+  OBJ_BOUNDARY        = 3;
+
+.. note::
+
+  by elfyyy
+
+*)
+function R_FindObjectNearTile(var TheObj: TRSObject; ID, ObjType, Distance: integer; StartTile: TPoint): Boolean;
+var
+  BaseX, BaseY, X, Y, i: integer;
+  Position: TPoint;
+  Locations: TpointArray;
+  Temp: TRSObject;
+  temp1:TRSObjectArray;
+begin
+  BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
+  BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
+  Position := Point(StartTile.X - BaseX, StartTile.Y - BaseY);
   Distance := Round(Distance / 2);
   for X := Position.X - Distance to Position.X + Distance do begin
     for Y := Position.Y - Distance to Position.Y + Distance do begin
