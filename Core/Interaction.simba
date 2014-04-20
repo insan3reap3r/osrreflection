@@ -167,7 +167,7 @@ Returns true if Door was opened.
 *)
 function R_OpenDoor(Door: TRSObject; TileEdge: String): Boolean;
 begin
-  R_OpenDoorAtTile(Door.Tile, TileEdge);
+  Result := R_OpenDoorAtTile(Door.Tile, TileEdge);
 end;
 
 (*
@@ -412,7 +412,7 @@ Bank items will be withdrawn from WithdrawSlot.
 *)
 procedure R_BankItems(BoothTile: TPoint; DepositAll: Boolean; WithdrawAmount, WithdrawSlot: Integer);
 var
-  u,x,y: Integer;
+  u: Integer;
   BankPoint: Tpoint;
 begin
   for u:= 0 to 100 do
