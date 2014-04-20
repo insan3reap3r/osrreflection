@@ -379,22 +379,39 @@ Clicks on given option in open menu
   by Frement
 
 *}
+
 function R_ChooseOption(Option: String): Boolean;
 var
   Index, MenuX, MenuY, MenuWidth, XOff, YOff: Integer;
   Options: TStringArray;
+  Left: Boolean;
 begin
   Options := R_GetMenuOptions;
   if (not R_IsMenuOpen) then
     Exit;
   Index := R_GetMenuIndex(Option, Options);
-  if (Index = -1) then
-    Index := R_GetMenuIndex('Cancel', Options);
   MenuX := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuX) * client_menuX_Multiplier + 4;
   MenuY := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuY) * client_menuY_Multiplier + 4;
   MenuWidth := SmartGetFieldInt(SmartCurrentTarget, 0, client_menuWidth) * client_menuWidth_Multiplier;
   XOff := RandomRange(4, MenuWidth - 4);
   YOff := RandomRange(20, 25) + (Index * 15);
+  if (MenuX + (MenuWidth div 2) > 765) then
+  begin
+    Left := True;
+  end;
+  if (MenuX - (MenuWidth div 2) < 0) then
+  begin
+    Left := False;
+  end;
+  if (Index = -1) then
+  begin
+    GetMousePos(MenuX, MenuY);
+    if (Left) then
+      MMouse(MenuX - 30 - MenuWidth + Random(10), MenuY + RandomRange(-2, 2), 2, 2)
+    else
+      MMouse(MenuX + 30 + MenuWidth + Random(10), MenuY + RandomRange(-2, 2), 2, 2);
+    Exit;
+  end;
   MMouse(MenuX + XOff, MenuY + YOff, 2, 2);
   Sleep(RandomRange(100, 250));
   ClickMouse2(Mouse_Left);
