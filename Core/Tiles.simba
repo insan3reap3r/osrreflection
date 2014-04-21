@@ -232,10 +232,10 @@ var
   Loc: TPoint;
 begin
   Loc := Point(R_GetTileGlobal.x, R_GetTileGlobal.y);
-  if (Loc.x > 20000) or (Loc.y > 20000) or (Loc.x < -20000) or (Loc.y < -20000) then
+  if (Tile.x > 20000) or (Tile.y > 20000) or (Tile.x < -20000) or (Tile.y < -20000) then
     exit;
   Result :=  Distance(Tile.x, Tile.y, Loc.x, Loc.y);
-end;
+end;  
 
 (*
 R_NearTile
