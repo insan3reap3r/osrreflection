@@ -28,7 +28,7 @@ end;
     function R_ChooseOptionEx(Option: String): Boolean;
 
 Clicks on given option in open menu.
-If the chooseoption appears twice, avoid close the menu and try again.
+If the option appears twice, avoid, close the menu and try again.
 
 .. note::
 
@@ -73,12 +73,44 @@ end;
 
 
 (*
-R_OpenDoorAtTile
+R_MouseTile
 ~~~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_OpenDoorAtTile(DoorTile: TPoint; TileEdge: String): Boolean;
+    R_MouseTile(Tile: TPoint; ranx, rany, ClickType: Integer): Boolean;
+
+Moves then clicks mouse (will only move if 'mouse_move' passed).
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_MouseTile(Tile: TPoint; ranx, rany, ClickType: Integer): Boolean;
+var
+  Tilex, Tiley: Integer;
+  Tile2: TPoint;
+begin
+  Result:= false;
+  Tile2.x:= 0;
+  Tile2.y:= 0;
+  Tile2:= R_TileToMs(Tile);
+  if (Tile2.x = 0) or (Tile2.y = 0) or (Tile2.x > 40000) or (Tile2.y > 40000) or (Tile2.x < -40000) or (Tile2.y < -40000) then
+    Exit;
+  Tilex:= iAbs(Tile2.x);
+  Tiley:= iAbs(Tile2.y);
+  MouseBox(Tilex-ranx, Tiley-rany, Tilex+ranx, Tiley+rany, ClickType);
+  Result:= true;
+end;
+
+(*
+R_OpenDoor
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_OpenDoor(DoorTile: TPoint; TileEdge: String): Boolean;
 
 Attempts to open the door on TileEdge ('N', 'S', 'E' or 'W') of DoorTile.
 Returns true if the door was opened.
@@ -86,43 +118,44 @@ Returns true if the door was opened.
 .. examples:: D = Door [T] = DoorTile
 
       D
-     [T]      R_OpenDoorAtTile(Point(x, y), 'N');
+     [T]      R_OpenDoor(Point(x, y), 'N');
 
 
-     [T]D     R_OpenDoorAtTile(Point(x, y), 'E');
+     [T]D     R_OpenDoor(Point(x, y), 'E');
 
 
-     [T]      R_OpenDoorAtTile(Point(x, y), 'S');
+     [T]      R_OpenDoor(Point(x, y), 'S');
       D
 
-    D[T]      R_OpenDoorAtTile(Point(x, y), 'W');
+    D[T]      R_OpenDoor(Point(x, y), 'W');
 
 .. note::
 
   by Krazy_Meerkat
 
 *)
-function R_OpenDoorAtTile(DoorTile: TPoint; TileEdge: String): Boolean;
+function R_OpenDoor(DoorTile: TPoint; TileEdge: String): Boolean;
 var
   Tilex, Tiley: Integer;
   Tile2: TPoint;
 begin
   Result:= false;
-  Tile2:= DoorTile;
+  Tile2.x:= 0;
+  Tile2.y:= 0;
   if (Lowercase(TileEdge) = 'n') then
-    Tile2:= R_TileOffsetToMS(Tile2, 0, 64, 100);
+    Tile2:= R_TileOffsetToMS(DoorTile, 0, 62, 100);
   if (Lowercase(TileEdge) = 's') then
-    Tile2:= R_TileOffsetToMS(Tile2, 0, -64, 100);
+    Tile2:= R_TileOffsetToMS(DoorTile, 0, -62, 100);
   if (Lowercase(TileEdge) = 'e') then
-    Tile2:= R_TileOffsetToMS(Tile2, 64, 0, 100);
+    Tile2:= R_TileOffsetToMS(DoorTile, 62, 0, 100);
   if (Lowercase(TileEdge) = 'w') then
-    Tile2:= R_TileOffsetToMS(Tile2, -64, 0, 100);
-  if (Tile2.x < 1) then
+    Tile2:= R_TileOffsetToMS(DoorTile, -62, 0, 100);
+  if (Tile2.x = 0) or (Tile2.y = 0) or (Tile2.x > 40000) or (Tile2.y > 40000) or (Tile2.x < -40000) or (Tile2.y < -40000) then
     Exit;
-  Tilex:= Tile2.x;
-  Tiley:= Tile2.y;
+  Tilex:= iAbs(Tile2.x);
+  Tiley:= iAbs(Tile2.y);
   MouseBox(Tilex-5, Tiley-5, Tilex+5, Tiley-5, mouse_move);
-  wait(103 + random(88));
+  wait(203 + random(188));
   if R_IsUpTextMulti(['Close', 'lose', 'ose', 'los', 'Open', 'Ope', 'pen']) then
   begin
     Result:= R_IsUpTextMulti(['Close', 'lose', 'ose', 'los']); //Door is already open
@@ -136,314 +169,65 @@ begin
 end;
 
 (*
-R_OpenDoor
+R_CloseDoor
 ~~~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    R_OpenDoor(Door: TRSObject; TileEdge: String): Boolean;
+    R_CloseDoor(DoorTile: TPoint; TileEdge: String): Boolean;
 
-Mouse to TileEdge and open Door.
-Returns true if Door was opened.
-
-.. examples:: D = Door [T] = DoorTile
-
-      D
-     [T]      R_OpenDoor(D, 'N');
-
-
-     [T]D     R_OpenDoor(D, 'E');
-
-
-     [T]      R_OpenDoor(D, 'S');
-      D
-
-    D[T]      R_OpenDoor(D, 'W');
+See above ^
 
 .. note::
 
   by Krazy_Meerkat
 
 *)
-function R_OpenDoor(Door: TRSObject; TileEdge: String): Boolean;
-begin
-  Result := R_OpenDoorAtTile(Door.Tile, TileEdge);
-end;
-
-(*
-R_ChooseOptionTile
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_ChooseOptionTile(Option: String; Tile: TPoint): Boolean;
-
-Moves the mouse randomly in a scaling box around Tile, when an action
-is found it will right-click and select Option from the available menu.
-Returns true if Option was clicked.
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-function R_ChooseOptionTile(Option: String; Tile: TPoint): Boolean;
+function R_CloseDoor(DoorTile: TPoint; TileEdge: String): Boolean;
 var
-  a, i, Tilex, Tiley: Integer;
+  Tilex, Tiley: Integer;
   Tile2: TPoint;
 begin
   Result:= false;
-  Tile2:= R_TileToMs(Tile);
-  if (Tile2.x = 0) then
+  Tile2.x:= 0;
+  Tile2.y:= 0;
+  if (Lowercase(TileEdge) = 'n') then
+    Tile2:= R_TileOffsetToMS(DoorTile, 0, 62, 30);
+  if (Lowercase(TileEdge) = 's') then
+    Tile2:= R_TileOffsetToMS(DoorTile, 0, -62, 30);
+  if (Lowercase(TileEdge) = 'e') then
+    Tile2:= R_TileOffsetToMS(DoorTile, 62, 0, 30);
+  if (Lowercase(TileEdge) = 'w') then
+    Tile2:= R_TileOffsetToMS(DoorTile, -62, 0, 30);
+  if (Tile2.x = 0) or (Tile2.y = 0) or (Tile2.x > 40000) or (Tile2.y > 40000) or (Tile2.x < -40000) or (Tile2.y < -40000) then
     Exit;
-  Tilex:= Tile2.x;
-  Tiley:= Tile2.y;
-  for i:=1 to 45 do
+  Tilex:= iAbs(Tile2.x);
+  Tiley:= iAbs(Tile2.y);
+  MouseBox(Tilex-2, Tiley-5, Tilex+2, Tiley-5, mouse_move);
+  wait(303 + random(88));
+  if R_IsUpTextMulti(['Close', 'lose', 'ose', 'los', 'Open', 'Ope', 'pen']) then
   begin
-    a:= i + 5;
-    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
-    wait(103 + random(88));
-    if R_IsUpAction then
+    Result:= R_IsUpText('Open'); //Door is already closed
+    if not(Result) then
+    begin
+      if (R_IsUpText('Close')) then
+      begin
+        clickMouse2(MOUSE_LEFT);
+        Result:= true;
+      end else
+      begin
+        ClickMouse2(false);
+        wait(103 + random(288));
+        Result:= R_ChooseOption('Close');
+      end;
+    end;
+  end else
+  begin
+    if (R_IsUpAction) then
     begin
       ClickMouse2(false);
       wait(103 + random(288));
-      Result:= R_ChooseOptionEx(Option);
-      if Result then
-      begin
-        i:= 45;
-      end;
+      Result:= R_ChooseOption('Close');
     end;
   end;
-end;
-
-(*
-R_ChooseOptionTileUptext
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_ChooseOptionTileUptext(Option, TileUptext: String; Tile: TPoint): Boolean;
-
-Moves the mouse randomly in a scaling box around Tile, when TileUptext
-is found it will right-click and select Option from the available menu.
-Returns true if Option was clicked.
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-function R_ChooseOptionTileUptext(Option, TileUptext: String; Tile: TPoint): Boolean;
-var
-  a, i, Tilex, Tiley: Integer;
-  Tile2: TPoint;
-begin
-  Result:= false;
-  Tile2:= R_TileToMs(Tile);
-  if (Tile2.x = 0) then
-    Exit;
-  Tilex:= Tile2.x;
-  Tiley:= Tile2.y;
-  for i:=1 to 45 do
-  begin
-    a:= i + 5;
-    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
-    wait(103 + random(88));
-    if R_IsUpText(TileUptext) then
-    begin
-      ClickMouse2(false);
-      wait(103 + random(288));
-      Result:= R_ChooseOptionEx(Option);
-      if Result then
-      begin
-        i:= 45;
-      end;
-    end;
-  end;
-end;
-
-(*
-R_ChooseOptionNpc
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_ChooseOptionNpc(Option: String; Npc: TNPC): Boolean;
-
-Moves the mouse randomly in a scaling box around Npc.Tile, when an action
-is found it will right-click and select Option from the available menu.
-Returns true if Option was clicked.
-
-.. note::
-
-  by Krazy_Meerkat
-
-*)
-function R_ChooseOptionNpc(Option: String; var Npc: TNPC): Boolean;
-var
-  a, i, Tilex, Tiley: Integer;
-  Tile2, OldTile: TPoint;
-begin
-  Result:= false;
-  OldTile:= Npc.Tile;
-  for i:= 1 to 45 do
-  begin
-    Npc:= R_GetTNPC(Npc.Index); //Update the npc's co-ords
-    if not(OldTile = Npc.Tile) then
-    begin
-      i:= 1;
-      OldTile:= Npc.Tile;
-    end;
-    Tile2:= R_TileToMs(Npc.Tile); //Convert to Ms point
-    if (Tile2.x = 0) then
-      Exit;
-    Tilex:= Tile2.x;
-    Tiley:= Tile2.y;
-    a:= i + 5;
-    MouseBox(Tilex-a, Tiley-i, Tilex+a, Tiley+i, mouse_move);
-    wait(103 + random(88));
-    if R_IsUpText(Npc.Name) then
-    begin
-      ClickMouse2(false);
-      wait(103 + random(288));
-      Result:= R_ChooseOptionEx(Option);
-      if Result then
-      begin
-        Npc:= R_GetTNPC(Npc.Index); //Update the npc's co-ords
-        i:= 45;
-      end;
-    end;
-  end;
-end;
-
-
-type
-  TInventoryItem2 = record
-    ID, Quantity, Slot: Integer;
-  end;
-
-  TInventoryItemArray2 = Array of TInventoryItem2;
-
-function R_GetWidget2(Index, ChildIndex: Integer): Integer;
-begin
-  Result := SmartGetFieldArray2DObject(SmartCurrentTarget, 0, client_widgets, Index, ChildIndex);
-end;
-(*
-R_GetInventoryItems2
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_GetInventoryItems2: TInventoryItemArray2;
-
-.. note::
-
-  by Frement
-
-*)
-function R_GetInventoryItems2: TInventoryItemArray2;
-var
-  _Inventory, _InventorySlot, _ItemID, _ItemQuantity: Integer;
-begin
-  _Inventory := R_GetWidget2(149, 0);
-  SetLength(Result, 28);
-  for _InventorySlot := 0 to 27 do begin
-    _ItemID := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_getItems, _InventorySlot);
-    if (_ItemID > 0) then begin
-      _ItemQuantity := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_getStackSizes, _InventorySlot);
-      with Result[_InventorySlot] do begin
-        ID := _ItemID;
-        Quantity := _ItemQuantity;
-        Slot := _InventorySlot + 1;
-      end;
-    end;
-  end;
-  SmartFreeObject(SmartCurrentTarget, _Inventory);
-end;
-
-(*
-R_InvCount2
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_InvCount2: Integer;
-
-.. note::
-
-  by Frement
-
-*)
-function R_InvCount2: Integer;
-var
-  I: Integer;
-  _Items: TInventoryItemArray2;
-begin
-  _Items := R_GetInventoryItems2;
-  for I := 0 to high(_items) do begin
-    if (_items[i].ID <> 0) then
-      inc(result);
-  end;
-end;
-
-(*
-R_BankItems
-~~~~~~~~~~~~~~
-
-.. code-block:: pascal
-
-    R_BankItems(BoothTile: TPoint; DepositAll: Boolean; WithdrawAmount, WithdrawSlot: Integer);
-
-Attempts to bank at BoothTile.
-If DepositAll is true, all player items will be deposited.
-if WithdrawAmount is 0, no items will be withdrawn.
-Bank items will be withdrawn from WithdrawSlot.
-
-.. note::
-
-  by Krazy_Meerkat
-
-.. example::
-
-  R_BankItems(Point(x, y), true, 0, 0); //Open bank & deposit inventory
-  R_BankItems(Point(x, y), false, 2, 1); //Open bank & withdraw 2 from slot 1
-  R_BankItems(Point(x, y), true, 1, 2); //Open bank, deposit all & withdraw 1 from slot 2
-
-*)
-procedure R_BankItems(BoothTile: TPoint; DepositAll: Boolean; WithdrawAmount, WithdrawSlot: Integer);
-var
-  u: Integer;
-  BankPoint: Tpoint;
-begin
-  for u:= 0 to 100 do
-  begin
-    R_PerfectPath([BoothTile]);
-    sleepandmovemouse(500 + random(500));
-    R_ChooseOptionTile('Bank B', BoothTile);
-    sleepandmovemouse(1000 + random(1500));
-    if BankScreen then u:= 100;
-  end;
-  if not BankScreen then
-  begin
-    writeln('[R_BankItems] Didn''t find BankScreen, logging out & terminating.');
-    if LoggedIn then LogOut;
-    TerminateScript;
-  end;
-  if DepositAll then
-  begin
-    for u:= 0 to 100 do
-    begin
-      wait(70 + random(50));
-      QuickDeposit('inv');
-      sleepandmovemouse(900 + random(450));
-      if (R_InvCount2 = 0) then u:= 100;
-    end;
-  end;
-  if (WithdrawSlot > 0) then
-    BankPoint := BankIndexToBankPoint(WithdrawSlot);
-  if (WithdrawAmount > 0) then
-    Withdraw(BankPoint.x, BankPoint.y, WithdrawAmount);
-  wait(70 + random(50));
-  CloseBank;
-  wait(70 + random(50));
 end;

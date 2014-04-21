@@ -85,25 +85,6 @@ begin
   Result:= false;
   if (not loggedIn) then
     exit;
-  FMan:= R_FindFreeNpc('Freaky Forester');
-  if (R_IsValidTNPC(FMan)) then
-  begin
-    MSFMan:= R_TileToMs(FMan.Tile);
-    if (MSFMan.x > 0) then
-    begin
-      if (R_ChooseOptionTile('Talk', FMan.Tile)) then
-      begin
-        Result := true;
-        wait(1500+random(550));
-        repeat
-          wait(100+random(100));
-          if not(R_IsAnimating) then
-            i:= 40;
-          inc(i);
-        until(i > 30);
-      end;
-    end;
-  end;
   if (result) then
     writeln('[Reflection Anti-Randoms] Talking to Forester');
 end;
@@ -120,42 +101,6 @@ var
 begin
   if (not loggedIn()) then
     exit;
-  t := (getSystemTime + 15000);
-  options := ['portal', 'one', 'two', 'three', 'four'];
-  options2 := ['4 ', '3 ', '2 ', '1 '];
-  result := -1;
-  // goes through the conversation, looking for the pheasant we have to kill
-  while ((areTalking) and (result = -1) and (getSystemTime < t)) do
-  begin
-    if not(FindNPCChatText('Okay', nothing)) then
-    begin
-      for i := 0 to high(options) do
-        if (FindNPCChatText(' '+options[i], nothing)) then
-        begin
-          wait(1500 + random(500));
-          result:= i;
-          break;
-        end;
-      if (result = -1) then
-      begin;
-      for i := 0 to high(options2) do
-        if (R_FindNPCChatTextMultiEdit([' '+options2[i]], nothing)) then
-        begin
-          wait(1500 + random(500));
-          result := (4 - i);
-          break;
-        end;
-      end;
-      wait(500 + random(300));
-      clickContinue(true);
-    end else
-      result:= 0;
-  end;
-  case result of
-    1..4: writeln('[Reflection Anti-Randoms] Need to kill the '+toStr(result)+' tailed pheasant');
-    0: writeln('[Reflection Anti-Randoms] Need to exit through portal');
-    -1: writeln('[Reflection Anti-Randoms] Failed to get pheasant');
-  end;
 end;
 
 (**
@@ -170,80 +115,6 @@ var
 begin
   if (not loggedIn()) then
     exit;
-  case numOfTails of
-      1: PheasantID:= 2029;
-      2: PheasantID:= 2031;
-      3: PheasantID:= 2032;
-      4: PheasantID:= 2030;
-  end;
-  t := (getSystemTime + (2 * 60000));
-  repeat
-    wait(10 + random(5));
-    CorrectPheasant:= R_FindFreeNpc(PheasantID);
-    if (R_IsValidTNPC(CorrectPheasant)) then
-    begin
-      MSPheas:= R_TileToMs(CorrectPheasant.Tile);
-      if (MSPheas.x > 0) then
-      begin
-        Result:= R_ChooseOptionNpc('Attack', CorrectPheasant);
-      end else
-      begin
-        R_PerfectPath([CorrectPheasant.Tile]);
-      end;
-    end;
-  until(result or (getSystemTime > t) or (not loggedIn()));
-  // wait for the raw pheasant to appear in inventory
-  if (result) then
-  begin
-    // need to make room for a raw pheasant
-    if (invFull()) then
-      dropItem(randomRange(12, 16));
-    result := false;
-    bmpPheasant := BitmapFromString(15, 14, 'meJxtkeFnQmEUxusfmXIlmdQyZR' +
-        'kRUWTMrGuqjTV3MlH0ISIufcjoQ/YhY8T0h/Z7e+qUu/F8OO9zfud' +
-        '5z3uvV+1dPkxznUXuaZ59nHm1IB6LJRJ5RIGDTzfrh5m7savB/BA/' +
-        'Ve8DmFKNgcir7qfBYITT8qo9lKw8X9y2gemCFV6WgnVR5n6Sbo6IZ' +
-        'QfH1wLHl1skQF6/fRkMSQK+SYMIANJgckh2C/uhlkfwjDNCXXz/Np' +
-        'hY7S9xKdIraOGUPjbFYO3M/ecqvK50lwlHUdSl/o/C9UwdTwrWxlP' +
-        'TVbhMdzwqwlNwBD60mKWWzkeOvG7XwrziZvCLTiN7/csbHB35sxIj' +
-        '/JTycIui/Nk+4hHwDpTL2RM=');
-    if not(R_ChooseOptionTile('ake', CorrectPheasant.Tile)) then
-    begin
-      tmpy := MSCX;
-      tmpx := MSCY;
-      if FindObjTPA(tmpx,tmpy,3433619,39,1,10,10,15,['aw','ake','phe','phea','pheas']) then
-      begin
-        Mouse(tmpx,tmpy,3,3,mouse_Right);
-        sleep(403 + random(288));
-        if ChooseOptionMulti(['ake R','ake Raw','ake','aw ph','phea','sant']) then
-        begin
-          tmpx:= 0;
-          repeat
-            if FindBitmapToleranceIn(bmpPheasant, x, y, MIX1, MIY1, MIX2, MIY2, 40)  then
-            begin
-              writeln('[Reflection Anti-Randoms] Pheasant found in inventory');
-              result := true;
-            end;
-            SleepAndMoveMouse(100 + Random(100));
-            tmpx:= tmpx + 1;
-          until((tmpx > 70) or result);
-        end;
-      end;
-    end else
-    begin
-      tmpx:= 0;
-      repeat
-        if FindBitmapToleranceIn(bmpPheasant, x, y, MIX1, MIY1, MIX2, MIY2, 40)  then
-        begin
-          writeln('[Reflection Anti-Randoms] Pheasant found in inventory');
-          result := true;
-        end;
-        SleepAndMoveMouse(100 + Random(100));
-        tmpx:= tmpx + 1;
-      until((tmpx > 70) or result);
-    end;
-    FreeBitmap(bmpPheasant);
-  end;
 end;
 
 (**
@@ -279,20 +150,6 @@ var
 begin
   if (not loggedIn) then
     exit;
-  repeat
-    inc(tries);
-    PortalTile:= R_TileToMs(Point(2611, 4776));
-    if (PortalTile.x > 0) then
-    begin
-      writeln('[Reflection Anti-Randoms] Attempting to use portal');
-      Result:= (R_ChooseOptionTile('Use', Point(2611, 4776)));
-    end else
-    begin
-      writeln('[Reflection Anti-Randoms] Walking to portal');
-      R_PerfectPath([Point(2611, 4776)]);
-    end;
-    wait(200 + random(300));
-  until((tries >= 10) or result);
   if (not result) then
     writeln('[Reflection Anti-Randoms] Couldn''t exit Forester');
 end;
@@ -307,35 +164,6 @@ var
   done: boolean;
 begin
   Result:= false;
-  if (not loggedIn()) then
     exit;
-  t := (getSystemTime + (5 * 60000)); // maximum 5 minutes
-  repeat
-    if (R_TalkToFF) then
-    begin
-      pheasant := R_GetPheasant();
-      // see if we need to kill a pheasant or exit through portal
-      if (pheasant > 0) then
-      begin
-        if (R_KillPheasant(pheasant)) then
-          done := R_ReturnPheasant;
-      end else
-        done := (pheasant = 0); // if we're free to leave
-    end else
-      R_WalkToFF;
-    if (done) then
-      if (R_ExitFF) then
-      begin
-        k:= 0;
-        repeat
-          wait(100 + random(50));
-          k:= k + 1;
-        until(not(R_DetectForester) or (k > 100));
-        if (k < 101) then
-          Result:= true;
-      end;
-  until(Result or (getSystemTime > t));
-  if (not Result) then
-    writeln('[Reflection Anti-Randoms] Forester solver timed out');
 end;
 
