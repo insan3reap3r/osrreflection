@@ -1,4 +1,3 @@
-
 (*
 R_TileOnMM
 ~~~~~~~~~~
@@ -528,12 +527,10 @@ begin
       if (not(R_IsWalking)) then
       begin
         repeat
-          R_FindNormalRandoms;
           wait(50+random(50));
         until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
       end;
       repeat
-        R_FindNormalRandoms;
         wait(50+random(50));
       until(not(R_IsWalking));
     until((R_NearTile(TheTile, 5)) or ((GetSystemTime - t) > 59999));
@@ -547,12 +544,10 @@ begin
       if (not(R_IsWalking)) then
       begin
         repeat
-          R_FindNormalRandoms;
           wait(50+random(50));
         until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
       end;
       repeat
-        R_FindNormalRandoms;
         wait(50+random(50));
       until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or not(R_IsWalking));
     until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or ((GetSystemTime - t) > 59999));
