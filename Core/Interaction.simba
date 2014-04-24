@@ -161,11 +161,17 @@ begin
     Result:= R_IsUpTextMulti(['Close', 'lose', 'ose', 'los']); //Door is already open
     if not(Result) then
     begin
+      ClickMouse2(true);
+      wait(103 + random(288));
+      Result:= true;
+    end;
+  end else
+    if (R_IsUpAction) then
+    begin
       ClickMouse2(false);
       wait(103 + random(288));
       Result:= R_ChooseOption('Open');
     end;
-  end;
 end;
 
 (*
@@ -210,16 +216,8 @@ begin
     Result:= R_IsUpText('Open'); //Door is already closed
     if not(Result) then
     begin
-      if (R_IsUpText('Close')) then
-      begin
-        clickMouse2(MOUSE_LEFT);
-        Result:= true;
-      end else
-      begin
-        ClickMouse2(false);
-        wait(103 + random(288));
-        Result:= R_ChooseOption('Close');
-      end;
+      clickMouse2(MOUSE_LEFT);
+      Result:= true;
     end;
   end else
   begin
