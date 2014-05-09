@@ -43,8 +43,8 @@ const
     Actor_interacting                                 =   'ab';
     Actor_maxHealth                                   =   'aa';
     Actor_health                                      =   'az';
-    Actor_localX                                      =   'h';
-    Actor_localY                                      =   'c';
+    Actor_localX                                      =   'c';
+    Actor_localY                                      =   'h';
     Actor_combatCycle = 'am';
 
 {*Actor Multipliers*}
@@ -52,8 +52,8 @@ const
     Actor_interacting_Multiplier                      =   1501622561;
     Actor_maxHealth_Multiplier                        =   63791007;
     Actor_health_Multiplier                           =   992112634;
-    Actor_localX_Multiplier                           =   964999791;
-    Actor_localY_Multiplier                           =   -891686403;
+    Actor_localY_Multiplier                           =   964999791;
+    Actor_localX_Multiplier                           =   -891686403;
     Actor_combatCycle_Multiplier = -836843363;
 
 {*CacheableNodeQueue*}
@@ -267,7 +267,7 @@ WallObject_hash_Multiplier = 1851785047;
 		Client_MenuOptions = 'client.iy';
 
 {*Client Multipliers*}
-    client_menuCount_Multiplier                       =   -1542599581;
+    client_menuCount_Multiplier                       =   1033279235;
     client_baseY_Multiplier                           =   -682157329;
     client_baseX_Multiplier                           =   1345223581;
     client_menuWidth_Multiplier                       =   -870011074;
