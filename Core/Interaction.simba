@@ -229,3 +229,72 @@ begin
     end;
   end;
 end;
+
+function R_ClosestBankBooth: TPoint;
+var
+  Bankers: TNPCArray;
+  me: TPoint;
+  i, CommonX, CommonY: Integer;
+begin
+  Result:= point(-1, -1);
+  Bankers:= R_GetNpcs('Banker');
+  for I := 1 to High(Bankers) do
+  begin
+    if (CommonX = 0) and (Bankers[i].tile.x = Bankers[i-1].tile.x) then
+    begin
+      CommonX:= Bankers[i].tile.x;
+    end;
+    if (CommonY = 0) and (Bankers[i].tile.y = Bankers[i-1].tile.y) then
+    begin
+      CommonY:= Bankers[i].tile.y;
+    end;
+  end;
+  me:= R_GetTileGlobal;
+  if (CommonX > 0) and (me.x < CommonX) then
+    Result:= point(CommonX - 1, Bankers[0].tile.y);
+  if (CommonX > 0) and (me.x > CommonX) then
+    Result:= point(CommonX + 1, Bankers[0].tile.y);
+  if (CommonY > 0) and (me.y < CommonY) then
+    Result:= point(Bankers[0].tile.x, CommonY - 1);
+  if (CommonY > 0) and (me.y > CommonY) then
+    Result:= point(Bankers[0].tile.x, CommonY + 1);
+  if (Result.x < 1) then
+  begin
+    writeln('Couldn''t find any close objects, terminating!');
+    TerminateScript;
+  end;
+end;
+
+function SelectOption(Option: String): Boolean;
+begin
+  Result:= false;
+  if (R_IsUpText(Option)) then
+  begin
+    ClickMouse2(Mouse_Left);
+    Result:= true;
+  end else
+    if (R_IsUpAction) then
+    begin
+      ClickMouse2(Mouse_Right);
+      Result:= ChooseOption(Option);
+    end;
+end;
+
+function InteractTile(Tile: TPoint; Option: String): Boolean;
+var
+  i: Integer;
+begin
+  Result:= false;
+  repeat
+    R_MouseTile(Tile, 15, 15, Mouse_Move);
+    wait(100 + random(50));
+    if (SelectOption(Option)) then
+    begin
+      i:= 40;
+      Result:= true;
+    end;
+    inc(i);
+    if ((i < 41) and (random(100) > 50)) then
+      RandomMovement;
+  until(i > 40);
+end;
