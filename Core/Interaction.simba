@@ -265,7 +265,7 @@ begin
   end;
 end;
 
-function SelectOption(Option: String): Boolean;
+function R_SelectOption(Option: String): Boolean;
 begin
   Result:= false;
   if (R_IsUpText(Option)) then
@@ -280,7 +280,7 @@ begin
     end;
 end;
 
-function InteractTile(Tile: TPoint; Option: String): Boolean;
+function R_InteractTile(Tile: TPoint; Option: String): Boolean;
 var
   i: Integer;
 begin
@@ -288,7 +288,7 @@ begin
   repeat
     R_MouseTile(Tile, 15, 15, Mouse_Move);
     wait(100 + random(50));
-    if (SelectOption(Option)) then
+    if (R_SelectOption(Option)) then
     begin
       i:= 40;
       Result:= true;

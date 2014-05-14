@@ -18,7 +18,7 @@ const
 {how randy do you like it?}
 randy = 0;
 {number of tiles between path points}
-PathDistance = 5;
+PathDistance = 1;
 
 Procedure DeclarePlayers;
 begin
