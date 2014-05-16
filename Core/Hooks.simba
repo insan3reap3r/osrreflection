@@ -49,7 +49,7 @@ const
     Actor_interacting                                 =   'ap';
     Actor_localX                                      =   'b';
     Actor_localY                                      =   's';
-    Actor_combatCycle                                 =   'ah.aa';
+    Actor_combatCycle                                 =   'aa';
 
 {*Actor Multipliers*}
     Actor_animation_Multiplier                        =   -987249045;
