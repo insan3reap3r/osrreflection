@@ -262,7 +262,7 @@ const
     client_menuOptions                                =   'client.im';
     client_menuX                                      =   'ad.he';
     client_menuY                                      =   'ex.hf';
-    client_menuWidth                                  =   'client.jf';
+    client_menuWidth                                  =   't.ic';
 
 {*Client Multipliers*}
     client_menuCount_Multiplier                       =   -1155973213;
@@ -283,5 +283,5 @@ const
     client_LoopCycle_Multiplier                       =   757363207;
     client_menuX_Multiplier                           =   -374280439;
     client_menuY_Multiplier                           =   -670697279;
-    client_menuWidth_Multiplier                       =   -1982727047;
+    client_menuWidth_Multiplier                       =   36520921;
 
