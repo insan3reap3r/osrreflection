@@ -20,7 +20,8 @@ begin
     Result:= true;
 end;
 
-{*R_ChooseOptionEx
+{*
+R_ChooseOptionEx
 ~~~~~~~~~~~~
 
 .. code-block:: pascal
@@ -71,6 +72,32 @@ begin
   Result := True;
 end;
 
+{*
+MouseBoxEdit
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure MouseBoxEdit(x1, y1, x2, y2: Integer; ClickType: Integer);
+
+Will move the mouse, even if it is already within the destination box.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
+procedure MouseBoxEdit(x1, y1, x2, y2: Integer; ClickType: Integer);
+var
+  fx, fy: Integer;
+begin
+  GaussBox(fx, fy, x1, y1, x2, y2);
+
+  if InRange(ClickType, mouse_Right, mouse_move) then
+    Mouse(fx, fy, 0, 0, clickType)
+  else
+    srl_Warn('MouseBox', 'ClickType is NOT a valid number!', warn_AllVersions);
+end;
 
 (*
 R_MouseTile
@@ -80,7 +107,7 @@ R_MouseTile
 
     R_MouseTile(Tile: TPoint; ranx, rany, ClickType: Integer): Boolean;
 
-Moves then clicks mouse (will only move if 'mouse_move' passed).
+Moves to Tile then clicks mouse (will only move if 'mouse_move' passed).
 
 .. note::
 
@@ -100,7 +127,7 @@ begin
     Exit;
   Tilex:= iAbs(Tile2.x);
   Tiley:= iAbs(Tile2.y);
-  MouseBox(Tilex-ranx, Tiley-rany, Tilex+ranx, Tiley+rany, ClickType);
+  MouseBoxEdit(Tilex-ranx, Tiley-rany, Tilex+ranx, Tiley+rany, ClickType);
   Result:= true;
 end;
 
@@ -154,7 +181,7 @@ begin
     Exit;
   Tilex:= iAbs(Tile2.x);
   Tiley:= iAbs(Tile2.y);
-  MouseBox(Tilex-5, Tiley-5, Tilex+5, Tiley-5, mouse_move);
+  MouseBoxEdit(Tilex-5, Tiley-5, Tilex+5, Tiley-5, mouse_move);
   wait(203 + random(188));
   if R_IsUpTextMulti(['Close', 'lose', 'ose', 'los', 'Open', 'Ope', 'pen']) then
   begin
@@ -209,7 +236,7 @@ begin
     Exit;
   Tilex:= iAbs(Tile2.x);
   Tiley:= iAbs(Tile2.y);
-  MouseBox(Tilex-2, Tiley-5, Tilex+2, Tiley-5, mouse_move);
+  MouseBoxEdit(Tilex-2, Tiley-5, Tilex+2, Tiley-5, mouse_move);
   wait(303 + random(88));
   if R_IsUpTextMulti(['Close', 'lose', 'ose', 'los', 'Open', 'Ope', 'pen']) then
   begin
@@ -230,15 +257,39 @@ begin
   end;
 end;
 
+{*
+R_ClosestBankBooth
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_ClosestBankBooth: TPoint;
+
+Returns the closest Bank booth Tile in a TPoint.
+Now supports gnome-bankers, ghost-bankers and squire @ pest control.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
 function R_ClosestBankBooth: TPoint;
 var
   Bankers: TNPCArray;
   me: TPoint;
+  BankerTile: TPointArray;
   i, CommonX, CommonY: Integer;
 begin
   Result:= point(-1, -1);
-  Bankers:= R_GetNpcs('Banker');
-  for I := 1 to High(Bankers) do
+  Bankers:= R_GetNpcs('anker');
+  if (Length(Bankers) < 1) then
+    Bankers:= R_GetNpcs('Squire');
+  if (Length(Bankers) < 1) then
+  begin
+    writeln('Couldn''t find any close Bankers, terminating!');
+    TerminateScript;
+  end;
+  for i := 1 to High(Bankers) do
   begin
     if (CommonX = 0) and (Bankers[i].tile.x = Bankers[i-1].tile.x) then
     begin
@@ -250,21 +301,78 @@ begin
     end;
   end;
   me:= R_GetTileGlobal;
-  if (CommonX > 0) and (me.x < CommonX) then
-    Result:= point(CommonX - 1, Bankers[0].tile.y);
-  if (CommonX > 0) and (me.x > CommonX) then
-    Result:= point(CommonX + 1, Bankers[0].tile.y);
-  if (CommonY > 0) and (me.y < CommonY) then
-    Result:= point(Bankers[0].tile.x, CommonY - 1);
-  if (CommonY > 0) and (me.y > CommonY) then
-    Result:= point(Bankers[0].tile.x, CommonY + 1);
-  if (Result.x < 1) then
+  setlength(BankerTile, length(Bankers));
+  for i:=0 to High(Bankers) do
   begin
-    writeln('Couldn''t find any close objects, terminating!');
-    TerminateScript;
+    BankerTile[i]:= Bankers[i].Tile;
   end;
+  SortTPAFrom(BankerTile, me);
+  if (CommonX > 0) and (me.x < CommonX) then
+    Result:= point(CommonX - 1, BankerTile[0].y);
+  if (CommonX > 0) and (me.x > CommonX) then
+    Result:= point(CommonX + 1, BankerTile[0].y);
+  if (CommonY > 0) and (me.y < CommonY) then
+    Result:= point(BankerTile[0].x, CommonY - 1);
+  if (CommonY > 0) and (me.y > CommonY) then
+    Result:= point(BankerTile[0].x, CommonY + 1);
 end;
 
+{*
+R_RandomMovement
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure R_RandomMovement;
+
+Needed a version which didn't change the compass back where it originally was.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
+procedure R_RandomMovement;
+var
+  Keys: TIntegerArray;
+  I: Integer;
+  Deg: Extended;
+begin
+ if(not(LoggedIn))then exit;
+  Keys := [VK_RIGHT, VK_LEFT];
+  I := Random(2);
+ if (Random(2) = I) then
+  begin
+   Wait(100 + random(50));
+   KeyDown(Keys[I]);
+   Wait(500 + random(1000));
+   KeyUp(Keys[I]);
+   Wait(500 + random(1000));
+  end else
+   if (Random(3) = 0) then
+    SleepAndMoveMouse(1000 + random(200));
+end;
+
+{*
+R_SelectOption
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_SelectOption(Option: String): Boolean;
+
+This function is very useful for selecting an option once you have
+moved the mouse, if there is uptext which reads Option, it left clicks, otherwise
+if an action is available, it rightclicks and attempts chooseoption.
+The reason ChooseOption is used and not R_ChooseOption, is because R_ChooseOption
+returns true when it doesn't click the menu item. The whole function was being
+screwed up by this.
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
 function R_SelectOption(Option: String): Boolean;
 begin
   Result:= false;
@@ -280,21 +388,41 @@ begin
     end;
 end;
 
+{*
+R_InteractTile
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_InteractTile(Tile: TPoint; Option: String): Boolean;
+
+A function which moves the mouse to a Tile location on the main screen and
+attempts to select Option. Randomly moves the camera position to get a
+better angle
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
 function R_InteractTile(Tile: TPoint; Option: String): Boolean;
 var
-  i: Integer;
+  i, e: Integer;
 begin
   Result:= false;
+  e:= random(4);
   repeat
+    if (BankScreen) then
+      Exit;
     R_MouseTile(Tile, 15, 15, Mouse_Move);
     wait(100 + random(50));
     if (R_SelectOption(Option)) then
     begin
-      i:= 40;
+      i:= 10;
       Result:= true;
     end;
     inc(i);
-    if ((i < 41) and (random(100) > 50)) then
-      RandomMovement;
-  until(i > 40);
+    if ((i < 11) and (random(100) > 50)) then
+      R_RandomMovement;
+  until(i > (7 + e));
 end;
