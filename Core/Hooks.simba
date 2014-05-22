@@ -48,7 +48,6 @@ const
     Actor_health                                      =   'at';
     Actor_localY                                      =   'q';
     Actor_localX                                      =   'x';
-    Actor_combatCycle                                 =   'aa';
 
 {*Actor Multipliers*}
     Actor_animation_Multiplier                        =   -61834439;
@@ -70,7 +69,6 @@ const
 {*NodeCache*}
     NodeCache                                         =   'fq';
     NodeCache_cacheableNode                           =   'a';
-    NodeCache_cacheableNode                           =   'p';
 
 {*Model*}
     Model                                             =   'cs';
@@ -139,6 +137,7 @@ const
     Region                                            =   'cg';
     Region_sceneObjects                               =   'l';
     Region_sceneTiles                                 =   'k';
+    SceneTile_worldObjects                           =   'i';
 
 {*WallObject*}
     WallObject                                        =   'm';
