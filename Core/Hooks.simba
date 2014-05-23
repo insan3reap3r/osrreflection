@@ -243,14 +243,14 @@ const
     client_weight                                     =   'client.jj';
     client_menuActions                               =   'client.ik';
     client_plane                                     =   'ae.hq';
-    client_npcIndices                                 =   'client.gw';
+    client_npcIndices                               =   'client.bp';
     client_groundItems                                =   'client.hx';
     client_players                                    =   'client.gp';
     client_npcs                                       =   'client.bs';
     client_login_state                               =   'client.d';
     client_widgetSettings                             =   'es.a';
     client_settings                                  =   'es.p';
-    client_LoopCycle                                   =   'client.l';
+    client_LoopCycle                                  =   'client.l';
     client_isMenuOpen                                =   'client.hu';
     client_menuOptions                               =   'client.iv';
     client_menuX                                     =   'e.hh';
@@ -273,7 +273,7 @@ const
     client_weight_Multiplier                          =   731471715;
     client_plane_Multiplier                          =   -146619895;
     client_login_state_Multiplier                    =   -1735346293;
-    client_LoopCycle_Multiplier                        =   757363207;
+    client_LoopCycle_Multiplier                      =   -1917958055;
     client_menuX_Multiplier                          =   -168932945;
     client_menuY_Multiplier                          =   501178119;
     client_menuWidth_Multiplier                      =   -162935831;

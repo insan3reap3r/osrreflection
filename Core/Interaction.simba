@@ -336,7 +336,6 @@ procedure R_RandomMovement;
 var
   Keys: TIntegerArray;
   I: Integer;
-  Deg: Extended;
 begin
  if(not(LoggedIn))then exit;
   Keys := [VK_RIGHT, VK_LEFT];
