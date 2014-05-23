@@ -250,7 +250,7 @@ const
     client_login_state                               =   'client.d';
     client_widgetSettings                             =   'es.a';
     client_settings                                  =   'es.p';
-    client_LoopCycle                                  =   'client.l';
+    client_LoopCycle                                =   'client.v';
     client_isMenuOpen                                =   'client.hu';
     client_menuOptions                               =   'client.iv';
     client_menuX                                     =   'e.hh';
