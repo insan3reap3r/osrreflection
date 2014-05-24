@@ -140,16 +140,16 @@ const
     SceneTile_worldObjects                           =   'i';
 
 {*WallObject*}
-    WallObject                                        =   'm';
-    WallObject_hash                                   =   'e';
-    WallObject_orientation                            =   'u';
+    WallObject                                        =   'cz';
+    WallObject_hash                                   =   'f';
+    WallObject_orientation                            =   'g';
 
 {*WallObject Multipliers*}
-    WallObject_hash_Multiplier                        =   -1856597801;
-    WallObject_orientation_Multiplier                 =   -1705544253;
+    WallObject_hash_Multiplier                        =   2002814215;
+    WallObject_orientation_Multiplier                 =   108416551;
 
 {*FloorDecorationObject*}
-    FloorDecorationObject                             =   'l';
+    FloorDecorationObject                             =   'cr';
     FloorDecorationObject_hash                        =   'u';
     FloorDecorationObject_hash_Multiplier             =   -228017819;
     FloorDecorationObject_Get_x                      =   'p';
@@ -158,19 +158,19 @@ const
     FloorDecorationObject_Get_y_Multiplier           =   -330161363;
 
 {*BoundaryObject*}
-    BoundaryObject                                    =   't';
-    BoundaryObject_Get_x                              =   'e';
-    BoundaryObject_Get_y                              =   'g';
-    BoundaryObject_plane                              =   'k';
-    BoundaryObject_orientation                        =   'u';
-    BoundaryObject_hash                               =   'm';
+    BoundaryObject                                    =   'ca';
+    BoundaryObject_Get_x                              =   'p';
+    BoundaryObject_Get_y                              =   'a';
+    BoundaryObject_plane                              =   'e';
+    BoundaryObject_orientation                        =   'g';
+    BoundaryObject_hash                               =   't';
 
 {*BoundaryObject Multipliers*}
-    BoundaryObject_Get_x_Multiplier                   =   570380847;
-    BoundaryObject_Get_y_Multiplier                   =   257102149;
-    BoundaryObject_plane_Multiplier                   =   2020201301;
+    BoundaryObject_Get_x_Multiplier                   =   1565892751;
+    BoundaryObject_Get_y_Multiplier                   =   1411135407;
+    BoundaryObject_plane_Multiplier                   =   570380847;
     BoundaryObject_orientation_Multiplier             =   -1888160489;
-    BoundaryObject_hash_Multiplier                    =   -738002663;
+    BoundaryObject_hash_Multiplier                    =   -1313887037;
 
 {*ItemLayer*}
     ItemLayer                                         =   'cy';
@@ -180,7 +180,7 @@ const
     Region_GetTiles                                   =   'k';
 
 {*WorldObject*}
-    WorldObject                                       =   'c';
+    WorldObject                                       =   'ci';
     WorldObject_hash                                  =   'o';
     WorldObject_Get_x                                 =   'a';
     WorldObject_Get_y                                 =   'g';
