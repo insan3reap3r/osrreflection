@@ -14,7 +14,7 @@ end;
 
 var
   R_Randoms : array[0..14] of R_Random;
-  R_CombatRandoms, R_Reincarnate: Boolean;
+  R_CombatRandoms, R_InventoryRandoms, R_PrayerRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
   R_Deaths: Integer;
 
@@ -193,7 +193,11 @@ begin
   Result := False;
   if (not R_UnderAttack) then
     exit;
-  Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent'];
+  if (R_PrayerRandoms) then
+  begin
+    Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent', 'zombie'];
+  end else
+    Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent'];
   Temp := R_GetAllNpcs;
   for i := 0 to high(Temp) do
   if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
@@ -230,6 +234,8 @@ begin
   Result := False;
   for i := 0 to high(R_Randoms) do
   begin
+    if ((R_Randoms[i].RandName = 'Rewards') and not(R_InventoryRandoms)) then
+      Continue;
     if ({$IFDEF Lape}@{$ENDIF}R_Randoms[i].DetectRandom <> nil) and (R_Randoms[i].DetectRandom()) then
     begin
       Result := True;
