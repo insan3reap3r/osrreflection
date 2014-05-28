@@ -3,7 +3,7 @@
 **    Developed by
 **      Krazy_Meerkat, Frement, Sirenia, NKN and n3ss3s.
 *}
-
+ 
 const
  ReflectionRevision = '49';
 
@@ -274,10 +274,10 @@ const
     client_map_scale_Multiplier                       =   275005369;
     client_map_offset_Multiplier                      =   100607273;
     client_compassAngle_Multiplier                    =   188773915;
-    client_cameraPitch_Multiplier                     =   -295253383;
-    client_cameraYaw_Multiplier                       =   -853412657;
+    client_cameraPitch_Multiplier                      =   978451045;
+    client_cameraYaw_Multiplier                        =   875492681;
     client_cameraX_Multiplier                         =   579382229;
-    client_cameraY_Multiplier                         =   1596040060;
+    client_cameraY_Multiplier                          =   201905125;
     client_cameraZ_Multiplier                         =   282686931;
     client_run_energy_Multiplier                      =   -2075744581;
     client_weight_Multiplier                          =   -1148693389;
