@@ -23,6 +23,58 @@ begin
 end;
 
 (*
+R_VariantToDirection
+~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_VariantToDirection(dir: Variant): Extended;
+
+Converts a variant to a direction, catching errors and attempts to fix. This
+function expects "compass relative" angles. For example: ('n', 's', 'e', 'w') or
+degree (23.3, 25, 205.2) or 'random' (returns 0..360).
+
+.. note::
+
+    by Nava2
+
+Example:
+
+.. code-block:: pascal
+
+    dir := R_VariantToDirection('n');     // -> 0.0
+    dir := R_VariantToDirection('rand');  // -> in range 0..360
+    dir := R_VariantToDirection(50);      // -> 50
+
+*)
+function R_VariantToDirection(dir: Variant): Extended;
+var
+  e: Extended;
+begin
+  if VariantIsNumber(dir) then
+    Result := FixD(dir + 0.0)
+  else if VariantIsString(dir) then
+    case LowerCase(dir) of
+      'n': Result := 0;
+      'e': Result := 90;
+      's': Result := 180;
+      'w': Result := 270;
+      'random', 'rand': Result := RandomRange(0, 360);
+      else
+      begin
+        e := StrToFloatDef(dir, -1337);
+        if (e <> -1337) then
+          Result := FixD(e)
+        else
+        begin
+            writeln('dir [' + toStr(dir) +'] invalid. Returned 0.0 for safety');
+          Result := 0.0;
+        end;
+      end;
+    end;
+end;
+
+(*
 RemoveDeadTPA
 ~~~~~~~~~~~~~~~
 

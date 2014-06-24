@@ -293,3 +293,184 @@ begin
     wait(WaitPerLoop);
   end;
 end;
+
+(*
+R_GetToTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
+
+Walks to the tile using the minimap and reflection.
+Full Anti-Random support while walking!
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+function R_GetToTile(TheTile, NextPoint: TPoint): Boolean;
+var
+   msTile: TPoint;
+   t: Integer;
+begin
+  Result := false;
+  msTile := R_TileToMM(TheTile);
+  if not(rs_OnMiniMap(msTile)) then
+    Exit;
+  t := getsystemtime;
+  if (NextPoint.x = -1) then
+  begin
+    repeat
+      msTile := R_TileToMM(TheTile);
+      Mouse(msTile.x, msTile.y, 1, 1, true);
+      Wait(RandomRange(80, 100));
+      if (not(R_IsWalking)) then
+      begin
+        repeat
+          wait(50+random(50));
+          R_FindNormalRandoms;
+        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
+      end;
+      repeat
+        wait(50+random(50));
+        R_FindNormalRandoms;
+      until(not(R_IsWalking));
+    until((R_NearTile(TheTile, 5)) or ((GetSystemTime - t) > 59999));
+  end;
+  if (NextPoint.x > -1) then
+  begin
+    repeat
+      msTile := R_TileToMM(TheTile);
+      Mouse(msTile.x, msTile.y, 1, 1, true);
+      Wait(RandomRange(80, 100));
+      if (not(R_IsWalking)) then
+      begin
+        repeat
+          wait(50+random(50));
+          R_FindNormalRandoms;
+        until(R_IsWalking or ((GetSystemTime - t) > (1000+random(500))));
+      end;
+      repeat
+        wait(50+random(50));
+        R_FindNormalRandoms;
+      until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or not(R_IsWalking));
+    until((R_NearTile(TheTile, 5) and R_TileOnMM(NextPoint)) or ((GetSystemTime - t) > 59999));
+  end;
+  Result := (GetSystemTime - t) < 60000;
+end;
+
+
+(*
+R_WebWalk
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_WebWalk(T: TPoint): Boolean;
+
+Walks blindly using WindPath!
+
+.. note::
+
+  by JuKKa, Modified by Krazy_Meerkat
+
+*)
+function R_WebWalk(T: TPoint): Boolean;
+var
+  I: Integer;
+  M: TPoint;
+  CTRLPoints: TPointArray;
+begin
+  Result:= false;
+  repeat
+    M := R_GetTileGlobal;
+    CtrlPoints := r_WindPath(M.x, M.y, T.X, T.Y, 5.0, 2.5, 0.0, 0.0, 4.5, 2.5);
+    for I:= High(CtrlPoints) DownTo 0 Do
+      if (I = 0) then
+      begin
+        if R_GetToTile(CtrlPoints[i], Point(-1,-1)) Then
+        begin
+          Result := I = High(CtrlPoints);
+          Break;
+        end;
+      end else
+      begin
+        if R_GetToTile(CtrlPoints[i], CtrlPoints[i-1]) Then
+        begin
+          Result := I = High(CtrlPoints);
+          Break;
+        end;
+      end;
+  until(Result);
+end;
+
+(*
+R_PerfectPath
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    R_PerfectPath(Path: TPointArray);
+
+Walks the path like a human would, if a point isn't visible on the MM it
+uses WebWalk until the point becomes visable. Works with any amount of
+path points at any distance apart.
+Full Anti-Random support while walking!
+
+.. note::
+
+  by Krazy_Meerkat
+
+*)
+procedure R_PerfectPath(Path: TPointArray);
+var
+  i, e, f, g: Integer;
+  tpa: TPointArray;
+begin
+  f:= 0;
+  SetArrayLength(TPA, length(Path));
+  for i:= 0 to high(path) do
+    TPA[i]:= Path[i];
+  SortTPAFrom(TPA, R_GetTileGlobal);
+  for g := 0 to high(path) do
+    if ((TPA[0].x=path[g].x) and (TPA[0].y=path[g].y)) then
+      f := g;
+  for i:= f to High(Path) do
+  begin
+    if (i = High(Path)) then
+    begin
+      repeat
+        wait(100+random(50));
+        if not(R_NearTile(Path[i], 100)) then Exit;
+        if not(R_TileOnMM(Path[i])) then
+          R_WebWalk(Path[i]);
+      until(R_GetToTile(Path[i], Point(-1,-1)));
+    end else
+    begin
+      for e:= f to High(Path) do
+      begin
+        if R_TileOnMM(Path[e]) then
+          i:= e;
+      end;
+      if (i = High(Path)) then
+      begin
+        repeat
+          wait(100+random(50));
+        if not(R_NearTile(Path[i], 100)) then Exit;
+          if not(R_TileOnMM(Path[i])) then
+            R_WebWalk(Path[i]);
+        until(R_GetToTile(Path[i], Point(-1,-1)));
+      end else
+      begin
+        repeat
+          wait(100+random(50));
+        if not(R_NearTile(Path[i], 100)) then Exit;
+          if not(R_TileOnMM(Path[i])) then
+            R_WebWalk(Path[i]);
+        until(R_GetToTile(Path[i], Path[i+1]));
+      end;
+    end;
+  end;
+end;

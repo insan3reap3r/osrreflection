@@ -188,6 +188,89 @@ begin
 end;
 
 (*
+R_MakeCompass
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_MakeCompass(Direction: Variant): Boolean;
+
+Aligns RS to specified direction
+   - Enter a compass angle ('n', 's', 'e', 'w') or degree (23.3, 25, 205.2)
+      and it will move the compass to that angle. Also accepts 'random',
+      and 'rand' to make the compass a random direction.
+    - Uses Reflection.
+
+.. note::
+
+    by Nielsie95 & Nava2
+    Modified by Krazy_Meerkat
+
+Example:
+
+.. code-block:: pascal
+
+    // using a string!
+    R_MakeCompass('N');
+
+    // using an integer!
+    R_MakeCompass(0);
+
+*)
+
+// Helper function for MakeCompass to clean up code
+// Compares Angle and DirectionDeg to see how far away it is
+function R_MakeCompass_MinCheck(Angle, DirectionDeg: Extended): Extended;
+begin
+  Result := MinE(Abs(Angle - (DirectionDeg + 360)), Abs((Angle + 360) - DirectionDeg));
+  Result := MinE(Abs(Angle - DirectionDeg), Result);
+end;
+
+function R_MakeCompass(Direction: Variant): Boolean;
+var
+  StartAngle, Angle, DirectionDeg, i: Extended;
+  Left: Boolean;
+  Mark: Integer;
+begin
+  Result := False;
+  StartAngle := (360-R_GetMinimapAngleDeg);
+  if ((StartAngle < 0) or (not LoggedIn)) then Exit;
+
+  // convert from variant to direction:
+  DirectionDeg := R_VariantToDirection(Direction);
+
+  if (R_MakeCompass_MinCheck(StartAngle, DirectionDeg) <= 8.0) then
+  begin
+    Result := True;
+    Exit;
+  end;
+  Left := (Round((360 - StartAngle) + DirectionDeg) mod 360 <= Round((StartAngle + 360) - DirectionDeg) mod 360);
+  KeyDown((Ord(not Left) * 2) + 37);
+  Wait(10);
+  MarkTime(Mark);
+  i := 0.0;
+  repeat
+    Wait(16);
+    Angle:= (360-R_GetMinimapAngleDeg);
+    if (((TimeFromMark(Mark) > 6000)  and (i < 1.0)) or
+        ((TimeFromMark(Mark) > 10000) and (i < 2.0)) or
+        ((TimeFromMark(Mark) > 14000) and (i < 3.0))) then
+    begin
+      i := i + 1.0;
+    end;
+   // TODO: simplify the maths?
+  until ((Angle < 0) or
+    (TimeFromMark(Mark) > 14000) or
+    (R_MakeCompass_MinCheck(Angle, DirectionDeg) <= (7.0 + i)));
+  if Left then
+    KeyUp(VK_Left)
+  else
+    KeyUp(VK_Right);
+  Wait(10);
+  Result := (R_MakeCompass_MinCheck(Angle, DirectionDeg) <= (7.0 + i));
+end;
+
+(*
 R_GetTileGlobal
 ~~~~~~~~~~~
 

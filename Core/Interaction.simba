@@ -396,8 +396,7 @@ R_InteractTile
     function R_InteractTile(Tile: TPoint; Option: String): Boolean;
 
 A function which moves the mouse to a Tile location on the main screen and
-attempts to select Option. Randomly moves the camera position to get a
-better angle
+attempts to select Option.
 
 .. note::
 
@@ -405,23 +404,47 @@ better angle
 
 *}
 function R_InteractTile(Tile: TPoint; Option: String): Boolean;
+begin
+  if (BankScreen) then
+    Exit;
+  R_MouseTile(Tile, 15, 15, Mouse_Move);
+  wait(100 + random(50));
+  Result:= R_SelectOption(Option);
+end;
+
+{*
+R_InteractTileWait
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_InteractTileWait(Tile: TPoint; Option: String; Timeout: Integer): Boolean;
+
+A function which moves the mouse to a Tile location on the main screen and
+attempts to select Option within Timeout ms. Randomly moves the camera position to get a
+better angle
+
+.. note::
+
+  by Krazy_Meerkat
+
+*}
+function R_InteractTileWait(Tile: TPoint; Option: String; Timeout: Integer): Boolean;
 var
-  i, e: Integer;
+  i: Integer;
+  deg: Extended;
 begin
   Result:= false;
-  e:= random(4);
+  deg:= (360-R_GetMinimapAngleDeg);
+  i := GetSystemTime;
   repeat
     if (BankScreen) then
       Exit;
     R_MouseTile(Tile, 15, 15, Mouse_Move);
     wait(100 + random(50));
-    if (R_SelectOption(Option)) then
-    begin
-      i:= 10;
-      Result:= true;
-    end;
-    inc(i);
-    if ((i < 11) and (random(100) > 50)) then
+    Result:= R_SelectOption(Option);
+    if (((GetSystemTime - i) < Timeout) and not(Result) and (random(100) > 50)) then
       R_RandomMovement;
-  until(i > (7 + e));
+  until (((GetSystemTime - i) > Timeout) or (Result));
+  R_MakeCompass(deg);
 end;
