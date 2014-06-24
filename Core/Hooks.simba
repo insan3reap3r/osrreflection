@@ -250,7 +250,7 @@ const
     client_map_offset                                 =   'client.do';
     client_compassAngle                               =   'client.fb';
     client_menuOptions                                =   'client.ic';
-    client_menuWidth                                  =   'cf.hn';
+    client_menuWidth                                  =   'u.ia';
     client_menuHeight                                  =   'aw.ij';
     client_isMenuOpen                                 =   'client.hz';
     client_cameraPitch                                =   'bd.fm';
@@ -273,9 +273,9 @@ const
     client_widgetSettings                             =   'ez.x';
     client_settings                                   =   'ez.u';
     client_LoopCycle                                  =   'client.i';
-    client_MenuX                                    =   'u.ia';
+    client_MenuX                                    =   'cf.hn';
     client_MenuY                                    =   'k.hp';
-    client_MenuX_Multiplier                                    =   -1370598807;
+    client_MenuX_Multiplier                                    =   -1861005033;
     client_MenuY_Multiplier                                    =   1839474867;
 
 {*Client Multipliers*}
@@ -285,7 +285,7 @@ const
     client_map_scale_Multiplier                       =   -647466117;
     client_map_offset_Multiplier                      =   -1001429641;
     client_compassAngle_Multiplier                    =   -1059769067;
-    client_menuWidth_Multiplier                       =   -1861005033;
+    client_menuWidth_Multiplier                       =   -1370598807;
     client_menuHeight_Multiplier                       =   1744742541;
     client_cameraPitch_Multiplier                     =   1604613207;
     client_cameraYaw_Multiplier                       =   455763763;
