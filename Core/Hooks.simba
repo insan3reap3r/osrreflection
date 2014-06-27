@@ -7,294 +7,279 @@
 *}
  
 const
- ReflectionRevision = '51';
+ ReflectionRevision = '52';
 
 {*Node*}
-    Node                                              =   'ge';
-    Node_prev                                         =   'ew';
-    Node_id                                           =   'do';
-    Node_next                                         =   'eq';
+    Node                                              =   'gb';
+    Node_prev                                         =   'ef';
+    Node_id                                           =   'df';
+    Node_next                                         =   'ej';
 
 {*CacheableNode*}
-    CacheableNode                                     =   'ff';
-    CacheableNode_next                                =   'cw';
-    CacheableNode_prev                                =   'cj';
+    CacheableNode                                     =   'fe';
+    CacheableNode_next                                =   'cd';
+    CacheableNode_prev                                =   'ch';
 
 {*LinkedList*}
     LinkedList                                        =   'fa';
-    LinkedList_next                                   =   'u';
-    LinkedList_head                                   =   'b';
+    LinkedList_head                                   =   'j';
+    LinkedList_next                                   =   'z';
 
 {*Stream*}
-    Stream                                            =   'dh';
-    Stream_getUnsignedByte                            =   'dh.h';
-    Stream_getUnsignedLEShort                         =   'dh.w';
-    Stream_getShort                                   =   'dh.z';
-    Stream_getString                                  =   'dh.al';
+    Stream                                            =   'de';
+    Stream_getUnsignedByte                            =   'de.d';
+    Stream_getUnsignedLEShort                         =   'de.s';
+    Stream_getShort                                   =   'de.m';
+    Stream_getString                                  =   'de.w';
 
 {*Renderable*}
-    Renderable                                        =   'bn';
-    Renderable_height                                 =   'ci';
+    Renderable                                        =   'bv';
+    Renderable_height                                 =   'cc';
 
 {*Renderable Multipliers*}
-    Renderable_height_Multiplier                      =   17340841;
+    Renderable_height_Multiplier                      =   -1694915813;
 
 {*Actor*}
-    Actor                                             =   'ar';
-    Actor_hitDamages                                  =   'ag';
-    Actor_activeText                                  =   'ar';
-    Actor_pathX                                       =   'bo';
-    Actor_pathY                                       =   'bc';
-    Actor_animation                                   =   'ah';
-    Actor_maxHealth                                   =   'ao';
-    Actor_health                                      =   'aw';
-    Actor_interacting                                 =   'aq';
-    Actor_localX                                      =   'a';
-    Actor_localY                                      =   'w';
-    Actor_CombatCycle                                      =   'bf';
+    Actor                                             =   'ag';
+    Actor_hitDamages                                  =   'at';
+    Actor_activeText                                  =   'ag';
+    Actor_pathX                                       =   'by';
+    Actor_pathY                                       =   'bn';
+    Actor_animation                                   =   'as';
+    Actor_interacting                                 =   'au';
+    Actor_maxHealth                                   =   'az';
+    Actor_health                                      =   'am';
+    Actor_localX                                      =   'm';
+    Actor_localY                                      =   'v';
+    Actor_combatCycle                                 =   'ay';
 
 {*Actor Multipliers*}
-    Actor_animation_Multiplier                        =   174962955;
-    Actor_maxHealth_Multiplier                        =   305248287;
-    Actor_health_Multiplier                           =   -2001948918;
-    Actor_interacting_Multiplier                      =   1869653509;
-    Actor_localX_Multiplier                           =   1492183441;
-    Actor_localY_Multiplier                           =   -2036211851;
-    Actor_CombatCycle_Multiplier                           =   -580165641;
+    Actor_animation_Multiplier                        =   346868905;
+    Actor_interacting_Multiplier                      =   718341389;
+    Actor_maxHealth_Multiplier                        =   -1034371255;
+    Actor_health_Multiplier                           =   -2056184474;
+    Actor_localX_Multiplier                           =   -1283739801;
+    Actor_localY_Multiplier                           =   -1308082377;
+    Actor_combatCycle_Multiplier                      =   -631709259;
 
 {*CacheableNodeQueue*}
-    CacheableNodeQueue                                =   'fz';
-    CacheableNodeQueue_getHead                        =   'b';
+    CacheableNodeQueue                                =   'fy';
+    CacheableNodeQueue_getHead                        =   'j';
 
 {*NodeHashTable*}
-    NodeHashTable                                     =   'fg';
-    NodeHashTable_getNodes                            =   'u';
-    NodeHashTable_getSize                             =   'o';
+    NodeHashTable                                     =   'fm';
+    NodeHashTable_getNodes                            =   'z';
 
 {*NodeCache*}
-    NodeCache                                         =   'fj';
-    NodeCache_cacheableNode                           =   'b';
-    NodeCache_hashTable                               =   'j';
-    NodeCache_remaining                               =   'x';
-    NodeCache_size                                    =   'b';
+    NodeCache                                         =   'fn';
+    NodeCache_cacheableNode                           =   'z';
 
 {*Model*}
-    Model                                             =   'cu';
-    Model_trianglesX                                  =   'l';
-    Model_trianglesY                                  =   'k';
-    Model_trianglesZ                                  =   'q';
-    Model_verticesX                                   =   'n';
-    Model_verticesY                                   =   'y';
-    Model_verticesZ                                   =   'f';
+    Model                                             =   'cl';
+    Model_trianglesX                                  =   'a';
+    Model_trianglesY                                  =   'q';
+    Model_trianglesZ                                  =   'i';
+    Model_verticesX                                   =   'e';
+    Model_verticesY                                   =   'k';
+    Model_verticesZ                                   =   'b';
 
 {*StringStorage*}
-    StringStorage                                     =   'et';
+    StringStorage                                     =   'eq';
 
 {*ItemDefinition*}
-    ItemDefinition                                    =   'aq';
-    ItemDefinition_groundActions                      =   's';
-    ItemDefinition_inventoryActions                   =   'r';
-    ItemDefinition_name                               =   'l';
-    ItemDefinition_isMembers                          =   'x';
+    ItemDefinition                                    =   'au';
+    ItemDefinition_groundActions                      =   'l';
+    ItemDefinition_inventoryActions                   =   'w';
+    ItemDefinition_name                               =   'a';
+    ItemDefinition_isMembers                          =   'y';
 
 {*Item*}
-    Item                                              =   'r';
-    Item_id                                           =   'b';
-    Item_stackSize                                    =   'u';
+    Item                                              =   'w';
+    Item_id                                           =   'j';
+    Item_stackSize                                    =   'z';
 
 {*Item Multipliers*}
-    Item_id_Multiplier                                =   2021265221;
-    Item_stackSize_Multiplier                         =   842627125;
+    Item_id_Multiplier                                =   -1208979173;
+    Item_stackSize_Multiplier                         =   460384345;
 
 {*ObjectDefinition*}
-    ObjectDefinition                                  =   'ap';
-    ObjectDefinition_name                             =   'q';
-    ObjectDefinition_actions                          =   'au';
+    ObjectDefinition                                  =   'av';
+    ObjectDefinition_name                             =   'i';
+    ObjectDefinition_actions                          =   'af';
 
 {*NpcDefinition*}
-    NpcDefinition                                     =   'as';
-    NpcDefinition_actions                             =   'w';
-    NpcDefinition_name                                =   'n';
-    NpcDefinition_id                                  =   'o';
-    NpcDefinition_level                               =   'o';
+    NpcDefinition                                     =   'an';
+    NpcDefinition_actions                             =   'v';
+    NpcDefinition_name                                =   'e';
+    NpcDefinition_id                                  =   'r';
+    NpcDefinition_level                               =   'p';
 
 {*NpcDefinition Multipliers*}
-    NpcDefinition_id_Multiplier                       =   -682460361;
-    NpcDefinition_level_Multiplier                       =   -682460361;
+    NpcDefinition_id_Multiplier                       =   -563242523;
+    NpcDefinition_level_Multiplier                    =   -563242523;
 
 {*Npc*}
-    Npc                                               =   'az';
-    Npc_definition                                    =   'b';
+    Npc                                               =   'ai';
+    Npc_definition                                    =   'j';
 
 {*PlayerDefinition*}
-    PlayerDefinition                                  =   'fe';
-    PlayerDefinition_getAppearanceIndices             =   'k';
-    PlayerDefinition_getAppearance                    =   'b';
+    PlayerDefinition                                  =   'fu';
+    PlayerDefinition_getAppearanceIndices             =   'q';
+    PlayerDefinition_getAppearance                    =   'j';
 
 {*Player*}
-    Player                                            =   'x';
-    Player_model                                      =   'e';
-    Player_name                                       =   'b';
-    Player_definition                                 =   'u';
-    Player_level                                      =   'o';
+    Player                                            =   'y';
+    Player_model                                      =   'f';
+    Player_name                                       =   'j';
+    Player_definition                                 =   'z';
+    Player_level                                      =   'r';
 
 {*Player Multipliers*}
-    Player_level_Multiplier                           =   497909805;
+    Player_level_Multiplier                           =   521196185;
 
 {*Region*}
-    Region                                            =   'ci';
-    Region_sceneObjects                               =   'p';
-    Region_sceneTiles                                 =   'n';
+    Region                                            =   'cc';
+    Region_sceneObjects                               =   'n';
+    Region_sceneTiles                                 =   'e';
 
 {*WallObject*}
-    WallObject                                        =   'f';
-    WallObject_Get_x                                  =   'b';
-    WallObject_Get_y                                  =   'x';
-    WallObject_orientation                            =   'o';
-    WallObject_hash                                   =   'n';
+    WallObject                                        =   'cb';
+    WallObject_Get_x                                  =   'y';
+    WallObject_Get_y                                  =   'h';
+    WallObject_orientation                            =   'r';
+    WallObject_hash                                   =   'a';
 
 {*WallObject Multipliers*}
-    WallObject_Get_x_Multiplier                       =   -1717162859;
-    WallObject_Get_y_Multiplier                       =   -1717162859;
-    WallObject_orientation_Multiplier                 =   -1300601877;
-    WallObject_hash_Multiplier                        =   1459328229;
+    WallObject_Get_x_Multiplier                       =   1067256453;
+    WallObject_Get_y_Multiplier                       =   918945475;
+    WallObject_orientation_Multiplier                 =   314372237;
+    WallObject_hash_Multiplier                        =   -2032013177;
 
 {*FloorDecorationObject*}
-    FloorDecorationObject                             =   'p';
-    FloorDecorationObject_Get_y                       =   'x';
-    FloorDecorationObject_Get_x                       =   'b';
-    FloorDecorationObject_hash                        =   'o';
-
-{*FloorDecorationObject Multipliers*}
-    FloorDecorationObject_Get_y_Multiplier            =   -34521833;
-    FloorDecorationObject_Get_x_Multiplier            =   -34521833;
-    FloorDecorationObject_hash_Multiplier             =   432785533;
+    FloorDecorationObject                             =   'co';
+    FloorDecorationObject_Get_x                       =   'y';
+    FloorDecorationObject_Get_y                       =   'h';
+    FloorDecorationObject_hash                        =   'r';
+    FloorDecorationObject_Get_x_Multiplier            =   1987689607;
+    FloorDecorationObject_Get_y_Multiplier            =   -344449963;
+    FloorDecorationObject_hash_Multiplier             =   -62010579;
 
 {*BoundaryObject*}
-    BoundaryObject                                    =   'y';
-    BoundaryObject_Get_x                              =   'b';
-    BoundaryObject_Get_y                              =   'x';
-    BoundaryObject_plane                              =   'n';
-    BoundaryObject_orientation                        =   'o';
-    BoundaryObject_hash                               =   'f';
+    BoundaryObject                                    =   'ch';
+    BoundaryObject_Get_x                              =   'y';
+    BoundaryObject_Get_y                              =   'h';
+    BoundaryObject_orientation                        =   'r';
+    BoundaryObject_hash                               =   'b';
 
 {*BoundaryObject Multipliers*}
-    BoundaryObject_Get_x_Multiplier                   =   -2085922821;
-    BoundaryObject_Get_y_Multiplier                   =   1660397539;
-    BoundaryObject_plane_Multiplier                   =   1113331615;
-    BoundaryObject_orientation_Multiplier             =   1447431393;
-    BoundaryObject_hash_Multiplier                    =   -946215277;
+    BoundaryObject_Get_x_Multiplier                   =   1920246735;
+    BoundaryObject_Get_y_Multiplier                   =   688028895;
+    BoundaryObject_orientation_Multiplier             =   -1409784601;
+    BoundaryObject_hash_Multiplier                    =   -107201215;
 
 {*ItemLayer*}
-    ItemLayer                                         =   'cp';
-    ItemLayer_Get_y                                   =   'x';
-
-{*ItemLayer Multipliers*}
-    ItemLayer_Get_y_Multiplier                        =   439781633;
+    ItemLayer                                         =   'ct';
 
 {*SceneTile*}
-    SceneTile                                         =   'cd';
-    Region_GetTiles                                   =   'n';
-    SceneTile_worldObjects                            =   'q';
+    SceneTile                                         =   'ca';
+    Region_GetTiles                                   =   'e';
+    SceneTile_WorldObjects                            =   'i';
 
 {*WorldObject*}
-    WorldObject                                       =   'c';
-    WorldObject_hash                                  =   'e';
-    WorldObject_Get_x                                 =   'j';
-    WorldObject_Get_y                                 =   'x';
-    WorldObject_height                                =   'u';
-    WorldObject_plane                                 =   'b';
-    WorldObject_orientation                           =   'n';
-    WorldObject_Flags                                 =   't';
+    WorldObject                                       =   'cz';
+    WorldObject_hash                                  =   'f';
+    WorldObject_Get_x                                 =   'h';
+    WorldObject_Get_y                                 =   'r';
+    WorldObject_height                                =   'y';
+    WorldObject_plane                                 =   'j';
+    WorldObject_orientation                           =   'e';
+    WorldObject_Flags                                 =   'o';
 
 {*WorldObject Multipliers*}
-    WorldObject_hash_Multiplier                       =   -1262288403;
-    WorldObject_Get_x_Multiplier                      =   1166041003;
-    WorldObject_Get_y_Multiplier                      =   -1717162859;
-    WorldObject_height_Multiplier                     =   -1875818113;
-    WorldObject_plane_Multiplier                      =   -1017845631;
-    WorldObject_orientation_Multiplier                =   -53269139;
-    WorldObject_Flags_Multiplier                      =   -989902813;
+    WorldObject_hash_Multiplier                       =   -1448524597;
+    WorldObject_Get_x_Multiplier                      =   -1521310019;
+    WorldObject_Get_y_Multiplier                      =   1563783995;
+    WorldObject_height_Multiplier                     =   -1852292595;
+    WorldObject_plane_Multiplier                      =   -1061781103;
+    WorldObject_orientation_Multiplier                =   -940565287;
+    WorldObject_Flags_Multiplier                      =   2142440351;
 
 {*Widget*}
-    Widget                                            =   'ec';
-    Widget_getRelativeX                               =   'x';
-    Widget_getRelativeY                               =   'h';
-    Widget_getActions                                 =   'bg';
-    Widget_getText                                    =   'bp';
-    Widget_getItems                                   =   'dd';
-    Widget_getStackSizes                              =   'dn';
-    Widget_getID                                      =   't';
+    Widget                                            =   'em';
+    Widget_getRelativeX                               =   's';
+    Widget_getRelativeY                               =   'g';
+    Widget_getActions                                 =   'bu';
+    Widget_getID                                      =   'f';
+    Widget_getText                                    =   'bt';
+    Widget_getItems                                   =   'dl';
+    Widget_getStackSizes                              =   'dr';
     Widget_height                                     =   'z';
-    Widget_width                                      =   'w';
-    Widget_getIndex                                   =   'g';
+    Widget_width                                      =   'v';
 
 {*Widget Multipliers*}
-    Widget_getRelativeX_Multiplier                    =   -709965361;
-    Widget_getRelativeY_Multiplier                    =   -1281949645;
-    Widget_getID_Multiplier                           =   -931968065;
-    Widget_height_Multiplier                          =   1612421837;
-    Widget_width_Multiplier                           =   1867215267;
-    Widget_getIndex_Multiplier                        =   715197253;
+    Widget_getRelativeX_Multiplier                    =   -1124070965;
+    Widget_getRelativeY_Multiplier                    =   1271518477;
+    Widget_getID_Multiplier                           =   1835939729;
+    Widget_width_Multiplier                           =   1887184409;
 
 {*Client*}
-    client_region                                     =   'c.dn';
-    client_menuCount                                  =   'client.is';
-    client_baseY                                      =   'l.cg';
-    client_baseX                                      =   'ak.ce';
-    client_menuActions                                =   'client.in';
-    client_widgets                                    =   'ec.b';
-    client_groundHeights                              =   'n.b';
-    client_player                                     =   'z.hs';
-    client_map_scale                                  =   'client.dc';
-    client_map_offset                                 =   'client.do';
-    client_compassAngle                               =   'client.fb';
-    client_menuOptions                                =   'client.ic';
-    client_menuWidth                                  =   'u.ia';
-    client_menuHeight                                  =   'aw.ij';
-    client_isMenuOpen                                 =   'client.hz';
-    client_cameraPitch                                =   'bd.fm';
-    client_cameraYaw                                  =   'c.fk';
-    client_cameraX                                    =   'e.fn';
-    client_cameraY                                    =   'j.fr';
-    client_cameraZ                                    =   'bd.fw';
-    client_plane                                      =   'ce.hg';
-    client_groundSettings                             =   'n.u';
-    client_levels                                     =   'client.hf';
-    client_real_levels                                =   'client.hv';
-    client_experiences                                =   'client.hr';
-    client_run_energy                                 =   'client.jx';
-    client_weight                                     =   'client.jb';
-    client_npcIndices                                 =   'client.bn';
-    client_players                                    =   'client.gg';
-    client_npcs                                       =   'client.bt';
-    client_groundItems                                =   'client.hm';
-    client_login_state                                =   'client.c';
-    client_widgetSettings                             =   'ez.x';
-    client_settings                                   =   'ez.u';
-    client_LoopCycle                                  =   'client.i';
-    client_MenuX                                    =   'cf.hn';
-    client_MenuY                                    =   'k.hp';
-    client_MenuX_Multiplier                                    =   -1861005033;
-    client_MenuY_Multiplier                                    =   1839474867;
+    client_region                                     =   'bb.dr';
+    client_menuCount                                  =   'client.ia';
+    client_baseY                                      =   'client.cu';
+    client_baseX                                      =   'e.ce';
+    client_groundSettings                             =   'e.z';
+    client_widgets                                    =   'em.j';
+    client_groundHeights                              =   'e.j';
+    client_player                                     =   'client.hj';
+    client_map_scale                                  =   'client.dj';
+    client_map_offset                                 =   'client.df';
+    client_compassAngle                               =   'client.fx';
+    client_menuActions                                =   'client.ip';
+    client_menuOptions                                =   'client.is';
+    client_levels                                     =   'client.hn';
+    client_real_levels                                =   'client.hx';
+    client_experiences                                =   'client.ha';
+    client_run_energy                                 =   'client.ja';
+    client_weight                                     =   'client.ji';
+    client_npcIndices                                 =   '.';
+    client_players                                    =   'client.gd';
+    client_groundItems                                =   'client.he';
+    client_npcs                                       =   'client.bc';
+    client_login_state                                =   'client.t';
+    client_widgetSettings                             =   'ea.y';
+    client_settings                                   =   'ea.z';
+    client_MenuX                                      =   'co.hs';
+    client_MenuY                                      =   'av.hg';
+    client_MenuX_Multiplier                           =   1064434231;
+    client_MenuY_Multiplier                           =   1472619701;
+    client_LoopCycle                                  =   'client.d';
+    client_LoopCycle_Multiplier                       =   1836037131;
+    client_plane                                      =   'cb.hi';
+    client_menuwidth                                  =   'af.ir';
+    client_menuheight                                 =   'fz.iv';
+    client_cameraPitch                                =   'cw.fi';
+    client_cameraYaw                                  =   'n.fd';
+    client_cameraX                                    =   'dg.fs';
+    client_cameraY                                    =   'ca.ft';
+    client_cameraZ                                    =   'g.fz';
+    client_menuWidth_Multiplier                       =   -1702543585;
+    client_menuHeight_Multiplier                      =   408425289;
+    client_cameraPitch_Multiplier                     =   -1301731629;
+    client_cameraYaw_Multiplier                       =   -1715187017;
+    client_cameraX_Multiplier                         =   -541413329;
+    client_cameraY_Multiplier                         =   573960223;
+    client_cameraZ_Multiplier                         =   1053895939;
+    client_plane_Multiplier                           =   -1434897979;
+    client_isMenuOpen                                 =   'client.hb';
 
 {*Client Multipliers*}
-    client_menuCount_Multiplier                       =   -1119455237;
-    client_baseY_Multiplier                           =   -1665226661;
-    client_baseX_Multiplier                           =   1604372075;
-    client_map_scale_Multiplier                       =   -647466117;
-    client_map_offset_Multiplier                      =   -1001429641;
-    client_compassAngle_Multiplier                    =   -1059769067;
-    client_menuWidth_Multiplier                       =   -1370598807;
-    client_menuHeight_Multiplier                       =   1744742541;
-    client_cameraPitch_Multiplier                     =   1604613207;
-    client_cameraYaw_Multiplier                       =   455763763;
-    client_cameraX_Multiplier                         =   -1048560663;
-    client_cameraY_Multiplier                         =   -1225114349;
-    client_cameraZ_Multiplier                         =   1735742291;
-    client_plane_Multiplier                           =   1883677805;
-    client_run_energy_Multiplier                      =   700955131;
-    client_weight_Multiplier                          =   -1748678659;
-    client_login_state_Multiplier                     =   -760608305;
-    client_LoopCycle_Multiplier                       =   376361103;
+    client_menuCount_Multiplier                       =   -1031396587;
+    client_baseY_Multiplier                           =   -2112689689;
+    client_baseX_Multiplier                           =   640915389;
+    client_map_scale_Multiplier                       =   -1158978579;
+    client_map_offset_Multiplier                      =   -986795503;
+    client_compassAngle_Multiplier                    =   -1116838697;
+    client_run_energy_Multiplier                      =   -1121464040;
+    client_weight_Multiplier                          =   1630043583;
+    client_login_state_Multiplier                     =   -1546172329;
 
