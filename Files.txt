@@ -58,3 +58,6 @@
 
 (Reflection\Core\Objects.simba)
 (http://osrreflection.googlecode.com/git/Core/Objects.simba)
+
+(Reflection\Core\Widgets.simba)
+(http://osrreflection.googlecode.com/git/Core/Widgets.simba)

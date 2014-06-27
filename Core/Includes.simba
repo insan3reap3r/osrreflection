@@ -7,4 +7,5 @@
 {$include SRL-OSR/SRL/Reflection/Core/Objects.simba}
 {$include SRL-OSR/SRL/Reflection/Core/GroundItems.simba}
 {$include SRL-OSR/SRL/Reflection/Core/Interaction.simba}
+{$include SRL-OSR/SRL/Reflection/Core/Widgets.simba}
 {$include SRL-OSR/SRL/Reflection/AntiRandoms/AntiRandoms.simba}

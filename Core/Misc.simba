@@ -136,7 +136,7 @@ begin
   SetLength(newlist, length(list));
   for ls:=0 to high(list) do
   begin
-    if not(List[ls] = 0) then
+    if not(List[ls] < 1) then
     begin
       newlist[maxlength]:= List[ls];
       maxlength:= maxlength + 1;
