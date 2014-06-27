@@ -53,6 +53,9 @@
 (Reflection\Tools\MainScreen to Tile.simba) 
 (http://osrreflection.googlecode.com/git/Tools/MainScreen%20to%20Tile.simba)
 
+(Reflection\Tools\ID Display.simba) 
+(http://osrreflection.googlecode.com/git/Tools/ID%20Display.simba)
+
 (Reflection\Core\GroundItems.simba)
 (http://osrreflection.googlecode.com/git/Core/GroundItems.simba)
 
