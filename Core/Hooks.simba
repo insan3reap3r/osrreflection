@@ -116,7 +116,7 @@ const
 
 {*NpcDefinition Multipliers*}
     NpcDefinition_id_Multiplier                       =   -563242523;
-    NpcDefinition_level_Multiplier                    =   -563242523;
+    NpcDefinition_level_Multiplier                    =   -545532659;
 
 {*Npc*}
     Npc                                               =   'ai';
@@ -143,7 +143,7 @@ const
     Region_sceneTiles                                 =   'e';
 
 {*WallObject*}
-    WallObject                                        =   'cb';
+    WallObject                                        =   'c';
     WallObject_Get_x                                  =   'y';
     WallObject_Get_y                                  =   'h';
     WallObject_orientation                            =   'r';
@@ -156,7 +156,7 @@ const
     WallObject_hash_Multiplier                        =   -2032013177;
 
 {*FloorDecorationObject*}
-    FloorDecorationObject                             =   'co';
+    FloorDecorationObject                             =   'n';
     FloorDecorationObject_Get_x                       =   'y';
     FloorDecorationObject_Get_y                       =   'h';
     FloorDecorationObject_hash                        =   'r';
@@ -165,7 +165,7 @@ const
     FloorDecorationObject_hash_Multiplier             =   -62010579;
 
 {*BoundaryObject*}
-    BoundaryObject                                    =   'ch';
+    BoundaryObject                                    =   'k';
     BoundaryObject_Get_x                              =   'y';
     BoundaryObject_Get_y                              =   'h';
     BoundaryObject_orientation                        =   'r';
