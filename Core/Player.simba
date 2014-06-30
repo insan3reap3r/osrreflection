@@ -139,12 +139,8 @@ Returns the max number value of your player's health.
 
 *)
 function R_GetMaxHealth: extended;
-var
-  Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
-  Result := (SmartGetFieldInt(SmartCurrentTarget, me, Actor_maxHealth) * Actor_maxHealth_Multiplier);
-  SmartFreeObject(SmartCurrentTarget, me);
+  Result := R_GetMaxSkillLevel(skill_hitpoints);
 end;
 
 (*
@@ -165,9 +161,14 @@ Returns the Current health percentage of player.
 
 function R_GetHealthPercent: extended;
 begin
-  if R_GetHealth = 0 then
+  if (R_GetHealth = 0) then
   begin
     Result := 100;
+    exit;
+  end;
+  if (R_GetMaxHealth = 0) then
+  begin
+    Result := R_GetHealth;
     exit;
   end;
   Result := Round((R_GetHealth / R_GetMaxHealth) * 100);
