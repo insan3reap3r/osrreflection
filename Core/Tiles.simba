@@ -296,6 +296,36 @@ begin
 end;
 
 (*
+R_RotateCameraToTile
+~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_RotateCameraToTile(Tile: Tpoint): Boolean;
+
+Rotates the camera position to face Tile.
+
+.. note::
+
+  Sourced from PowerBot, Modified by Krazy_Meerkat
+
+*)
+function R_RotateCameraToTile(Tile: Tpoint): Boolean;
+var
+  angle: Extended;
+  Me: TPoint;
+begin
+  Me:= R_GetTileGlobal;
+  angle:= (Degrees(ArcTan2(Tile.y - Me.y, Tile.x - Me.x))) - 90;
+  if (angle < 0) then
+  begin
+      angle:= 360 + angle;
+  end;
+  angle:= 360 - angle;
+  Result:= R_MakeCompass(angle);
+end;
+
+(*
 R_DistanceFromTile
 ~~~~~~~~~~~
 

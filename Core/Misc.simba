@@ -55,10 +55,10 @@ begin
     Result := FixD(dir + 0.0)
   else if VariantIsString(dir) then
     case LowerCase(dir) of
-      'n': Result := 0;
-      'e': Result := 90;
-      's': Result := 180;
-      'w': Result := 270;
+      'n', 'north': Result := 0;
+      'e', 'east': Result := 90;
+      's', 'south': Result := 180;
+      'w', 'west': Result := 270;
       'random', 'rand': Result := RandomRange(0, 360);
       else
       begin
