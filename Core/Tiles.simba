@@ -391,7 +391,9 @@ var
   i, numpoints, inside, X, Y: Integer;
 begin
   numpoints := Length(Area);
-  X := R_GetTileGlobal.x Y := R_GetTileGlobal.y if (numpoints < 3) then
+  X := R_GetTileGlobal.x;
+  Y := R_GetTileGlobal.y;
+  if (numpoints < 3) then
     Exit;
   xold := Area[numpoints - 1].X;
   yold := Area[numpoints - 1].Y;
