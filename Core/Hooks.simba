@@ -241,7 +241,7 @@ const
     client_experiences                                =   'client.ha';
     client_run_energy                                 =   'client.ja';
     client_weight                                     =   'client.ji';
-    client_npcIndices                                 =   '.';
+    client_npcIndices                                 =   'client.bv';
     client_players                                    =   'client.gd';
     client_groundItems                                =   'client.he';
     client_npcs                                       =   'client.bc';

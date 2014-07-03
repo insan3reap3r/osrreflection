@@ -1,6 +1,6 @@
 
 var
-  TalkRandomName: string;
+  TalkRandomIndex: Integer;
 
 (*
 R_FindTalk
@@ -22,36 +22,32 @@ var
   i, f: integer;
   PName: String;
   RandList: TStringArray;
-  Temp: TNPCArray;
   loc: TPoint;
 begin
   Result := False;
+  loc := R_GetTileGlobal;
   RandList := ['miles', 'giles', 'sandwhich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
-  Temp := R_GetAllNPCs;
-  for i := 0 to High(Temp) do
-    if (ExactStrInArr(Lowercase(Temp[i].Name), RandList)) then
+  for i := 0 to High(R_FoundNpcs) do
+    if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), RandList)) then
   begin
-    if (not R_NearTile(Temp[i].Tile, 4)) then
-      Exit;
-    PName := lowercase(R_GetPlayerName);
-    TalkRandomName := Temp[i].Name;
+    if (not R_NearTile(R_FoundNpcs[i].Tile, 4)) then
+      Continue;
+    PName := R_GetPlayerName;
+    TalkRandomIndex:= R_FoundNpcs[i].Index;
     MarkTime(f);
-    while Pos(PName, Lowercase(Temp[i].OverHeadText)) <= 0 do
+    while Pos(PName, Lowercase(R_FoundNpcs[i].OverHeadText)) <= 0 do
     begin
-      R_FindNPC(TalkRandomName, Temp[i]);
       wait(200);
       if TimeFromMark(f) > 10000 then
-        exit;
+        Continue;
     end;
-    if lowercase(TalkRandomName) = 'mysterious old man' then
+    if lowercase(R_FoundNpcs[i].Name) = 'mysterious old man' then
     begin
-      loc := R_GetTileGlobal;
-      Wait(RandomRange(5000, 7500));
       if (not R_NearTile(loc, 10)) then
         Exit;
     end;
     Result := True;
-    R_Randoms[13].RandName := TalkRandomName;
+    R_Randoms[13].RandName := R_FoundNpcs[i].Name;
   end;
 end;
 
@@ -78,13 +74,15 @@ var
 begin
   Result := False;
   MarkTime(f);
-  if (TalkRandomName = 'Miles') or (TalkRandomName = 'Giles') or (TalkRandomName = 'Sandwhich lady') then
+  FoundNPC:= R_GetTNPC(TalkRandomIndex);
+  if (FoundNPC.Name = 'Miles') or (FoundNPC.Name = 'Giles') or (FoundNPC.Name = 'Sandwhich lady') then
     Exit;
   begin
     StartLoc := R_GetTileGlobal;
     MarkTime(f);
     repeat
-    if (not R_FindNPC(TalkRandomName, FoundNPC)) then
+    FoundNPC:= R_GetTNPC(TalkRandomIndex);
+    if (not R_NearTile(FoundNPC.Tile, 20)) then
       Break;
     Loc := FoundNPC.Tile;
     Loc := R_TileToMs(Loc);

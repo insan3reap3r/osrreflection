@@ -3,7 +3,6 @@
 {$include_once R_MazeSolve.simba}
 {$include_once R_MimeSolve.simba}
 {$include_once R_PrisonPeteSolve.simba}
-{$include_once R_FrogSolve.simba}
 
 type
   R_Random = record
@@ -17,8 +16,95 @@ var
   R_CombatRandoms, R_InventoryRandoms, R_PrayerRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
   R_Deaths: Integer;
+  R_FoundNpcs: TNPCArray;
 
 {$include_once R_TalkRandoms.simba}
+
+{* R_FrogSolve
++Detection and solving
++By: elfyyy
++
++ ToDo = Add support for frog cave*}
+
+
+(** function R_FindFrog
+ * Description: Finds Frog and checks to see if it is our random
+ *)
+function R_FindFrog: Boolean;
+var
+  TheNulls: TNPCArray;
+  t, i, e:  integer;
+  PName: String;
+begin
+  Result := False;
+  for e := 0 to High(R_FoundNpcs) do
+  if (Pos('Frog', R_FoundNpcs[e].name) > 0) then
+  begin
+    if (not R_NearTile(R_FoundNpcs[e].Tile, 5)) then
+      Exit;
+    PName := lowercase(R_GetPlayerName);
+    TheNulls := R_GetNpcs('null');
+    if length(TheNulls) = 0 then
+      Exit;
+    MarkTime(t);
+    for i := 0 to high(TheNulls) do
+    begin
+      if TimeFromMark(t) > 10000 then
+        Exit;
+      if Pos(PName, Lowercase(TheNulls[i].OverHeadText)) >= 0 then
+      begin
+        Result := True;
+      end;
+      if i = high(TheNulls) then
+      begin
+        TheNulls := R_GetNpcs('null');
+        i := 0;
+      end;
+    end;
+  end;
+end;
+
+(**
+ * function R_SolveFrog
+ * Description: Solves frog random
+ *)
+function R_SolveFrog: Boolean;
+var
+  T: integer;
+  Loc: TPoint;
+  FrogPrincess: TNPC;
+begin
+  MarkTime(T);
+  Result := False;
+  repeat
+  if not R_FindNpc('Frog', FrogPrincess) then
+  begin
+    Result := True;
+    Exit;
+  end;
+  R_FindNpc('Frog', FrogPrincess);
+  Loc := FrogPrincess.Tile;
+  Loc := R_TileToMs(Loc);
+  Mmouse(Loc.x, Loc.y, 0, 0);
+  if R_WaitUptext('Frog', 200) then
+  begin
+    ClickMouse2(Mouse_Left);
+    Wait(5000);
+    ClickToContinue;
+    ChatWait;
+    FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+    ChatWait;
+    ClickToContinue;
+    ChatWait;
+    FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+    ClickToContinue;
+    ClickToContinue;
+    Wait(1500);
+    if (not R_FindNpc('Frog', FrogPrincess)) then
+      Result := True;
+  end;
+  until(result) or (TimeFromMark(T) > 40000)
+end;
 
 (*
 R_SetupRandoms
@@ -202,14 +288,39 @@ begin
   for i := 0 to high(Temp) do
   if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
   begin
-    R_FindNpc(Temp[i].Name, FoundNpc);
-    if (not R_NearTile(FoundNpc.Tile, 10)) then
+    if (not R_NearTile(Temp[i].Tile, 10)) then
       exit
     else
       Result := True;
   end;
   if Result then
-    writeln('[Reflection Anti-Randoms] ''' + (FoundNpc.Name) + ''' Combat random detected! Running away...');
+    writeln('[Reflection Anti-Randoms] ''' + (Temp[i].Name) + ''' Combat random detected! Running away...');
+end;
+
+function R_FindCombatRandomEx(Temp: TNPCArray): boolean;
+var
+  Names: TStringArray;
+  i: integer;
+begin
+  Result := False;
+  if (not R_UnderAttack) then
+    exit;
+  if (R_PrayerRandoms) then
+  begin
+    Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent', 'zombie'];
+  end else
+    Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent'];
+  for i := 0 to high(Temp) do
+  if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
+  begin
+    Temp[i]:= R_GetTNPC(Temp[i].Index);
+    if (not R_NearTile(Temp[i].Tile, 10)) then
+      exit
+    else
+      Result := True;
+  end;
+  if Result then
+    writeln('[Reflection Anti-Randoms] ''' + (Temp[i].Name) + ''' Combat random detected! Running away...');
 end;
 
 (*
@@ -232,6 +343,7 @@ var
   i: integer;
 begin
   Result := False;
+  R_FoundNpcs:= R_GetAllNpcs;
   for i := 0 to high(R_Randoms) do
   begin
     if ((R_Randoms[i].RandName = 'Rewards') and not(R_InventoryRandoms)) then
@@ -256,10 +368,11 @@ begin
     end;
   end;
   if R_CombatRandoms then
-    if R_FindCombatRandom then begin
+    if R_FindCombatRandomEx(R_FoundNpcs) then
+    begin
       R_RunAway(R_RunAwayDirection, 30, True);
-        Exit;
-      end;
+      Exit;
+    end;
   if (R_Return(Result, @FindMod)) then
     Exit;
   if (R_Return(Result, @R_FindDead)) then
