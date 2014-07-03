@@ -137,7 +137,12 @@ begin
         begin
           Result[k] := T[i];
           inc(k);
-        end;
+        end else
+          if Pos('!@#$%', NPC) > 0 then
+          begin
+            Result[k] := T[i];
+            inc(k);
+          end;
         SmartFreeObject(SmartCurrentTarget, NameInt);
       end else
       begin
@@ -151,20 +156,45 @@ begin
       SmartFreeObject(SmartCurrentTarget, NPCNode);
       SmartFreeObject(SmartCurrentTarget, NPCDef);
     end;
-    k := 1;
   end else
   begin
     for i := 0 to s do
     begin
       NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
       NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
-      Result[k] := T[i];
-      inc(k);
+
+      if VariantIsString(NPC) then
+      begin
+        NameInt := SmartGetFieldObject(SmartCurrentTarget, NPCDef, NpcDefinition_name);
+        Name := (Trim(R_GetJavaString(NameInt, 512)));
+        if Pos(NPC, Name) > 0 then
+        begin
+          Result[k] := T[i];
+          inc(k);
+        end else
+          if Pos('!@#$%', NPC) > 0 then
+          begin
+            Result[k] := T[i];
+            inc(k);
+          end;
+        SmartFreeObject(SmartCurrentTarget, NameInt);
+      end else
+      begin
+        TNpcID := SmartGetFieldInt(SmartCurrentTarget, NPCDef, NpcDefinition_id) * NpcDefinition_id_Multiplier;
+        if TNpcID = NPC then
+        begin
+          Result[k] := T[i];
+          inc(k);
+        end;
+      end;
       SmartFreeObject(SmartCurrentTarget, NPCNode);
       SmartFreeObject(SmartCurrentTarget, NPCDef);
     end;
   end;
-  if k = 0 then
+  if VariantIsString(NPC) then
+      if Pos('!@#$%', NPC) > 0 then
+        k:= 0;
+  if (k = 0) then
   begin
     DoIterate := True;
     Temp := R_GetIndices;
@@ -300,7 +330,7 @@ var
   C, I, J, H: Integer;
   NewNPCArray: TNPCArray;
 begin
-  NPCs := R_LoadNPCIndexEx('', False);
+  NPCs := R_LoadNPCIndexEx('!@#$%', False);
   H := High(NPCs);
   SetLength(Result, H + 1);
   for I := 0 to H do begin
