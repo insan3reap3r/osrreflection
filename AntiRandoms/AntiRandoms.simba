@@ -273,7 +273,6 @@ function R_FindCombatRandom: boolean;
 var
   Names: TStringArray;
   Temp: TNPCArray;
-  FoundNpc: TNPC;
   i: integer;
 begin
   Result := False;
@@ -289,9 +288,9 @@ begin
   if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
   begin
     if (not R_NearTile(Temp[i].Tile, 10)) then
-      exit
-    else
-      Result := True;
+      Continue;
+    Result := True;
+    Break;
   end;
   if Result then
     writeln('[Reflection Anti-Randoms] ''' + (Temp[i].Name) + ''' Combat random detected! Running away...');
@@ -316,8 +315,8 @@ begin
     R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
     if (not R_NearTile(R_FoundNpcs[i].Tile, 10)) then
       continue;
-    else
-      Result := True;
+    Result := True;
+    Break;
   end;
   if Result then
     writeln('[Reflection Anti-Randoms] ''' + (R_FoundNpcs[i].Name) + ''' Combat random detected! Running away...');
