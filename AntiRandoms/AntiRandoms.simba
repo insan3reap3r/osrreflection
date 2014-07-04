@@ -297,30 +297,30 @@ begin
     writeln('[Reflection Anti-Randoms] ''' + (Temp[i].Name) + ''' Combat random detected! Running away...');
 end;
 
-function R_FindCombatRandomEx(Temp: TNPCArray): boolean;
+function R_FindCombatRandomEx: boolean;
 var
   Names: TStringArray;
   i: integer;
 begin
   Result := False;
-  if (not R_UnderAttack) then
+  if ((not R_UnderAttack) or (length(R_FoundNpcs) < 1)) then
     exit;
   if (R_PrayerRandoms) then
   begin
     Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent', 'zombie'];
   end else
     Names := ['security guard', 'evil chicken', 'river troll', 'rock golem', 'shade', 'swarm', 'tree spirit', 'ent'];
-  for i := 0 to high(Temp) do
-  if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
+  for i := 0 to high(R_FoundNpcs) do
+  if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), Names)) then
   begin
-    Temp[i]:= R_GetTNPC(Temp[i].Index);
-    if (not R_NearTile(Temp[i].Tile, 10)) then
-      exit
+    R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
+    if (not R_NearTile(R_FoundNpcs[i].Tile, 10)) then
+      continue;
     else
       Result := True;
   end;
   if Result then
-    writeln('[Reflection Anti-Randoms] ''' + (Temp[i].Name) + ''' Combat random detected! Running away...');
+    writeln('[Reflection Anti-Randoms] ''' + (R_FoundNpcs[i].Name) + ''' Combat random detected! Running away...');
 end;
 
 (*
@@ -368,11 +368,12 @@ begin
     end;
   end;
   if R_CombatRandoms then
-    if R_FindCombatRandomEx(R_FoundNpcs) then
-    begin
-      R_RunAway(R_RunAwayDirection, 30, True);
-      Exit;
-    end;
+    if (length(R_FoundNpcs) > 0) then
+      if R_FindCombatRandomEx then
+      begin
+        R_RunAway(R_RunAwayDirection, 30, True);
+        Exit;
+      end;
   if (R_Return(Result, @FindMod)) then
     Exit;
   if (R_Return(Result, @R_FindDead)) then
