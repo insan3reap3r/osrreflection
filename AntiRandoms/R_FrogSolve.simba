@@ -1,0 +1,100 @@
+{* R_FrogSolve
++Detection and Solving
++By: elfyyy and Krazy_Meerkat
++
++*}
+
+(** function R_FindFrog
+ * Description: Finds Frog and checks to see if it is our random
+ *)
+function R_FindFrog: Boolean;
+var
+  TheNulls: TNPCArray;
+  t, i, e:  integer;
+  PName: String;
+begin
+  Result := False;
+  for e := 0 to High(R_FoundNpcs) do
+  if (Pos('Frog', R_FoundNpcs[e].name) > 0) then
+  begin
+    if (not R_NearTile(R_FoundNpcs[e].Tile, 5)) then
+      Exit;
+    PName := lowercase(R_GetPlayerName);
+    TheNulls := R_GetNpcs('null');
+    if length(TheNulls) = 0 then
+      Exit;
+    MarkTime(t);
+    for i := 0 to high(TheNulls) do
+    begin
+      if TimeFromMark(t) > 10000 then
+        Exit;
+      if Pos(PName, Lowercase(TheNulls[i].OverHeadText)) >= 0 then
+      begin
+        Result := True;
+      end;
+      if i = high(TheNulls) then
+      begin
+        TheNulls := R_GetNpcs('null');
+        i := 0;
+      end;
+    end;
+  end;
+end;
+
+(**
+ * function R_SolveFrog
+ * Description: Solves frog random
+ *)
+function R_SolveFrog: Boolean;
+var
+  T, i: integer;
+  Loc: TPoint;
+  FrogPrincess: TNPC;
+begin
+  MarkTime(T);
+  Result := False;
+  repeat
+  for i := 0 to High(R_FoundNpcs) do
+  begin
+    if not R_FindNpc('Frog', FrogPrincess) then
+    begin
+      Result := True;
+      Exit;
+    end;
+    repeat
+      R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
+      R_BlindWalk(R_FoundNpcs[i].Tile);
+      wait(500+random(250));
+      while R_IsWalking do
+        wait(100+random(50));
+      R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
+      Loc := R_FoundNpcs[i].Tile;
+      Loc := R_TileToMs(Loc);
+    until((pointinbox(loc, inttobox(msx1, msy1, msx2, msy2))) or (Timefrommark(T) > 40000));
+    if pointinbox(loc, inttobox(msx1, msy1, msx2, msy2)) then
+      Mmouse(Loc.x, Loc.y, 0, 0);
+    if R_WaitUptext('Frog', 450+random(50)) then
+    begin
+      ClickMouse2(Mouse_Left);
+      wait(500+random(250));
+      while R_IsWalking do
+        wait(100+random(50));
+      ClickToContinue;
+      ChatWait;
+      FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+      ChatWait;
+      ClickToContinue;
+      ChatWait;
+      FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+      ClickToContinue;
+      ClickToContinue;
+      Wait(8500+random(3317));
+      if (not R_FindNpc('Frog', FrogPrincess)) then
+      begin
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+  until(Timefrommark(T) > 300000);
+end;
