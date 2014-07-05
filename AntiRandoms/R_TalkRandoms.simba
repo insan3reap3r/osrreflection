@@ -35,12 +35,14 @@ begin
     PName := R_GetPlayerName;
     TalkRandomIndex:= R_FoundNpcs[i].Index;
     MarkTime(f);
-    while Pos(PName, Lowercase(R_FoundNpcs[i].OverHeadText)) <= 0 do
+    while Pos(Lowercase(PName), Lowercase(R_FoundNpcs[i].OverHeadText)) <= 0 do
     begin
       wait(200);
-      if TimeFromMark(f) > 10000 then
-        Continue;
+      if TimeFromMark(f) > 5000 then
+        Break;
     end;
+    if TimeFromMark(f) > 5000 then
+      Continue;
     if lowercase(R_FoundNpcs[i].Name) = 'mysterious old man' then
     begin
       if (not R_NearTile(loc, 10)) then
