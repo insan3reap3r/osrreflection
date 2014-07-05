@@ -29,11 +29,17 @@
 (Reflection\AntiRandoms\AntiRandoms.simba)
 (http://osrreflection.googlecode.com/git/AntiRandoms/AntiRandoms.simba)
 
+(Reflection\AntiRandoms\R_TalkRandoms.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_TalkRandoms.simba)
+
 (Reflection\AntiRandoms\R_DDSolve.simba)
 (http://osrreflection.googlecode.com/git/AntiRandoms/R_DDSolve.simba)
 
 (Reflection\AntiRandoms\R_ForesterSolve.simba)
 (http://osrreflection.googlecode.com/git/AntiRandoms/R_ForesterSolve.simba)
+
+(Reflection\AntiRandoms\R_FrogSolve.simba)
+(http://osrreflection.googlecode.com/git/AntiRandoms/R_FrogSolve.simba)
 
 (Reflection\AntiRandoms\R_MazeSolve.simba)
 (http://osrreflection.googlecode.com/git/AntiRandoms/R_MazeSolve.simba)
