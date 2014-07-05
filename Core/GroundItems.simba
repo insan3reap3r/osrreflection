@@ -61,6 +61,7 @@ begin
       Break;
     SetLength(Result, Length(Result) + 1);
     Result[High(Result)] := GroundItem(ID * Item_id_Multiplier, Quantity * Item_stackSize_Multiplier, Tile);
+    _Node := _Next;
     _Next := SmartGetFieldObject(SmartCurrentTarget, _Next, Node_next);
     SmartFreeObject(SmartCurrentTarget, _Node);
   end;
