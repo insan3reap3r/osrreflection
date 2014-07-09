@@ -421,6 +421,10 @@ begin
     M := R_GetTileGlobal;
     if (M.X = - 1) then
       Continue;
+    if (Tile.X = - 1) then
+      Continue;
+    if (R_NearTile(Tile, 2)) then
+      Exit;
     if (Length(ctrlPoints) = 0) then
       ctrlPoints := TPABetweenPoints(M, Tile, 5 + Random(2), 2);
     Inc(Tries);
