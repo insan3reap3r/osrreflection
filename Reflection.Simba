@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 78;
+  IncludeRevision = 79;
 
 (*
 CreateNewFiles
@@ -175,6 +175,9 @@ begin
       end;
     finally
       CloseFile(NewFile);
+      writeLn('Reflection update completed.');
+      writeLn('Please restart Simba.');
+      TerminateScript;
     end;
   end else
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Include%20Rev.txt');
