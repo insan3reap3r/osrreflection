@@ -19,7 +19,7 @@ begin
   begin
     for e := 0 to High(R_FoundNpcs) do
     begin
-      if (Pos(Lowercase(R_FoundNpcs[e].Name), 'null frog') >= 0) then
+      if (Pos(Lowercase(R_FoundNpcs[e].Name), ' null frog') > 0) then
       begin
         if (not(R_NearTile(R_FoundNpcs[e].Tile, 8)) or (R_FoundNpcs[e].Interacting <> R_GetPlayerIndex)) then
           Continue;
@@ -46,7 +46,7 @@ begin
   repeat
   for i := 0 to High(R_FoundNpcs) do
   begin
-    if (Pos(Lowercase(R_FoundNpcs[i].Name), 'null frog') >= 0) then //Looks for both 'null' and 'frog' in the npc name
+    if (Pos(Lowercase(R_FoundNpcs[i].Name), ' null frog') > 0) then //Looks for both 'null' and 'frog' in the npc name
     begin
       repeat
         if not R_FindNpc('Frog', FrogPrincess) then

@@ -38,7 +38,7 @@ begin
   Result:= false;
   for i:=0 to high(NpcArray) do
   begin
-    Result:= (Pos(Lowercase(NpcArray[i].Name), Lowercase(NpcName)) >= 0);
+    Result:= (Pos(Lowercase(NpcArray[i].Name), Lowercase(NpcName)) > 0);
     if (Result) then
       Exit;
   end;
