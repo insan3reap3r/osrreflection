@@ -20,7 +20,6 @@ Finds all talking randoms.
 function R_FindTalk: Boolean;
 var
   i, f: integer;
-  PName: String;
   RandList: TStringArray;
   loc: TPoint;
 begin
@@ -28,28 +27,15 @@ begin
   loc := R_GetTileGlobal;
   RandList := ['miles', 'giles', 'sandwhich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
   for i := 0 to High(R_FoundNpcs) do
-    if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), RandList)) then
   begin
-    if (not R_NearTile(R_FoundNpcs[i].Tile, 4)) then
-      Continue;
-    PName := R_GetPlayerName;
-    TalkRandomIndex:= R_FoundNpcs[i].Index;
-    MarkTime(f);
-    while Pos(Lowercase(PName), Lowercase(R_FoundNpcs[i].OverHeadText)) <= 0 do
+    if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), RandList)) then
     begin
-      wait(200);
-      if TimeFromMark(f) > 5000 then
-        Break;
+      if (R_FoundNpcs[i].Interacting <> R_GetPlayerIndex) then
+        Continue;
+      TalkRandomIndex:= R_FoundNpcs[i].Index;
+      Result := True;
+      R_Randoms[13].RandName := R_FoundNpcs[i].Name;
     end;
-    if TimeFromMark(f) > 5000 then
-      Continue;
-    if lowercase(R_FoundNpcs[i].Name) = 'mysterious old man' then
-    begin
-      if (not R_NearTile(loc, 10)) then
-        Exit;
-    end;
-    Result := True;
-    R_Randoms[13].RandName := R_FoundNpcs[i].Name;
   end;
 end;
 
@@ -83,23 +69,23 @@ begin
     StartLoc := R_GetTileGlobal;
     MarkTime(f);
     repeat
-    FoundNPC:= R_GetTNPC(TalkRandomIndex);
-    if (not R_NearTile(FoundNPC.Tile, 20)) then
-      Break;
-    Loc := FoundNPC.Tile;
-    Loc := R_TileToMs(Loc);
-    Mmouse(Loc.x, Loc.y, 0, 0);
-    if R_WaitUptext('Talk to ' + FoundNPC.Name, 200) then
-      ClickMouse2(Mouse_Left)
-    else
-    begin
-      ClickMouse2(Mouse_Right);
-      R_ChooseOption('Talk');
-    end;
-    while R_IsWalking do
-      Wait(RandomRange(1000, 1800));
-    DoConversation('', True);
-    Wait(RandomRange(1400, 2200));
+      FoundNPC:= R_GetTNPC(TalkRandomIndex);
+      if (not(R_NearTile(FoundNPC.Tile, 20)) or not(R_IsValidTNPC(FoundNPC)) or (FoundNpc.Interacting <> R_GetPlayerIndex)) then
+        Break;
+      Loc := FoundNPC.Tile;
+      Loc := R_TileToMs(Loc);
+      Mmouse(Loc.x, Loc.y, 0, 0);
+      if R_WaitUptext('Talk to ' + FoundNPC.Name, 200) then
+        ClickMouse2(Mouse_Left)
+      else
+      begin
+        ClickMouse2(Mouse_Right);
+        R_ChooseOption('Talk');
+      end;
+      while R_IsWalking do
+        Wait(RandomRange(1000, 1800));
+      DoConversation('', True);
+      Wait(RandomRange(1400, 2200));
     until TimeFromMark(f) > 30000;
     if R_NearTile(StartLoc, 20) then
     begin

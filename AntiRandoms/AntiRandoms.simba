@@ -257,7 +257,7 @@ var
   i: integer;
 begin
   Result := False;
-  R_FoundNpcs:= R_GetAllNpcs;
+  R_FoundNpcs:= R_SortNPCs(R_GetAllNpcs);
   for i := 0 to high(R_Randoms) do
   begin
     if ((R_Randoms[i].RandName = 'Rewards') and not(R_InventoryRandoms)) then

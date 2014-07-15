@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 79;
+  IncludeRevision = 80;
 
 (*
 CreateNewFiles
@@ -162,7 +162,7 @@ begin
   if (trim(OnlineVersion) > ReflectionRevision) then
   begin
     writeLn('Hook update available!');
-    writeLn('Updating to revision ' + OnlineVersion);
+    writeLn('Updating Hooks to R' + OnlineVersion);
     try
       NewFileName := includePath + 'SRL-OSR\SRL\Reflection\Core\' + 'Hooks.simba';
       NewFile := Rewritefile(NewFileName, true);
@@ -184,7 +184,7 @@ begin
   if (StrToInt(OnlineVersion) > IncludeRevision) then
   begin
     writeLn('Reflection update available!');
-    writeLn('Updating to revision ' + OnlineVersion);
+    writeLn('Auto-Updating to Version #' + OnlineVersion);
     NewFileName:= GetPage('http://osrreflection.googlecode.com/git/Files.txt');
     Multi:= MultiBetween(NewFileName, '(', ')');
     for i:= 0 to high(Multi) do

@@ -24,6 +24,26 @@ begin
 end;
 
 (*
+R_GetPlayerIndex
+~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetPlayerIndex: Integer;
+
+Returns the Player Index.
+
+.. note::
+
+  by Frement
+
+*)
+function R_GetPlayerIndex: Integer;
+begin
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, 'client.hv') * 1836161929) + 32768;
+end;
+
+(*
 R_IsAnimating
 ~~~~~~~~~~~
 

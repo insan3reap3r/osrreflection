@@ -18,29 +18,13 @@ var
 begin
   Result := False;
   for e := 0 to High(R_FoundNpcs) do
-  if (Pos('Frog', R_FoundNpcs[e].name) > 0) then
   begin
-    if (not R_NearTile(R_FoundNpcs[e].Tile, 5)) then
-      Exit;
-    PName := lowercase(R_GetPlayerName);
-    TheNulls := R_GetNpcs('null');
-    if length(TheNulls) = 0 then
-      Exit;
-    MarkTime(t);
-    for i := 0 to high(TheNulls) do
+    if (Pos(Lowercase(R_FoundNpcs[e].Name), 'null frog') >= 0) then
     begin
-      if TimeFromMark(t) > 10000 then
-        Exit;
-      if Pos(PName, Lowercase(TheNulls[i].OverHeadText)) >= 0 then
-      begin
-        Result := True;
-        R_FrogCurrentTile:= R_GetTileGlobal;
-      end;
-      if i = high(TheNulls) then
-      begin
-        TheNulls := R_GetNpcs('null');
-        i := 0;
-      end;
+      if (not(R_NearTile(R_FoundNpcs[e].Tile, 8)) or (R_FoundNpcs[e].Interacting <> R_GetPlayerIndex)) then
+        Continue;
+      Result := True;
+      R_FrogCurrentTile:= R_GetTileGlobal;
     end;
   end;
 end;
@@ -70,7 +54,7 @@ begin
         end;
         if not(R_NearTile(R_FrogCurrentTile, 50)) then //Teleported to cave
         begin
-          R_FoundNpcs:= R_GetAllNpcs;
+          R_FoundNpcs:= R_SortNPCs(R_GetAllNpcs);
           R_FrogCurrentTile:= R_GetTileGlobal; //Update co-ords so we don't do this multiple times
         end;
         R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
