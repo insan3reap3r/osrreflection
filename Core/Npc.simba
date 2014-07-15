@@ -15,6 +15,35 @@
   end;
   TNPCArray = Array of TNPC;
 
+(*
+R_IsNpcInArray
+~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsNpcInArray(NpcName:String; NpcArray: TNpcArray): Boolean;
+
+Returns true if any npc in the NpcArray has NpcName as it's name.
+Not Case-Sensative but the length has to be exact, it won't find "man" in "woman"
+
+.. note::
+
+  by Krazy Meerkat
+
+*)
+function R_IsNpcInArray(NpcName:String; NpcArray: TNPCArray): Boolean;
+var
+  i: Integer;
+begin
+  Result:= false;
+  for i:=0 to high(NpcArray) do
+  begin
+    Result:= (Pos(Lowercase(NpcArray[i].Name), Lowercase(NpcName)) >= 0);
+    if (Result) then
+      Exit;
+  end;
+end;
+
 function NULL_NPC: TNPC;
  begin
   with Result do

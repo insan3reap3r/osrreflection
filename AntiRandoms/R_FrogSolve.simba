@@ -12,19 +12,21 @@ var
  *)
 function R_FindFrog: Boolean;
 var
-  TheNulls: TNPCArray;
-  t, i, e:  integer;
-  PName: String;
+  e:  integer;
 begin
   Result := False;
-  for e := 0 to High(R_FoundNpcs) do
+  if (R_IsNpcInArray('frog', R_FoundNpcs)) then
   begin
-    if (Pos(Lowercase(R_FoundNpcs[e].Name), 'null frog') >= 0) then
+    for e := 0 to High(R_FoundNpcs) do
     begin
-      if (not(R_NearTile(R_FoundNpcs[e].Tile, 8)) or (R_FoundNpcs[e].Interacting <> R_GetPlayerIndex)) then
-        Continue;
-      Result := True;
-      R_FrogCurrentTile:= R_GetTileGlobal;
+      if (Pos(Lowercase(R_FoundNpcs[e].Name), 'null frog') >= 0) then
+      begin
+        if (not(R_NearTile(R_FoundNpcs[e].Tile, 8)) or (R_FoundNpcs[e].Interacting <> R_GetPlayerIndex)) then
+          Continue;
+        Result := True;
+        R_FrogCurrentTile:= R_GetTileGlobal;
+        Exit;
+      end;
     end;
   end;
 end;
