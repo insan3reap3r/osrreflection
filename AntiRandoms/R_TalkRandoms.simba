@@ -25,7 +25,7 @@ var
 begin
   Result := False;
   loc := R_GetTileGlobal;
-  RandList := ['miles', 'giles', 'sandwhich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
+  RandList := ['niles', 'miles', 'giles', 'sandwich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
   for i := 0 to High(R_FoundNpcs) do
   begin
     if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), RandList)) then
@@ -63,7 +63,7 @@ begin
   Result := False;
   MarkTime(f);
   FoundNPC:= R_GetTNPC(TalkRandomIndex);
-  if (FoundNPC.Name = 'Miles') or (FoundNPC.Name = 'Giles') or (FoundNPC.Name = 'Sandwhich lady') then
+  if (LowerCase(FoundNPC.Name) = 'niles') or (LowerCase(FoundNPC.Name) = 'miles') or (LowerCase(FoundNPC.Name) = 'giles') or (LowerCase(FoundNPC.Name) = 'sandwich lady') then
     Exit;
   begin
     StartLoc := R_GetTileGlobal;
