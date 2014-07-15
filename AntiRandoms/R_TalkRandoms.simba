@@ -1,6 +1,7 @@
 
 var
   TalkRandomIndex: Integer;
+  R_TalkStartLoc: Tpoint;
 
 (*
 R_FindTalk
@@ -25,7 +26,7 @@ var
 begin
   Result := False;
   loc := R_GetTileGlobal;
-  RandList := ['niles', 'miles', 'giles', 'sandwich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
+  RandList := ['molly', 'niles', 'miles', 'giles', 'sandwich lady', 'drunken dwarf', 'genie', 'highwayman', 'dr jekyll', 'cap''n hand', 'security guard', 'rick turpentine','mysterious old man'];
   for i := 0 to High(R_FoundNpcs) do
   begin
     if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), RandList)) then
@@ -34,7 +35,9 @@ begin
         Continue;
       TalkRandomIndex:= R_FoundNpcs[i].Index;
       Result := True;
+      R_TalkStartLoc := R_GetTileGlobal;
       R_Randoms[13].RandName := R_FoundNpcs[i].Name;
+      Exit;
     end;
   end;
 end;
@@ -58,15 +61,14 @@ function R_SolveTalk: Boolean;
 var
   f: integer;
   FoundNPC: TNPC;
-  Loc, StartLoc: Tpoint;
+  Loc: Tpoint;
 begin
   Result := False;
   MarkTime(f);
   FoundNPC:= R_GetTNPC(TalkRandomIndex);
-  if (LowerCase(FoundNPC.Name) = 'niles') or (LowerCase(FoundNPC.Name) = 'miles') or (LowerCase(FoundNPC.Name) = 'giles') or (LowerCase(FoundNPC.Name) = 'sandwich lady') then
+  if (LowerCase(FoundNPC.Name) = 'molly') or (LowerCase(FoundNPC.Name) = 'niles') or (LowerCase(FoundNPC.Name) = 'miles') or (LowerCase(FoundNPC.Name) = 'giles') or (LowerCase(FoundNPC.Name) = 'sandwich lady') then
     Exit;
   begin
-    StartLoc := R_GetTileGlobal;
     MarkTime(f);
     repeat
       FoundNPC:= R_GetTNPC(TalkRandomIndex);
@@ -87,7 +89,7 @@ begin
       DoConversation('', True);
       Wait(RandomRange(1400, 2200));
     until TimeFromMark(f) > 30000;
-    if R_NearTile(StartLoc, 20) then
+    if R_NearTile(R_TalkStartLoc, 20) then
     begin
       Result := True
       exit;

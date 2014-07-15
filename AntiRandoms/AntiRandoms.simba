@@ -202,7 +202,7 @@ begin
   for i := 0 to high(Temp) do
   if (ExactStrInArr(Lowercase(Temp[i].Name), Names)) then
   begin
-    if (not R_NearTile(Temp[i].Tile, 10)) then
+    if (Temp[i].Interacting <> R_GetPlayerIndex) then
       Continue;
     Result := True;
     Break;
@@ -228,7 +228,7 @@ begin
   if (ExactStrInArr(Lowercase(R_FoundNpcs[i].Name), Names)) then
   begin
     R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
-    if (not R_NearTile(R_FoundNpcs[i].Tile, 10)) then
+    if (R_FoundNpcs[i].Interacting <> R_GetPlayerIndex) then
       continue;
     Result := True;
     Break;
