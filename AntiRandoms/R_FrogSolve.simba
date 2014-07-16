@@ -49,15 +49,15 @@ begin
     if (Pos(Lowercase(R_FoundNpcs[i].Name), ' null frog') > 0) then //Looks for both 'null' and 'frog' in the npc name
     begin
       repeat
-        if not R_FindNpc('Frog', FrogPrincess) then
-        begin
-          Result := True;
-          Exit;
-        end;
         if not(R_NearTile(R_FrogCurrentTile, 50)) then //Teleported to cave
         begin
           R_FoundNpcs:= R_SortNPCs(R_GetAllNpcs);
           R_FrogCurrentTile:= R_GetTileGlobal; //Update co-ords so we don't do this multiple times
+        end;
+        if (not R_IsNpcInArray('Frog', R_FoundNpcs)) then
+        begin
+          Result := True;
+          Exit;
         end;
         R_FoundNpcs[i]:= R_GetTNPC(R_FoundNpcs[i].Index);
         R_BlindWalk(R_FoundNpcs[i].Tile);
@@ -78,19 +78,20 @@ begin
           wait(100+random(50));
         ClickToContinue;
         ChatWait;
-        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+        FindNPCChatTextMulti(['eah ok','very','orry','hange','lrigh','Okay','kay','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
         ChatWait;
         ClickToContinue;
         ChatWait;
-        FindNPCChatTextMulti(['very','orry','hange','lrigh','Okay','kay.','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+        FindNPCChatTextMulti(['eah ok','very','orry','hange','lrigh','Okay','kay','I supp','pose so','yeah','Yeah','Sure','ure'], Clickleft);
+        ChatWait;
         ClickToContinue;
-        wait(100+random(50));
+        wait(600+random(250));
         ClickToContinue;
-        wait(100+random(50));
+        wait(600+random(250));
         ClickToContinue;
         //Wait(8500+random(3317)); //This just lags out causing the player to enter the caves
       end;
-      if (not R_FindNpc('Frog', FrogPrincess)) then
+      if (not R_FindNpc('frog', FrogPrincess)) then
       begin
         Result := True;
         Exit;
