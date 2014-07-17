@@ -253,9 +253,9 @@ const
     client_map_scale                                  =   'client.du'; //
     client_map_offset                                 =   'client.dj'; //
     client_compassAngle                               =   'client.fq'; //
-    client_levels                                     =   'client.hs'; //
-    client_real_levels                                =   'client.hn'; //
-    client_experiences                                =   'client.hj'; //
+    client_levels                                     =   'client.hn'; //
+    client_real_levels                                =   'client.hj'; //
+    client_experiences                                =   'client.hs'; //
     client_run_energy                                 =   'client.jv'; //
     client_weight                                     =   'client.jp';  //
 
