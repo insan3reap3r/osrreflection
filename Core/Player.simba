@@ -40,7 +40,7 @@ Returns the Player Index.
 *)
 function R_GetPlayerIndex: Integer;
 begin
-  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, 'client.hv') * 1836161929) + 32768;
+  Result := (SmartGetFieldInt(SmartCurrentTarget, 0, 'client.hk') * -1449052993) + 32768;
 end;
 
 (*
