@@ -256,8 +256,8 @@ const
     client_levels                                     =   'client.hn'; //
     client_real_levels                                =   'client.hj'; //
     client_experiences                                =   'client.hs'; //
-    client_run_energy                                 =   'client.jv'; //
-    client_weight                                     =   'client.jp';  //
+    client_run_energy                                 =   'client.jp'; //
+    client_weight                                     =   'client.jv';  //
 
 {*Client Multipliers*}
     client_menuCount_Multiplier                       =   -1779944627;
@@ -278,6 +278,6 @@ const
     client_map_scale_Multiplier                       =   288338803;  //
     client_map_offset_Multiplier                      =   618343375; //
     client_compassAngle_Multiplier                    =   1801688049; //
-    client_run_energy_Multiplier                      =   -99831321; //
-    client_weight_Multiplier                          =   -1957221321; //
+    client_run_energy_Multiplier                      =   -1957221321; //
+    client_weight_Multiplier                          =   -99831321; //
 
