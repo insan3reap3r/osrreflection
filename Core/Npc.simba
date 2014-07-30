@@ -222,15 +222,13 @@ begin
   end;
   if VariantIsString(NPC) then
       if Pos('!@#$%', NPC) > 0 then
-        k:= 0;
-  if (k = 0) then
-  begin
-    DoIterate := True;
-    Temp := R_GetIndices;
-    Setlength(Result, length(Temp));
-    DoIterate := False;
-    Result := R_GetIndices;
-  end;
+      begin
+        DoIterate := True;
+        Temp := R_GetIndices;
+        Setlength(Result, length(Temp));
+        DoIterate := False;
+        Result := R_GetIndices;
+      end;
   result:= RemoveDeadTIA(result);
 end;
 
