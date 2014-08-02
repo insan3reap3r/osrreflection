@@ -256,8 +256,8 @@ const
     client_settings                                   =   'en.v';
     client_LoopCycle                                  =   'client.d';  //
     client_menuHeight                                 =   'd.iy'; //
-    client_menuOptions                                =   'client.ik'; //
-    client_menuActions                                =   'client.ip'; //
+    client_menuOptions                                =   'client.ip'; //
+    client_menuActions                                =   'client.ik'; //
     client_menuX                                      =   'cv.hd'; //
     client_menuY                                      =   'ad.hl'; //
     client_plane                                      =   'eb.hf';
