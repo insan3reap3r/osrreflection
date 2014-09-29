@@ -257,6 +257,7 @@ var
   i: integer;
 begin
   Result := False;
+  (*
   R_FoundNpcs:= R_SortNPCs(R_GetAllNpcs);
   for i := 0 to high(R_Randoms) do
   begin
@@ -288,6 +289,7 @@ begin
         R_RunAway(R_RunAwayDirection, 30, True);
         Exit;
       end;
+  *)
   if (R_Return(Result, @FindMod)) then
     Exit;
   if (R_Return(Result, @R_FindDead)) then

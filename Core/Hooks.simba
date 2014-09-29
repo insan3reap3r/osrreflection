@@ -1,7 +1,7 @@
-{ 209 Hooks Found By Cheddys Updater }
+{ 209 Hooks Found By Cheddys Beautiful Updater }
 
 const
-ReflectionRevision = '58';
+ReflectionRevision = '59';
 
 
     {* BoundaryObject - 9 Hooks *}
@@ -100,17 +100,15 @@ ReflectionRevision = '58';
         Client_Experiences = 'client.hu';
         Client_LoopCycle = 'client.p';
         Client_LoopCycle_Multiplier = 1234794817;
-        Client_Login_State = 'client.l';
-        Client_Login_State_Multiplier = -1320666373;
+        Client_Login_State = 'client.u';
+        Client_Login_State_Multiplier = 2064132071;
         Client_GroundItems = 'client.hm';
         Client_ItemDefinitionCache = 'aj.e';
         Client_ItemContainerTable = 'w.t';
-        Client_Levels = 'client.hp';
+        Client_Levels = 'client.ht';
         Client_NPCs = 'client.bb';
         Client_Player = 'cr.hf';
         Client_Players = 'client.ga';
-        Client_LoginState = 'aw.ae';
-        Client_LoginState_Multiplier = 76594955;
         Client_CompassAngle = 'client.fq';
         Client_CompassAngle_Multiplier = -482144205;
         Client_Map_Offset = 'client.df';
@@ -118,8 +116,8 @@ ReflectionRevision = '58';
         Client_Map_Scale = 'client.dg';
         Client_Map_Scale_Multiplier = 1186981241;
         Client_MenuActions = 'client.ik';
-        Client_MenuCount = 'client.ip';
-        Client_MenuCount_Multiplier = -686236781;
+        Client_MenuCount = 'client.iv';
+        Client_MenuCount_Multiplier = 837382777;
         Client_MenuHeight = 'ah.io';
         Client_MenuHeight_Multiplier = -1940027677;
         Client_MenuOptions = 'client.iq';
@@ -135,7 +133,7 @@ ReflectionRevision = '58';
         Client_Password = 'aw.az';
         Client_Plane = 'h.hq';
         Client_Plane_Multiplier = 892241573;
-        Client_Real_Levels = 'client.ht';
+        Client_Real_Levels = 'client.hp';
         Client_Region = 'e.dk';
         Client_Settings = 'ei.s';
         Client_GroundHeights = 'n.t';
@@ -250,8 +248,8 @@ ReflectionRevision = '58';
     {* NPCDefinition - 7 Hooks *}
     NPCDefinition = 'ar';
         NPCDefinition_Actions = 'k';
-        NPCDefinition_CombatLevel = 'h';
-        NPCDefinition_CombatLevel_Multiplier = 569378961;
+        NPCDefinition_Level = 'h';
+        NPCDefinition_Level_Multiplier = 569378961;
         NPCDefinition_ID = 'd';
         NPCDefinition_ID_Multiplier = 903407553;
         NPCDefinition_Name = 'n';
@@ -260,8 +258,6 @@ ReflectionRevision = '58';
         NPCDefinition_TransformIDs = 'ao';
         NPCDefinition_VarBitID = 'ae';
         NPCDefinition_VarBitID_Multiplier = 702885197;
-        NpcDefinition_level = 'h';
-        NpcDefinition_level_multiplier = 569378961;
 
     {* ObjectDefinition - 2 Hooks *}
     ObjectDefinition = 'aq';
