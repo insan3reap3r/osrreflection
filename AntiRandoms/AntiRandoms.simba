@@ -13,7 +13,7 @@ end;
 
 var
   R_Randoms : array[0..14] of R_Random;
-  R_CombatRandoms, R_InventoryRandoms, R_PrayerRandoms, R_Reincarnate: Boolean;
+  R_CombatRandoms, R_PrayerRandoms, R_Reincarnate: Boolean;
   R_RunAwayDirection: String;
   R_Deaths: Integer;
   R_FoundNpcs: TNPCArray;
@@ -253,8 +253,6 @@ Solves all Randoms using Reflection first, and SRL solvers second
 
 *)
 function R_FindNormalRandoms: Boolean;
-var
-  i: integer;
 begin
   Result := False;
   (*
