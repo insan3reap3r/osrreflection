@@ -1,4 +1,4 @@
-
+v
 var
   TalkRandomIndex: Integer;
   R_TalkStartLoc: Tpoint;
@@ -20,7 +20,7 @@ Finds all talking randoms.
 *)
 function R_FindTalk: Boolean;
 var
-  i, f: integer;
+  i: integer;
   RandList: TStringArray;
   loc: TPoint;
 begin
