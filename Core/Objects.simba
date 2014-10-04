@@ -103,23 +103,25 @@ Returns a TRSObjectArray of WallObject, NOT to be called in scripts
 *)
 function R_GetWallObject(x, y: integer): TRSObject;
 var
-  TheRegion, Tile, TheObject, ID, basex, basey: integer;
+  TheRegion, Tile, TheObject, ID, Hash, BaseX, BaseY: integer;
   tileO:tpoint;
 begin
   TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
   Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles, R_GetPlane, x, y);
-  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, WallObject);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, SceneTile_WallObject);
   if(not (TheObject = 0)) then
   begin
     ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, WallObject_hash) * WallObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
-  SmartFreeObject(SmartCurrentTarget, TheObject);
-  SmartFreeObject(SmartCurrentTarget, Tile);
-  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  Hash := SmartGetFieldInt(SmartCurrentTarget, TheObject, WallObject_hash) * WallObject_hash_Multiplier;
   BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
-  tileo := point(X + BaseX, Y + BaseY);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  tileO.X := (Hash and $7f) + BaseX;
+  tileO.Y := ((Hash shr 7) and $7f) + BaseY;
   Result := RSObject(ID, 1, tileo);
 end;
 
@@ -140,23 +142,25 @@ Returns a TRSObjectArray of FloorDecorationObject, NOT to be called in scripts
 *)
 function R_GetFloorDecorationObject(x, y: integer): TRSObject;
 var
-  TheRegion, Tile, TheObject, ID, basex, basey: integer;
+  TheRegion, Tile, TheObject, ID, Hash, BaseX, BaseY: integer;
   tileO:tpoint;
 begin
   TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
   Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles, R_GetPlane, x, y);
-  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, FloorDecorationObject);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, SceneTile_FloorObject);
   if(not (TheObject = 0)) then
   begin
     ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecorationObject_hash) * FloorDecorationObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
-  SmartFreeObject(SmartCurrentTarget, TheObject);
-  SmartFreeObject(SmartCurrentTarget, Tile);
-  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  Hash := SmartGetFieldInt(SmartCurrentTarget, TheObject, FloorDecorationObject_hash);
   BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
-  tileo := point(X + BaseX, Y + BaseY);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  tileO.x := (Hash and $7f) + BaseX;
+  tileO.y := ((Hash shr 7) and $7f) + BaseY;
   Result := RSObject(ID, 2, tileo);
 end;
 
@@ -177,23 +181,25 @@ Returns a TRSObjectArray of BoundaryObject, NOT to be called in scripts
 *)
 function R_GetBoundaryObject(x, y: integer): TRSObject;
 var
-  TheRegion, Tile, TheObject, ID, basex, basey: integer;
+  TheRegion, Tile, TheObject, ID, Hash, BaseX, BaseY: integer;
   tileO:tpoint;
 begin
   TheRegion := SmartGetFieldObject(SmartCurrentTarget, 0, client_region);
   Tile := SmartGetFieldArray3DObject(SmartCurrentTarget, TheRegion, Region_sceneTiles,R_GetPlane, x, y);
-  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, BoundaryObject);
+  TheObject := SmartGetFieldObject(SmartCurrentTarget, Tile, SceneTile_BoundaryObject);
   if(not (TheObject = 0)) then
   begin
     ID := SmartGetFieldInt(SmartCurrentTarget, TheObject, BoundaryObject_hash) * BoundaryObject_hash_Multiplier;
     ID := (ID shr 14) and $7fff;
   end;
-  SmartFreeObject(SmartCurrentTarget, TheObject);
-  SmartFreeObject(SmartCurrentTarget, Tile);
-  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  Hash := SmartGetFieldInt(SmartCurrentTarget, TheObject, BoundaryObject_hash) * BoundaryObject_hash_Multiplier;
   BaseX := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier;
   BaseY := SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier;
-  tileo := point(X + BaseX, Y + BaseY);
+  SmartFreeObject(SmartCurrentTarget, Tile);
+  SmartFreeObject(SmartCurrentTarget, TheRegion);
+  SmartFreeObject(SmartCurrentTarget, TheObject);
+  tileO.x := (Hash and $7f) + BaseX;
+  tileO.y := ((Hash shr 7) and $7f) + BaseY;
   Result := RSObject(ID, 3, tileo);
 end;
 
