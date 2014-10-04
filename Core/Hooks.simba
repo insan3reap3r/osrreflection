@@ -129,8 +129,8 @@ const
 {*Client*}
     client_region                                     =   'df.dn';
     client_menuCount                                  =   'client.iy';
-    client_baseY                                      =   'fr.cp';
-    client_baseX                                      =   'bu.ca';
+    client_baseY                                      =   'bu.ca';
+    client_baseX                                      =   'fr.cp';
     client_widgets                                    =   'eu.g';
     client_menuActions                                =   'client.im';
     client_player                                     =   'h.hc';
@@ -142,8 +142,8 @@ const
     client_cameraPitch                                =   'ej.fd';
     client_cameraYaw                                  =   'dk.fg';
     client_cameraX                                    =   'ca.fz';
-    client_cameraY                                    =   'g.fp';
-    client_cameraZ                                    =   'gs.fk';
+    client_cameraY                                    =   'gs.fk';
+    client_cameraZ                                    =   'g.fp';
     client_npcIndices                                 =   'client.bj';
     client_npcs                                       =   'client.bb';
     client_groundItems                                =   'client.hz';
@@ -165,15 +165,15 @@ const
 
 {*Client Multipliers*}
     client_menuCount_Multiplier                       =   391839991;
-    client_baseY_Multiplier                           =   263051377;
-    client_baseX_Multiplier                           =   -1743142671;
+    client_baseY_Multiplier                           =   -1743142671;
+    client_baseX_Multiplier                           =   263051377;
     client_plane_Multiplier                           =   -570926309;
     client_menuWidth_Multiplier                       =   1703965243;
     client_cameraPitch_Multiplier                     =   -611182019;
     client_cameraYaw_Multiplier                       =   -1717637923;
     client_cameraX_Multiplier                         =   1217916071;
-    client_cameraY_Multiplier                         =   699100371;
-    client_cameraZ_Multiplier                         =   1498802843;
+    client_cameraY_Multiplier                         =   1498802843;
+    client_cameraZ_Multiplier                         =   699100371;
     client_LoopCycle_Multiplier                       =   -637317861;
     client_menuHeight_Multiplier                      =   720768655;
     client_menuX_Multiplier                           =   -745630459;
