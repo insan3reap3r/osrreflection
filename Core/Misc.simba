@@ -494,8 +494,7 @@ begin
   begin
     if (R_IsMenuOpen) then
     begin
-      R_ChooseOption(Option);
-      Result := True;
+      Result := R_ChooseOption(Option);
       Exit;
     end;
     Wait(20 + Random(20));
