@@ -1,814 +1,187 @@
-{ 444 Hooks Found By Cheddy's PiUpdater }
-
+##Hooks.simba
 const
-ReflectionRevision = '67';
+ ReflectionRevision = '68';
+
+{*Node*}
+    Node                                              =   'gv';
+    Node_id                                           =   'ee';
+    Node_next                                         =   'ey';
+
+{*LinkedList*}
+    LinkedList                                        =   'fw';
+    LinkedList_head                                   =   'l';
+
+{*Actor*}
+    Actor                                             =   'aa';
+    Actor_combatCycle                                 =   'ae';
+    Actor_activeText                                  =   'aa';
+    Actor_animation                                   =   'bm';
+    Actor_Health                                      =   'ai';
+    Actor_maxHealth                                   =   'ay';
+    Actor_interacting                                 =   'ab';
+    Actor_localX                                      =   'h';
+    Actor_localY                                      =   'k';
+
+{*Actor Multipliers*}
+    Actor_animation_Multiplier                        =   495733559;
+    Actor_combatCycle_Multiplier                      =   -593991415;
+    Actor_Health_Multiplier                           =   -1515030189;
+    Actor_maxHealth_Multiplier                        =   1629208675;
+    Actor_interacting_Multiplier                      =   -1596270757;
+    Actor_localX_Multiplier                           =   1604947505;
+    Actor_localY_Multiplier                           =   917902939;
 
 
-	{* AccessFile - 3 Hooks *}
-	AccessFile = 'gh';
-		AccessFile_File = 'f';
-		AccessFile_Length = 'k';
-		AccessFile_Length_Multiplier = -5423684098042682479;
-		AccessFile_Position = 'y';
-		AccessFile_Position_Multiplier = 1;
+{*Item*}
+    Item                                              =   'q';
+    Item_id                                           =   'l';
+    Item_stackSize                                    =   'y';
 
-	{* AnimableNode - 7 Hooks *}
-	AnimableNode = 'p';
-		AnimableNode_Animation = 'n';
-		AnimableNode_ID = 'f';
-		AnimableNode_ID_Multiplier = -75314697;
-		AnimableNode_Orientation = 'y';
-		AnimableNode_Orientation_Multiplier = -1344708335;
-		AnimableNode_Plane = 'e';
-		AnimableNode_Plane_Multiplier = 430869165;
-		AnimableNode_Type = 'k';
-		AnimableNode_Type_Multiplier = -1168676601;
-		AnimableNode_X = 'r';
-		AnimableNode_X_Multiplier = -257812957;
-		AnimableNode_Y = 'a';
-		AnimableNode_Y_Multiplier = -245796119;
+{*Item Multipliers*}
+    Item_id_Multiplier                                =   1182524155;
+    Item_stackSize_Multiplier                         =   -1258609723;
 
-	{* AnimationSequence - 10 Hooks *}
-	AnimationSequence = 'at';
-		AnimationSequence_FlowControl = 'p';
-		AnimationSequence_Frame1IDs = 'a';
-		AnimationSequence_Frame2IDs = 'x';
-		AnimationSequence_FrameStep = 'o';
-		AnimationSequence_FrameStep_Multiplier = 87388795;
-		AnimationSequence_MaxLoops = 'b';
-		AnimationSequence_MaxLoops_Multiplier = 2066189651;
-		AnimationSequence_MinLoops = 's';
-		AnimationSequence_MinLoops_Multiplier = 1890689879;
-		AnimationSequence_PrecedenceAnimation = 'u';
-		AnimationSequence_PrecedenceAnimation_Multiplier = -376338167;
-		AnimationSequence_Priority = 'j';
-		AnimationSequence_Priority_Multiplier = 1375597605;
-		AnimationSequence_ReplyMode = 'd';
-		AnimationSequence_ReplyMode_Multiplier = -1618836133;
-		AnimationSequence_isStretched = 'v';
+{*ObjectDefinition*}
+    ObjectDefinition                                  =   'am';
+    ObjectDefinition_name                             =   'a';
+    ObjectDefinition_actions                          =   'an';
 
-	{* BoundaryObject - 9 Hooks *}
-	BoundaryObject = 'cb';
-		BoundaryObject_AlternativeOrientation = 'r';
-		BoundaryObject_AlternativeOrientation_Multiplier = -1376780773;
-		BoundaryObject_BackupRenderable = 'n';
-		BoundaryObject_Flags = 'g';
-		BoundaryObject_Flags_Multiplier = -1519830901;
-		BoundaryObject_Hash = 'x';
-		BoundaryObject_Hash_Multiplier = 401706905;
-		BoundaryObject_Orientation = 'e';
-		BoundaryObject_Orientation_Multiplier = 1353155057;
-		BoundaryObject_Plane = 'f';
-		BoundaryObject_Plane_Multiplier = 607904031;
-		BoundaryObject_Renderable = 'a';
-		BoundaryObject_Get_X = 'k';
-		BoundaryObject_Get_X_Multiplier = -605675167;
-		BoundaryObject_Get_Y = 'y';
-		BoundaryObject_Get_Y_Multiplier = -934841109;
+{*NpcDefinition*}
+    NpcDefinition                                     =   'aq';
+    NpcDefinition_actions                             =   'h';
+    NpcDefinition_name                                =   'c';
+    NpcDefinition_id                                  =   'w';
+    NpcDefinition_level                               =   'v';
 
-	{* Buffer - 2 Hooks *}
-	Buffer = 'du';
-		Buffer_Offset = 'k';
-		Buffer_Offset_Multiplier = -1714433361;
-		Buffer_Payload = 'f';
+{*NpcDefinition Multipliers*}
+    NpcDefinition_id_Multiplier                       =   2072508285;
+    NpcDefinition_level_Multiplier                    =   -740355527;
 
-	{* BufferedConnection - 5 Hooks *}
-	BufferedConnection = 'eh';
-		BufferedConnection_InputStream = 'f';
-		BufferedConnection_OutputStream = 'k';
-		BufferedConnection_Payload = 'n';
-		BufferedConnection_Socket = 'y';
-		BufferedConnection_isClosed = 'e';
+{*Npc*}
+    Npc                                               =   'az';
+    Npc_definition                                    =   'l';
 
-	{* Cache - 5 Hooks *}
-	Cache = 'fu';
-		Cache_CacheableNode = 'f';
-		Cache_NodeHashTable = 'e';
-		Cache_Queue = 'r';
-		Cache_Remaining = 'y';
-		Cache_Remaining_Multiplier = 1;
-		Cache_Size = 'k';
-		Cache_Size_Multiplier = 1;
+{*Player*}
+    Player                                            =   'g';
+    Player_definition                                 =   'y';
+    Player_name                                       =   'l';
 
-	{* CacheableNode - 2 Hooks *}
-	CacheableNode = 'gt';
-		CacheableNode_Next = 'ct';
-		CacheableNode_Prev = 'ch';
+{*Region*}
+    Region                                            =   'cd';
+    Region_sceneTiles                                 =   'c';
 
-	{* Canvas - 1 Hooks *}
-	Canvas = 'da';
-		Canvas_Component = 'f';
+{*WallObject*}
+    WallObject                                        =   'cf';
+    WallObject_hash                                   =   'n';
 
-	{* Actor - 17 Hooks *}
-	Actor = 'au';
-		Actor_Animation = 'ba';
-		Actor_Animation_Multiplier = 1074559987;
-		Actor_CombatCycle = 'am';
-		Actor_CombatCycle_Multiplier = 1063374517;
-		Actor_Health = 'ai';
-		Actor_Health_Multiplier = 125469711;
-		Actor_HitCycles = 'ag';
-		Actor_HitDamages = 'an';
-		Actor_HitTypes = 'ad';
-		Actor_Interacting = 'af';
-		Actor_Interacting_Multiplier = -1147715801;
-		Actor_MaxHealth = 'ab';
-		Actor_MaxHealth_Multiplier = -1438643949;
-		Actor_Orientation = 'bn';
-		Actor_Orientation_Multiplier = 1222000815;
-		Actor_PathLength = 'bg';
-		Actor_PathLength_Multiplier = 1269455073;
-		Actor_PathTraversed = 'bb';
-		Actor_PathX = 'bv';
-		Actor_PathY = 'by';
-		Actor_ActiveText = 'au';
-		Actor_LocalX = 'm';
-		Actor_LocalX_Multiplier = -91995979;
-		Actor_LocalY = 'q';
-		Actor_LocalY_Multiplier = 2127210343;
-		Actor_isInSequence = 'av';
+{*WallObject Multipliers*}
+    WallObject_hash_Multiplier                        =   1625964717;
 
-	{* ChatboxMessage - 6 Hooks *}
-	ChatboxMessage = 'ao';
-		ChatboxMessage_ClanName = 'r';
-		ChatboxMessage_ID = 'f';
-		ChatboxMessage_ID_Multiplier = 552997091;
-		ChatboxMessage_PlayerName = 'e';
-		ChatboxMessage_Text = 'a';
-		ChatboxMessage_TimeSent = 'k';
-		ChatboxMessage_TimeSent_Multiplier = -1646875103;
-		ChatboxMessage_Type = 'y';
-		ChatboxMessage_Type_Multiplier = 1579806963;
+{*FloorDecorationObject*}
+    FloorDecorationObject                             =   'cv';
+    FloorDecorationObject_hash                        =   'w';
+    FloorDecorationObject_hash_Multiplier             =   -1921889485;
 
-	{* ClassData - 3 Hooks *}
-	ClassData = 'ge';
-		ClassData_Data = 'x';
-		ClassData_Fields = 'a';
-		ClassData_Methods = 'n';
+{*BoundaryObject*}
+    BoundaryObject                                    =   'cg';
+    BoundaryObject_hash                               =   'f';
 
-	{* Client - 85 Hooks *}
-		Client_AnimationSequenceCache = 'at.e';
-		Client_BaseX = 'g.ci';
-		Client_BaseX_Multiplier = 577562667;
-		Client_BaseY = 'ax.cd';
-		Client_BaseY_Multiplier = -1958427927;
-		Client_CameraPitch = 'aw.fp';
-		Client_CameraPitch_Multiplier = 245321827;
-		Client_CameraPitchMinimum = 'client.fn';
-		Client_CameraPitchMinimum_Multiplier = 908122891;
-		Client_CameraX = 'cp.fe';
-		Client_CameraX_Multiplier = -1191995939;
-		Client_CameraY = 'n.fk';
-		Client_CameraY_Multiplier = -295589047;
-		Client_CameraYaw = 'dv.fb';
-		Client_CameraYaw_Multiplier = 479649135;
-		Client_CameraZ = 'gy.fi';
-		Client_CameraZ_Multiplier = -1405614605;
-		Client_Canvas = 'l.pt';
-		Client_CollisionMaps = 'client.w';
-		Client_CosineCurve = 'cn.aw';
-		Client_CurrentWorldID = 'client.r';
-		Client_CurrentWorldID_Multiplier = -700418903;
-		Client_DestinationX = 'client.me';
-		Client_DestinationX_Multiplier = -1724043487;
-		Client_DestinationY = 'client.md';
-		Client_DestinationY_Multiplier = -1462134499;
-		Client_Run_Energy = 'client.jp';
-		Client_Run_Energy_Multiplier = -1733600851;
-		Client_Experiences = 'client.hb';
-		Client_FirstMenuOption = 'et.if';
-		Client_LoopCycle = 'client.d';
-		Client_LoopCycle_Multiplier = -1171337607;
-		Client_Login_State = 'client.u';
-		Client_Login_State_Multiplier = 255442979;
-		Client_GroundItems = 'client.hw';
-		Client_IdleTime = 'dv.e';
-		Client_IdleTime_Multiplier = 1;
-		Client_ItemDefinintionCache = 'ab.x';
-		Client_ItemModelCache = 'ab.g';
-		Client_Keyboard = 'dk.f';
-		Client_LastClickTime = 'dv.v';
-		Client_LastClickTime_Multiplier = 9042664709934741361;
-		Client_LastClickX = 'dv.o';
-		Client_LastClickX_Multiplier = -71226401;
-		Client_LastClickY = 'dv.p';
-		Client_LastClickY_Multiplier = 120172535;
-		Client_LastMouseClickButton = 'dv.r';
-		Client_LastMouseClickButton_Multiplier = 1986682939;
-		Client_LastMouseClickModifier = 'dv.y';
-		Client_LastMouseClickModifier_Multiplier = 1405573651;
-		Client_Levels = 'client.hh';
-		Client_NPCs = 'client.bv';
-		Client_Player = 'client.hf';
-		Client_PlayerIndex = 'client.hj';
-		Client_PlayerIndex_Multiplier = 1355892987;
-		Client_Players = 'client.gj';
-		Client_LoginState = 'ar.ax';
-		Client_LoginState_Multiplier = -1637224235;
-		Client_CompassAngle = 'client.fy';
-		Client_CompassAngle_Multiplier = 936749349;
-		Client_Map_Offset = 'client.dq';
-		Client_Map_Offset_Multiplier = -667653403;
-		Client_Map_Scale = 'client.da';
-		Client_Map_Scale_Multiplier = 1814244903;
-		Client_MenuActions = 'client.ib';
-		Client_MenuCount = 'client.ik';
-		Client_MenuCount_Multiplier = -1281097825;
-		Client_MenuHeight = 't.ih';
-		Client_MenuHeight_Multiplier = -1419355641;
-		Client_MenuOptions = 'client.ia';
-		Client_MenuWidth = 'aw.ic';
-		Client_MenuWidth_Multiplier = -1172156477;
-		Client_MenuX = 'u.hu';
-		Client_MenuX_Multiplier = -1404262159;
-		Client_MenuY = 'ew.hp';
-		Client_MenuY_Multiplier = -910554721;
-		Client_Mouse = 'dv.f';
-		Client_MouseX = 'dv.a';
-		Client_MouseX_Multiplier = 190197409;
-		Client_MouseY = 'dv.n';
-		Client_MouseY_Multiplier = 459003895;
-		Client_NPCDefinitionCache = 'ae.y';
-		Client_NPCIndices = 'client.bb';
-		Client_NPCModelCache = 'ae.e';
-		Client_ObjectAnimatedModelCache = 'ak.n';
-		Client_ObjectDefinitionCache = 'ak.e';
-		Client_ObjectModelCache = 'ak.r';
-		Client_ObjectRenderableCache = 'ak.a';
-		Client_Password = 'ar.ay';
-		Client_Plane = 'ag.hv';
-		Client_Plane_Multiplier = 1719742089;
-		Client_PlayerModelCache = 'fk.v';
-		Client_ProjectileList = 'client.he';
-		Client_Real_Levels = 'client.ho';
-		Client_Region = 'ax.dx';
-		Client_RGBImageCache = 'ab.o';
-		Client_SelectedItemName = 'client.it';
-		Client_SelectedSpellName = 'client.jl';
-		Client_Settings = 'fc.k';
-		Client_SineCurve = 'cn.ao';
-		Client_GroundHeights = 'a.f';
-		Client_GroundSettings = 'a.k';
-		Client_Username = 'ar.ak';
-		Client_ValidWidgets = 'ey.k';
-		Client_VarpbitCache = 'ag.k';
-		Client_VarpbitSettings = 'fc.f';
-		Client_Weight = 'client.jn';
-		Client_Weight_Multiplier = 406075875;
-		Client_WidgetBoundsHeight = 'client.lz';
-		Client_WidgetBoundsWidth = 'client.lo';
-		Client_WidgetBoundsX = 'client.lt';
-		Client_WidgetBoundsY = 'client.lm';
-		Client_WidgetItemTable = 't.f';
-		Client_WidgetNodeTable = 'client.jb';
-		Client_Widgets = 'ey.f';
-		Client_WidgetSettings = 'fc.y';
-		Client_Worlds = 'ab.bp';
-		Client_isMenuOpen = 'client.hc';
-		Client_isWorldSelectorOpen = 'ar.af';
+{*BoundaryObject Multipliers*}
+    BoundaryObject_hash_Multiplier                    =   -77259343;
 
-	{* CollisionMap - 5 Hooks *}
-	CollisionMap = 'hs';
-		CollisionMap_Flags = 'al';
-		CollisionMap_Height = 'ar';
-		CollisionMap_Height_Multiplier = 598021243;
-		CollisionMap_OffsetX = 'i';
-		CollisionMap_OffsetX_Multiplier = -738582607;
-		CollisionMap_OffsetY = 'ah';
-		CollisionMap_OffsetY_Multiplier = -162562087;
-		CollisionMap_Width = 'aj';
-		CollisionMap_Width_Multiplier = 1465805847;
+{*SceneTile*}
+    SceneTile                                         =   'cq';
+    SceneTile_WorldObjects                            =   'a';
+    SceneTile_WallObject                              =   'f';
+    SceneTile_BoundaryObject                          =   'x';
+    SceneTile_FloorObject                             =   't';
 
-	{* ComplexTile - 1 Hooks *}
-	ComplexTile = 'cv';
-		ComplexTile_isFlat = 'p';
+{*WorldObject*}
+    WorldObject                                       =   'ct';
+    WorldObject_hash                                  =   'o';
+    WorldObject_Get_x                                 =   'g';
+    WorldObject_Get_y                                 =   'j';
 
-	{* FloorDecorationObject - 6 Hooks *}
-	FloorDecorationObject = 'ca';
-		FloorDecorationObject_Flags = 'a';
-		FloorDecorationObject_Flags_Multiplier = -1923975349;
-		FloorDecorationObject_Hash = 'r';
-		FloorDecorationObject_Hash_Multiplier = 897609863;
-		FloorDecorationObject_Plane = 'f';
-		FloorDecorationObject_Plane_Multiplier = -2090116439;
-		FloorDecorationObject_Renderable = 'e';
-		FloorDecorationObject_Get_X = 'k';
-		FloorDecorationObject_Get_X_Multiplier = 1627816621;
-		FloorDecorationObject_Get_Y = 'y';
-		FloorDecorationObject_Get_Y_Multiplier = 591130107;
 
-	{* GenericTile - 1 Hooks *}
-	GenericTile = 'ct';
-		GenericTile_isFlat = 'a';
+{*WorldObject Multipliers*}
+    WorldObject_hash_Multiplier                       =   2122780761;
+    WorldObject_Get_x_Multiplier                      =   830319895;
+    WorldObject_Get_y_Multiplier                      =   -449096723;
 
-	{* NodeHashTable - 5 Hooks *}
-	NodeHashTable = 'ff';
-		NodeHashTable_Current = 'e';
-		NodeHashTable_CurrentIndex = 'r';
-		NodeHashTable_CurrentIndex_Multiplier = 1;
-		NodeHashTable_Head = 'y';
-		NodeHashTable_GetNodes = 'k';
-		NodeHashTable_GetSize = 'f';
-		NodeHashTable_GetSize_Multiplier = 1;
+{*Widget*}
+    Widget                                            =   'eu';
+    Widget_getRelativeX                               =   'i';
+    Widget_getRelativeY                               =   'x';
+    Widget_getActions                                 =   'bj';
+    Widget_getID                                      =   'b';
+    Widget_getItems                                   =   'dp';
+    Widget_getStackSizes                              =   'dr';
+    Widget_getText                                    =   'bn';
+    Widget_height                                     =   'k';
+    Widget_width                                      =   'h';
 
-	{* WorldObject - 12 Hooks *}
-	WorldObject = 'cx';
-		WorldObject_Flags = 't';
-		WorldObject_Flags_Multiplier = 1394849385;
-		WorldObject_Height = 'k';
-		WorldObject_Height_Multiplier = 1964401549;
-		WorldObject_Hash = 'w';
-		WorldObject_Hash_Multiplier = -1794820627;
-		WorldObject_Orientation = 'a';
-		WorldObject_Orientation_Multiplier = -1933940061;
-		WorldObject_Plane = 'f';
-		WorldObject_Plane_Multiplier = 1885554737;
-		WorldObject_RelativeX = 'n';
-		WorldObject_RelativeX_Multiplier = 1705058477;
-		WorldObject_RelativeY = 'g';
-		WorldObject_RelativeY_Multiplier = -1646604961;
-		WorldObject_Renderable = 'r';
-		WorldObject_SizeX = 'x';
-		WorldObject_SizeX_Multiplier = -1712665305;
-		WorldObject_SizeY = 'o';
-		WorldObject_SizeY_Multiplier = 1522677079;
-		WorldObject_Get_X = 'y';
-		WorldObject_Get_X_Multiplier = 1256903183;
-		WorldObject_Get_Y = 'e';
-		WorldObject_Get_Y_Multiplier = 324579019;
+{*Widget Multipliers*}
+    Widget_getRelativeX_Multiplier                    =   -2146529991;
+    Widget_getRelativeY_Multiplier                    =   275292991;
+    Widget_getID_Multiplier                           =   -166984235;
+    Widget_height_Multiplier                          =   1230511175;
+    Widget_width_Multiplier                           =   432045399;
 
-	{* Item - 2 Hooks *}
-	Item = 'i';
-		Item_ID = 'f';
-		Item_ID_Multiplier = -1184994765;
-		Item_StackSize = 'k';
-		Item_StackSize_Multiplier = -737428775;
+{*Client*}
+    client_region                                     =   'er.df';
+    client_menuCount                                  =   'client.in';
+    client_baseY                                      =   'aa.ca';
+    client_baseX                                      =   'b.ck';
+    client_widgets                                    =   'eu.l';
+    client_menuActions                                =   'client.iu';
+    client_player                                     =   'z.hg';
+    client_plane                                      =   'fo.hd';
+    client_groundSettings                             =   'c.y';
+    client_groundHeights                              =   'c.l';
+    client_menuWidth                                  =   'er.io';
+    client_isMenuOpen                                 =   'client.hn';
+    client_cameraPitch                                =   'aw.fq';
+    client_cameraYaw                                  =   'l.fo';
+    client_cameraX                                    =   'bz.fk';
+    client_cameraY                                    =   'ep.fv';
+    client_cameraZ                                    =   'f.fm';
+    client_npcIndices                                 =   'client.bz';
+    client_npcs                                       =   'client.br';
+    client_groundItems                                =   'client.hu';
+    client_login_state                                =   'client.u';
+    client_settings                                   =   'fg.g';
+    client_LoopCycle                                  =   'client.i';
+    client_menuHeight                                 =   'ak.iy';
+    client_menuOptions                                =   'client.ir';
+    client_menuX                                      =   'dm.hw';
+    client_menuY                                      =   'eh.hy';
+    client_map_scale                                  =   'client.ft';
+    client_map_offset                                 =   'client.do';
+    client_compassAngle                               =   'client.di';
+    client_levels                                     =   'client.hl';
+    client_real_levels                                =   'client.hc';
+    client_experiences                                =   'client.hi';
+    client_run_energy                                 =   'client.jd';
+    client_weight                                     =   '';
 
-	{* ItemDefinition - 38 Hooks *}
-	ItemDefinition = 'ab';
-		ItemDefinition_DiagonalRotation = 'q';
-		ItemDefinition_DiagonalRotation_Multiplier = -220843727;
-		ItemDefinition_FemaleDialogue = 'ap';
-		ItemDefinition_FemaleDialogue_Multiplier = -554961047;
-		ItemDefinition_FemaleDialogueHat = 'an';
-		ItemDefinition_FemaleDialogueHat_Multiplier = -727887795;
-		ItemDefinition_FemaleEmblem = 'ak';
-		ItemDefinition_FemaleEmblem_Multiplier = 2099489553;
-		ItemDefinition_FemaleEquipOffset = 'av';
-		ItemDefinition_FemaleEquipOffset_Multiplier = -826266121;
-		ItemDefinition_FemaleEquipPrimaryModel = 'ax';
-		ItemDefinition_FemaleEquipPrimaryModel_Multiplier = 1082308959;
-		ItemDefinition_FemaleEquipSecondaryModel = 'au';
-		ItemDefinition_FemaleEquipSecondaryModel_Multiplier = 1121534275;
-		ItemDefinition_GroundActions = 'aj';
-		ItemDefinition_LightModifier = 'aq';
-		ItemDefinition_LightModifier_Multiplier = 1168595203;
-		ItemDefinition_MaleDialogue = 'ay';
-		ItemDefinition_MaleDialogue_Multiplier = -1257661383;
-		ItemDefinition_MaleDialogueHat = 'at';
-		ItemDefinition_MaleDialogueHat_Multiplier = -584780767;
-		ItemDefinition_MaleEmblem = 'ae';
-		ItemDefinition_MaleEmblem_Multiplier = 921910625;
-		ItemDefinition_MaleEquipOffset = 'ao';
-		ItemDefinition_MaleEquipOffset_Multiplier = -1974693973;
-		ItemDefinition_MaleEquipPrimaryModel = 'al';
-		ItemDefinition_MaleEquipPrimaryModel_Multiplier = -1914889355;
-		ItemDefinition_MaleEquipSecondaryModel = 'aw';
-		ItemDefinition_MaleEquipSecondaryModel_Multiplier = 1640378765;
-		ItemDefinition_ModelColours = 's';
-		ItemDefinition_ModelID = 'w';
-		ItemDefinition_ModelID_Multiplier = 1833662953;
-		ItemDefinition_ModelOffset = 'h';
-		ItemDefinition_ModelOffset_Multiplier = -505242685;
-		ItemDefinition_ModelSizeX = 'ab';
-		ItemDefinition_ModelSizeX_Multiplier = 1465906077;
-		ItemDefinition_ModelSizeY = 'af';
-		ItemDefinition_ModelSizeY_Multiplier = -1499388439;
-		ItemDefinition_ModelSizeZ = 'ac';
-		ItemDefinition_ModelSizeZ_Multiplier = -819932945;
-		ItemDefinition_ModelTextures = 'u';
-		ItemDefinition_ModelZoom = 'd';
-		ItemDefinition_ModelZoom_Multiplier = 1320402405;
-		ItemDefinition_ModifiedModelColours = 'b';
-		ItemDefinition_ModifiedModelTextures = 'j';
-		ItemDefinition_Name = 't';
-		ItemDefinition_NoteIndex = 'am';
-		ItemDefinition_NoteIndex_Multiplier = 1159756611;
-		ItemDefinition_NoteTemplateIndex = 'ai';
-		ItemDefinition_NoteTemplateIndex_Multiplier = -1148783131;
-		ItemDefinition_Rotation1 = 'l';
-		ItemDefinition_Rotation1_Multiplier = -1909493213;
-		ItemDefinition_Rotation2 = 'm';
-		ItemDefinition_Rotation2_Multiplier = -253152529;
-		ItemDefinition_ShadowModifier = 'as';
-		ItemDefinition_ShadowModifier_Multiplier = -1082988865;
-		ItemDefinition_Sine = 'c';
-		ItemDefinition_Sine_Multiplier = 122604747;
-		ItemDefinition_StackableAmmounts = 'ag';
-		ItemDefinition_StackableIDs = 'ad';
-		ItemDefinition_TeamIndex = 'az';
-		ItemDefinition_TeamIndex_Multiplier = 1209598627;
-		ItemDefinition_Value = 'i';
-		ItemDefinition_Value_Multiplier = -1643418757;
-		ItemDefinition_InventoryActions = 'ar';
-		ItemDefinition_isMembers = 'aa';
-
-	{* ItemLayer - 8 Hooks *}
-	ItemLayer = 'cg';
-		ItemLayer_BottomRenderable = 'e';
-		ItemLayer_Height = 'x';
-		ItemLayer_Height_Multiplier = 45326531;
-		ItemLayer_ID = 'n';
-		ItemLayer_ID_Multiplier = 250233137;
-		ItemLayer_MiddleRenderable = 'r';
-		ItemLayer_Plane = 'f';
-		ItemLayer_Plane_Multiplier = 1150760823;
-		ItemLayer_TopRenderable = 'a';
-		ItemLayer_X = 'k';
-		ItemLayer_X_Multiplier = -403373607;
-		ItemLayer_Y = 'y';
-		ItemLayer_Y_Multiplier = 281724329;
-
-	{* KeyboardListener - 0 Hooks *}
-	KeyboardListener = 'dk';
-
-	{* LinkedList - 2 Hooks *}
-	LinkedList = 'fx';
-		LinkedList_Head = 'f';
-		LinkedList_Tail = 'k';
-
-	{* Model - 15 Hooks *}
-	Model = 'ci';
-		Model_IndicesLength = 'g';
-		Model_IndicesLength_Multiplier = 1;
-		Model_IndicesX = 'o';
-		Model_IndicesY = 'p';
-		Model_IndicesZ = 'v';
-		Model_TexturedIndicesX = 'w';
-		Model_TexturedIndicesY = 't';
-		Model_TexturedIndicesZ = 's';
-		Model_TexturedVerticesLength = 'm';
-		Model_TexturedVerticesLength_Multiplier = 1;
-		Model_TexturedVerticesX = 'q';
-		Model_TexturedVerticesY = 'h';
-		Model_TexturedVerticesZ = 'c';
-		Model_VerticesLength = 'r';
-		Model_VerticesLength_Multiplier = 1;
-		Model_VerticesX = 'a';
-		Model_VerticesY = 'n';
-		Model_VerticesZ = 'x';
-
-	{* ModelHeader - 0 Hooks *}
-	ModelHeader = 'cy';
-
-	{* MouseCapturer - 5 Hooks *}
-	MouseCapturer = 'v';
-		MouseCapturer_Length = 'y';
-		MouseCapturer_Length_Multiplier = 522776779;
-		MouseCapturer_Lock = 'k';
-		MouseCapturer_TrackingX = 'e';
-		MouseCapturer_TrackingY = 'r';
-		MouseCapturer_isCapturing = 'f';
-
-	{* MouseListener - 0 Hooks *}
-	MouseListener = 'dv';
-
-	{* Node - 3 Hooks *}
-	Node = 'gx';
-		Node_Next = 'er';
-		Node_Previous = 'ef';
-		Node_ID = 'ep';
-		Node_ID_Multiplier = 1;
-
-	{* NPC - 1 Hooks *}
-	NPC = 'aw';
-		NPC_Definition = 'f';
-
-	{* NPCDefinition - 27 Hooks *}
-	NPCDefinition = 'ae';
-		NPCDefinition_Actions = 'm';
-		NPCDefinition_BoundaryObjectDimension = 'n';
-		NPCDefinition_BoundaryObjectDimension_Multiplier = -716261159;
-		NPCDefinition_Brightness = 'ah';
-		NPCDefinition_Brightness_Multiplier = 1110552697;
-		NPCDefinition_Level = 'h';
-		NPCDefinition_Level_Multiplier = 814774837;
-		NPCDefinition_Contrast = 'aj';
-		NPCDefinition_Contrast_Multiplier = 1313860299;
-		NPCDefinition_DegreesToTurn = 'al';
-		NPCDefinition_DegreesToTurn_Multiplier = 728336703;
-		NPCDefinition_HeadIcon = 'ar';
-		NPCDefinition_HeadIcon_Multiplier = -2126204515;
-		NPCDefinition_ID = 'r';
-		NPCDefinition_ID_Multiplier = 103731901;
-		NPCDefinition_ModelColours = 'u';
-		NPCDefinition_ModelIDs = 'x';
-		NPCDefinition_ModelTextures = 'd';
-		NPCDefinition_ModifiedModelColours = 'j';
-		NPCDefinition_ModifiedModelTextures = 'l';
-		NPCDefinition_Name = 'a';
-		NPCDefinition_SettingID = 'ax';
-		NPCDefinition_SettingID_Multiplier = 1534479683;
-		NPCDefinition_SizeX = 'c';
-		NPCDefinition_SizeX_Multiplier = 677680001;
-		NPCDefinition_SizeY = 'z';
-		NPCDefinition_SizeY_Multiplier = 1529619303;
-		NPCDefinition_StandAnimationID = 'o';
-		NPCDefinition_StandAnimationID_Multiplier = 1612535337;
-		NPCDefinition_TransformIDs = 'aw';
-		NPCDefinition_TurnAroundAnimationID = 't';
-		NPCDefinition_TurnAroundAnimationID_Multiplier = 2022067133;
-		NPCDefinition_TurnLeftAnimationID = 'b';
-		NPCDefinition_TurnLeftAnimationID_Multiplier = 316783401;
-		NPCDefinition_TurnRightAnimationID = 's';
-		NPCDefinition_TurnRightAnimationID_Multiplier = -1325737583;
-		NPCDefinition_VarbitID = 'ao';
-		NPCDefinition_VarbitID_Multiplier = -674863285;
-		NPCDefinition_WalkAnimationID = 'w';
-		NPCDefinition_WalkAnimationID_Multiplier = 863644745;
-		NPCDefinition_isClickable = 'au';
-		NPCDefinition_isMinimapVisible = 'q';
-		NPCDefinition_isVisible = 'i';
-
-	{* ObjectDefinition - 30 Hooks *}
-	ObjectDefinition = 'ak';
-		ObjectDefinition_Actions = 'ar';
-		ObjectDefinition_AnimationID = 'z';
-		ObjectDefinition_AnimationID_Multiplier = 725786917;
-		ObjectDefinition_ClipType = 'q';
-		ObjectDefinition_ClipType_Multiplier = -751306293;
-		ObjectDefinition_Icon = 'al';
-		ObjectDefinition_Icon_Multiplier = -464592271;
-		ObjectDefinition_LightAmbient = 'ah';
-		ObjectDefinition_LightAmbient_Multiplier = 1025198045;
-		ObjectDefinition_LightDiffuse = 'aj';
-		ObjectDefinition_LightDiffuse_Multiplier = 1611477703;
-		ObjectDefinition_MapID = 'aw';
-		ObjectDefinition_MapID_Multiplier = 246614099;
-		ObjectDefinition_ModelColours = 'w';
-		ObjectDefinition_ModelIDs = 'o';
-		ObjectDefinition_ModelSizeX = 'au';
-		ObjectDefinition_ModelSizeX_Multiplier = -1171491733;
-		ObjectDefinition_ModelSizeY = 'av';
-		ObjectDefinition_ModelSizeY_Multiplier = -1766410405;
-		ObjectDefinition_ModelSizeZ = 'ae';
-		ObjectDefinition_ModelSizeZ_Multiplier = -1337494359;
-		ObjectDefinition_ModelTextures = 's';
-		ObjectDefinition_ModelTypes = 'p';
-		ObjectDefinition_ModifiedModelColours = 't';
-		ObjectDefinition_ModifiedModelTextures = 'b';
-		ObjectDefinition_Name = 'v';
-		ObjectDefinition_SettingID = 'ai';
-		ObjectDefinition_SettingID_Multiplier = -2044819221;
-		ObjectDefinition_SizeX = 'u';
-		ObjectDefinition_SizeX_Multiplier = 579142735;
-		ObjectDefinition_SizeY = 'j';
-		ObjectDefinition_SizeY_Multiplier = 1261621721;
-		ObjectDefinition_TransformIDs = 'ag';
-		ObjectDefinition_TranslateX = 'ak';
-		ObjectDefinition_TranslateX_Multiplier = -1634522035;
-		ObjectDefinition_TranslateY = 'ay';
-		ObjectDefinition_TranslateY_Multiplier = -1427663057;
-		ObjectDefinition_TranslateZ = 'at';
-		ObjectDefinition_TranslateZ_Multiplier = -1549088377;
-		ObjectDefinition_VarbitID = 'am';
-		ObjectDefinition_VarbitID_Multiplier = 2054605145;
-		ObjectDefinition_isDelayShading = 'h';
-		ObjectDefinition_isRotated = 'ao';
-		ObjectDefinition_isShadowCast = 'ax';
-		ObjectDefinition_isSolid = 'l';
-		ObjectDefinition_isUnwalkableSolid = 'an';
-
-	{* Player - 8 Hooks *}
-	Player = 'y';
-		Player_CombatLevel = 'r';
-		Player_CombatLevel_Multiplier = -1060739463;
-		Player_Definition = 'k';
-		Player_Name = 'f';
-		Player_PlayerModel = 'w';
-		Player_PrayerIcon = 'e';
-		Player_PrayerIcon_Multiplier = 22243951;
-		Player_SkullIcon = 'y';
-		Player_SkullIcon_Multiplier = -1798586141;
-		Player_TeamIndex = 'd';
-		Player_TeamIndex_Multiplier = -854020347;
-		Player_isVisible = 'j';
-
-	{* PlayerDefinition - 3 Hooks *}
-	PlayerDefinition = 'fk';
-		PlayerDefinition_Appearance = 'f';
-		PlayerDefinition_NPCID = 'e';
-		PlayerDefinition_NPCID_Multiplier = -1546096827;
-		PlayerDefinition_isFemale = 'y';
-
-	{* Projectile - 17 Hooks *}
-	Projectile = 'n';
-		Projectile_Cycle = 'x';
-		Projectile_Cycle_Multiplier = 1817335505;
-		Projectile_Height = 'r';
-		Projectile_Height_Multiplier = -1758135389;
-		Projectile_HeightOffset = 'l';
-		Projectile_RotationX = 'm';
-		Projectile_RotationX_Multiplier = 188309239;
-		Projectile_RotationY = 'q';
-		Projectile_RotationY_Multiplier = -1666862303;
-		Projectile_Scalar = 'j';
-		Projectile_Slope = 'g';
-		Projectile_Slope_Multiplier = 97584997;
-		Projectile_SpeedX = 'b';
-		Projectile_SpeedY = 'u';
-		Projectile_SpeedZ = 'd';
-		Projectile_StartX = 'y';
-		Projectile_StartX_Multiplier = -235566703;
-		Projectile_StartY = 'e';
-		Projectile_StartY_Multiplier = 1346470839;
-		Projectile_TargetDistance = 'o';
-		Projectile_TargetDistance_Multiplier = 541514157;
-		Projectile_TargetID = 'p';
-		Projectile_TargetID_Multiplier = -75736945;
-		Projectile_X = 'w';
-		Projectile_Y = 't';
-		Projectile_isMoving = 'v';
-
-	{* Queue - 1 Hooks *}
-	Queue = 'gn';
-		Queue_Head = 'f';
-
-	{* Region - 2 Hooks *}
-	Region = 'cf';
-		Region_WorldObjects = 'g';
-		Region_SceneTiles = 'a';
-
-	{* Renderable - 1 Hooks *}
-	Renderable = 'cs';
-		Renderable_ModelHeight = 'cb';
-		Renderable_ModelHeight_Multiplier = 1542751811;
-
-	{* RSLoader - 1 Hooks *}
-	RSLoader = 'ep';
-		RSLoader_isCrashed = 'px';
-
-	{* SceneTile - 11 Hooks *}
-	SceneTile = 'ce';
-		SceneTile_BoundaryObject = 'n';
-		SceneTile_ComplexTile = 'a';
-		SceneTile_FloorObject = 'g';
-		SceneTile_GenericTile = 'r';
-		SceneTile_WorldObjects = 'v';
-		SceneTile_ItemLayer = 'o';
-		SceneTile_Plane = 'e';
-		SceneTile_Plane_Multiplier = -361381043;
-		SceneTile_SceneTile = 'h';
-		SceneTile_WallObject = 'x';
-		SceneTile_X = 'k';
-		SceneTile_X_Multiplier = -204543061;
-		SceneTile_Y = 'y';
-		SceneTile_Y_Multiplier = 516911903;
-
-	{* Varp - 3 Hooks *}
-	Varp = 'ag';
-		Varp_ConfigID = 'y';
-		Varp_ConfigID_Multiplier = 1246627967;
-		Varp_EndBit = 'r';
-		Varp_EndBit_Multiplier = -1952247015;
-		Varp_StartBit = 'e';
-		Varp_StartBit_Multiplier = -189795143;
-
-	{* WallObject - 11 Hooks *}
-	WallObject = 'cq';
-		WallObject_BackupRenderable = 'g';
-		WallObject_Flags = 'p';
-		WallObject_Flags_Multiplier = -1895876681;
-		WallObject_Height = 'r';
-		WallObject_Height_Multiplier = 1252998201;
-		WallObject_Hash = 'o';
-		WallObject_Hash_Multiplier = 476575863;
-		WallObject_Orientation = 'e';
-		WallObject_Orientation_Multiplier = -1591721045;
-		WallObject_Plane = 'f';
-		WallObject_Plane_Multiplier = 2074838003;
-		WallObject_RelativeX = 'a';
-		WallObject_RelativeX_Multiplier = -1043852817;
-		WallObject_RelativeY = 'n';
-		WallObject_RelativeY_Multiplier = 1269695475;
-		WallObject_Renderable = 'x';
-		WallObject_X = 'k';
-		WallObject_X_Multiplier = -835807123;
-		WallObject_Y = 'y';
-		WallObject_Y_Multiplier = -1760748487;
-
-	{* Widget - 60 Hooks *}
-	Widget = 'ey';
-		Widget_GetActions = 'bk';
-		Widget_Alpha = 'au';
-		Widget_Alpha_Multiplier = 393203409;
-		Widget_BorderThickness = 'ap';
-		Widget_BorderThickness_Multiplier = -479529659;
-		Widget_BoundsIndex = 'dq';
-		Widget_BoundsIndex_Multiplier = -1683042757;
-		Widget_Children = 'dw';
-		Widget_ConfigListeners = 'cg';
-		Widget_ConfigTriggers = 'cy';
-		Widget_ContainerActions = 'bt';
-		Widget_GetItems = 'dt';
-		Widget_Height = 'q';
-		Widget_Height_Multiplier = -1001258379;
-		Widget_GetID = 't';
-		Widget_GetID_Multiplier = -2077665251;
-		Widget_GetIndex = 's';
-		Widget_GetIndex_Multiplier = -160985989;
-		Widget_ItemID = 'dd';
-		Widget_ItemID_Multiplier = -281643035;
-		Widget_LoopCycleStatus = 'ee';
-		Widget_LoopCycleStatus_Multiplier = 993212533;
-		Widget_ModelID = 'ai';
-		Widget_ModelID_Multiplier = -1488246071;
-		Widget_ModelType = 'am';
-		Widget_ModelType_Multiplier = 820935981;
-		Widget_ModelZoom = 'bp';
-		Widget_ModelZoom_Multiplier = -140287761;
-		Widget_MouseClickedListeners = 'ck';
-		Widget_MouseDraggedListeners = 'cn';
-		Widget_MouseEnteredListeners = 'cr';
-		Widget_MouseExitedListeners = 'cq';
-		Widget_MouseHoverListeners = 'ca';
-		Widget_MouseMovedListeners = 'ch';
-		Widget_MousePressedListeners = 'cz';
-		Widget_MouseReleasedListeners = 'cx';
-		Widget_Name = 'bq';
-		Widget_Opcodes = 'db';
-		Widget_RenderListeners = 'ci';
-		Widget_Root = 'bg';
-		Widget_RootID = 'h';
-		Widget_RootID_Multiplier = 1727312991;
-		Widget_RotationX = 'aa';
-		Widget_RotationX_Multiplier = 760824909;
-		Widget_RotationY = 'br';
-		Widget_RotationY_Multiplier = -112557705;
-		Widget_RotationZ = 'ba';
-		Widget_RotationZ_Multiplier = -1850971005;
-		Widget_ScrollHeight = 'aj';
-		Widget_ScrollHeight_Multiplier = -789900699;
-		Widget_ScrollListeners = 'cl';
-		Widget_ScrollWidth = 'ah';
-		Widget_ScrollWidth_Multiplier = -1368367939;
-		Widget_ScrollX = 'z';
-		Widget_ScrollX_Multiplier = -1258402043;
-		Widget_ScrollY = 'i';
-		Widget_ScrollY_Multiplier = 1276350147;
-		Widget_SelectedActionName = 'cs';
-		Widget_ShadowColour = 'an';
-		Widget_ShadowColour_Multiplier = -272586265;
-		Widget_SkillListeners = 'cc';
-		Widget_SkillTriggers = 'cw';
-		Widget_SpellName = 'dx';
-		Widget_SpriteID = 'ay';
-		Widget_SpriteID_Multiplier = 55137993;
-		Widget_StackSize = 'dz';
-		Widget_StackSize_Multiplier = -887020771;
-		Widget_GetStackSizes = 'dy';
-		Widget_TableListeners = 'ce';
-		Widget_TableTriggers = 'cu';
-		Widget_GetText = 'bx';
-		Widget_TextColour = 'ar';
-		Widget_TextColour_Multiplier = -1694080911;
-		Widget_TextDrawingAreaIndex = 'be';
-		Widget_TextDrawingAreaIndex_Multiplier = -1747882657;
-		Widget_TextureID = 'ae';
-		Widget_TextureID_Multiplier = -383287039;
-		Widget_Tooltip = 'di';
-		Widget_Width = 'm';
-		Widget_Width_Multiplier = 1494525251;
-		Widget_GetRelativeX = 'd';
-		Widget_GetRelativeX_Multiplier = 1773338635;
-		Widget_GetRelativeY = 'x';
-		Widget_GetRelativeY_Multiplier = -2119612121;
-		Widget_isFlippedHorizontally = 'ag';
-		Widget_isFlippedVertically = 'ad';
-		Widget_isHidden = 'c';
-		Widget_isTypeFaceShadowed = 'at';
-
-	{* WidgetItemNode - 2 Hooks *}
-	WidgetItemNode = 't';
-		WidgetItemNode_IDs = 'k';
-		WidgetItemNode_StackSizes = 'y';
-
-	{* WidgetNode - 1 Hooks *}
-	WidgetNode = 'e';
-		WidgetNode_ID = 'f';
-		WidgetNode_ID_Multiplier = 1448822185;
-
-	{* World - 7 Hooks *}
-	World = 'h';
-		World_Activity = 'r';
-		World_Domain = 'e';
-		World_Index = 'n';
-		World_Index_Multiplier = 66091511;
-		World_Location = 'a';
-		World_Location_Multiplier = -229524237;
-		World_Mask = 'k';
-		World_Mask_Multiplier = -1458575321;
-		World_Population = 'y';
-		World_Population_Multiplier = -1126273331;
-		World_WorldID = 'f';
-		World_WorldID_Multiplier = -1772271531;
+{*Client Multipliers*}
+    client_menuCount_Multiplier                       =   -2141825229;
+    client_baseY_Multiplier                           =   1423972157;
+    client_baseX_Multiplier                           =   -1730369117;
+    client_plane_Multiplier                           =   1140350779;
+    client_menuWidth_Multiplier                       =   -659962767;
+    client_cameraPitch_Multiplier                     =   -1280666421;
+    client_cameraYaw_Multiplier                       =   -1602289579;
+    client_cameraX_Multiplier                         =   1327254957;
+    client_cameraY_Multiplier                         =   -2010995499;
+    client_cameraZ_Multiplier                         =   766099511;
+    client_LoopCycle_Multiplier                       =   -1399128113;
+    client_menuHeight_Multiplier                      =   -39793823;
+    client_menuX_Multiplier                           =   1828771929;
+    client_menuY_Multiplier                           =   -1589416691;
+    client_login_state_Multiplier                     =   -2035261693;
+    client_map_scale_Multiplier                       =   -1898854141;
+    client_map_offset_Multiplier                      =   -844428383;
+    client_compassAngle_Multiplier                    =   633858349;
+    client_run_energy_Multiplier                      =   1236262691;
+    client_weight_Multiplier                          =   0;
