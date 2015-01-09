@@ -135,8 +135,8 @@ ReflectionRevision = '69';
  Client_Rights_Multiplier = -400104091;
  Client_CurrentWorld =  'client.b';
  Client_CurrentWorld_Multiplier = 1640745123;
- Client_LoginState =  'dz.s';
- Client_LoginState_Multiplier = 3166751;
+ Client_LoginState =  'client.f';
+ Client_LoginState_Multiplier = 12560521;
  Client_PlayerIndex =  'client.gb';
  Client_PlayerIndex_Multiplier = 328712329;
 
