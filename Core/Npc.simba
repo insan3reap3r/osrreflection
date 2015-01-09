@@ -101,7 +101,7 @@ begin //If the NpcIndex hook works, use it
     begin
       for i := 0 to 32767 do
       begin
-        NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, i);
+        NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, Client_LocalNpcs, i);
         if NPCNode = 0 then
         begin
           SmartFreeObject(SmartCurrentTarget, NPCNode);
@@ -155,7 +155,7 @@ begin
   begin
     for i := 0 to s do
     begin
-      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, Client_LocalNpcs, T[i]);
       NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
       if Sort then
       if VariantIsString(NPC) then
@@ -189,7 +189,7 @@ begin
   begin
     for i := 0 to s do
     begin
-      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, T[i]);
+      NPCNode := SmartGetFieldArrayObject(SmartCurrentTarget, 0, Client_LocalNpcs, T[i]);
       NPCDef := SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
 
       if VariantIsString(NPC) then
@@ -271,24 +271,24 @@ function R_GetTNPC(NpcIndex: Integer): TNPC;
 var
 NPCNode, Def, NameInt, OverHeadInt: Integer;
 begin
-  NPCNode:= SmartGetFieldArrayObject(SmartCurrentTarget, 0, client_npcs, NpcIndex);
+  NPCNode:= SmartGetFieldArrayObject(SmartCurrentTarget, 0, Client_LocalNpcs, NpcIndex);
   Def:= SmartGetFieldObject(SmartCurrentTarget, NPCNode, Npc_definition);
   NameInt := SmartGetFieldObject(SmartCurrentTarget, Def, NpcDefinition_name);
-  OverHeadInt := SmartGetFieldObject(SmartCurrentTarget, NPCNode,  Actor_ActiveText);
+  OverHeadInt := SmartGetFieldObject(SmartCurrentTarget, NPCNode,  Actor_SpokenText);
   with result do
   begin
     Name := Trim(R_GetJavaString(NameInt, 512));
     OverHeadText := Trim(R_GetJavaString(OverHeadInt, 512));
-    Tile.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localX) * Actor_localX_Multiplier) div 128;
-    Tile.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_localY) * Actor_localY_Multiplier) div 128;
+    Tile.x:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_WorldX) * Actor_WorldX_Multiplier) div 128;
+    Tile.y:= (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_WorldY) * Actor_WorldY_Multiplier) div 128;
     Index:= NpcIndex;
-    Level:= (SmartGetFieldInt(SmartCurrentTarget, Def, NpcDefinition_level ) * NpcDefinition_level_Multiplier);
+    Level:= (SmartGetFieldInt(SmartCurrentTarget, Def, NpcDefinition_CombatLevel ) * NpcDefinition_CombatLevel_Multiplier);
     NpcID:= SmartGetFieldInt(SmartCurrentTarget, Def, NpcDefinition_id) * NpcDefinition_id_Multiplier;
     Animation:= SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_animation)  * Actor_animation_Multiplier;
     HitPoints:= ((SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_health) * Actor_health_Multiplier) / 30);
     if (HitPoints < 0) then
       HitPoints:= 0;
-    Interacting:= SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_interacting) * Actor_interacting_Multiplier;
+    Interacting:= SmartGetFieldInt(SmartCurrentTarget, NPCNode, Actor_interactingindex) * Actor_interactingindex_Multiplier;
     if ((Animation > -1) or (HitPoints > 0)) then
       InCombat:= True
     else
@@ -396,7 +396,7 @@ Npcs: TIntegerArray;
 h, i: integer;
 res2: TNPCArray;
 begin
-  Npcs := R_LoadNpcIndex(NPC)
+  Npcs := R_LoadNpcIndex(NPC);
   h := high(Npcs);
   Setlength(Result, h + 1);
   Setlength(res2, h + 1);
@@ -484,8 +484,8 @@ var
   Local, InteractingIndex: Integer;
   Temp: TNPC;
 begin
-  Local := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
-  InteractingIndex := SmartGetFieldInt(SmartCurrentTarget, Local, Actor_interacting) * Actor_interacting_Multiplier;
+  Local := SmartGetFieldObject(SmartCurrentTarget, 0, Client_GetLocalPlayer);
+  InteractingIndex := SmartGetFieldInt(SmartCurrentTarget, Local, Actor_Interactingindex) * Actor_Interactingindex_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Local);
   Temp := R_GetTNPC(InteractingIndex);
   if ((Temp.Name = '') or (iabs(Temp.Animation) > 10000)) then
