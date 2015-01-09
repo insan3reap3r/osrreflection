@@ -289,9 +289,9 @@ function R_GetTileGlobal: TPoint;
 var
   Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
-  Result.X := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_localX) * Actor_localX_Multiplier) div 128;
-  Result.Y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_localY) * Actor_localY_Multiplier) div 128;
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, Client_GetLocalPlayer);
+  Result.X := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseX) * client_baseX_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_WorldX) * Actor_WorldX_Multiplier) div 128;
+  Result.Y := (SmartGetFieldInt(SmartCurrentTarget, 0, client_baseY) * client_baseY_Multiplier) + (SmartGetFieldInt(SmartCurrentTarget, Me, Actor_WorldY) * Actor_WorldY_Multiplier) div 128;
   SmartFreeObject(SmartCurrentTarget, Me);
 end;
 
@@ -438,12 +438,12 @@ Returns true if player is on the tile specified.
   by elfyyy
 
 *)
-function R_OnTile(TP:Tpoint):Boolean;
+function R_OnTile(TP: Tpoint):Boolean;
 var
   Loc: TPoint;
 begin
-  Loc := R_GetTileGlobal
-  Result := Loc = TP;
+  Loc := R_GetTileGlobal;
+  Result := (Loc.X = TP.X) and (Loc.Y = TP.Y);
 end;
 
 (*
@@ -502,14 +502,14 @@ begin
     result := 0;
     exit;
   end;
-  CurPlane := SmartGetFieldInt(SmartCurrentTarget, 0, client_plane) * client_plane_Multiplier;
-  GroundSetting := SmartGetFieldArray3DByte(SmartCurrentTarget, 0, client_groundSettings, 1, X, Y);
+  CurPlane := SmartGetFieldInt(SmartCurrentTarget, 0, Client_GetPlane) * Client_GetPlane_Multiplier;
+  GroundSetting := SmartGetFieldArray3DByte(SmartCurrentTarget, 0, Client_TileSettings, 1, X, Y);
   if ((CurPlane < 3) and ((GroundSetting and 2) <> 0)) then
     CurPlane := CurPlane + 1;
-  Result := SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x, y)
-  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x + 1, y)
-  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x, y + 1)
-  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, client_groundHeights, curPlane, x + 1, y + 1);
+  Result := SmartGetFieldArray3DInt(SmartCurrentTarget, 0, Client_TileHeights, curPlane, x, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, Client_TileHeights, curPlane, x + 1, y)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, Client_TileHeights, curPlane, x, y + 1)
+  + SmartGetFieldArray3DInt(SmartCurrentTarget, 0, Client_TileHeights, curPlane, x + 1, y + 1);
   Result := - Result div 4;
 end;
 
@@ -533,9 +533,9 @@ var
   first, second: Tpoint;
 begin
   first := R_GetTileGlobal;
-  wait(800)
+  wait(800);
   second := R_GetTileGlobal;
-  result := first <> second;
+  result := (first.X <> second.X) and (first.Y <> second.Y);
 end;
 
 (*
