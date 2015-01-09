@@ -250,7 +250,7 @@ var
 begin
   SetLength(Result, 2000);
   for i := 0 to 1999 do
-    Result[i] := SmartGetFieldArrayInt(SmartCurrentTarget, 0, client_settings, i);
+    Result[i] := SmartGetFieldArrayInt(SmartCurrentTarget, 0, Client_GameSettings, i);
 end;
 
 {*R_GetSetting
@@ -655,7 +655,7 @@ function R_GetPlayerName: String;
 var
   _Player, _PlayerName: Integer;
 begin
-  _Player := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  _Player := SmartGetFieldObject(SmartCurrentTarget, 0, Client_GetLocalPlayer);
   _PlayerName := SmartGetFieldObject(SmartCurrentTarget, _Player, Player_name);
   Result := R_GetJavaString(_PlayerName, 512);
   SmartFreeObject(SmartCurrentTarget, _PlayerName);
@@ -701,7 +701,7 @@ function R_GetActorLoopCycle: integer;
 var
   Me: Integer;
 begin
-  Me := SmartGetFieldObject(SmartCurrentTarget, 0, client_player);
+  Me := SmartGetFieldObject(SmartCurrentTarget, 0, Client_GetLocalPlayer);
   result :=  SmartGetFieldInt(SmartCurrentTarget, me, Actor_combatCycle) * Actor_combatCycle_Multiplier;
   SmartFreeObject(SmartCurrentTarget, Me);
 end;
