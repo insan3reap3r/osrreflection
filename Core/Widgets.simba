@@ -8,7 +8,7 @@ type
 
 function R_GetWidget(Index, ChildIndex: Integer): Integer;
 begin
-  Result := SmartGetFieldArray2DObject(SmartCurrentTarget, 0, client_widgets, Index, ChildIndex);
+  Result := SmartGetFieldArray2DObject(SmartCurrentTarget, 0, Client_GetWidgets, Index, ChildIndex);
 end;
 
 function R_GetWidgetText(WidgetPointer: Integer): String;
@@ -27,9 +27,9 @@ begin
   _Inventory := R_GetWidget(149, 0);
   SetLength(Result, 28);
   for _InventorySlot := 0 to 27 do begin
-    _ItemID := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_getItems, _InventorySlot);
+    _ItemID := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_GetIDs, _InventorySlot);
     if (_ItemID > 0) then begin
-      _ItemQuantity := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_getStackSizes, _InventorySlot);
+      _ItemQuantity := SmartGetFieldArrayInt(SmartCurrentTarget, _Inventory, Widget_StackSizes, _InventorySlot);
       with Result[_InventorySlot] do begin
         ID := _ItemID;
         Quantity := _ItemQuantity;
