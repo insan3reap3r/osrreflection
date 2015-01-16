@@ -2,7 +2,7 @@
 {$include SRL-OSR/SRL/Reflection/Core/Includes.simba}
 
 const
-  IncludeRevision = 98;
+  IncludeRevision = 99;
 
 (*
 CreateNewFiles
@@ -156,6 +156,12 @@ var
   Multi: TStringArray;
   Toggle: Boolean;
 begin
+  ClearDebug;
+  WriteLn('[Reflection] Development has moved to github..');
+  Writeln('Please redownload the Pascal script version from Github');
+  Writeln('Follow the instructions: https://villavu.com/forum/showthread.php?t=107479');
+  Writeln('Be sure to download Prosocks using the instructions');
+  TerminateScript;
   CreateNewFiles;
   DeleteOldFiles;
   OnlineVersion := GetPage('http://osrreflection.googlecode.com/git/Current%20Rev.txt');
